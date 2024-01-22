@@ -22,6 +22,7 @@ CREATE TABLE posts (
                       title VARCHAR(64) NOT NULL,
                       content VARCHAR(8192) NOT NULL,
                       likes_count INT DEFAULT 0,
+                      dislikes_count INT DEFAULT 0,
                       CONSTRAINT posts_users_user_id_fk
                           FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
