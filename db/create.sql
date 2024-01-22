@@ -4,15 +4,16 @@ CREATE TABLE users (
                       last_name VARCHAR(32) NOT NULL,
                       email VARCHAR(50) UNIQUE NOT NULL,
                       username VARCHAR(50) UNIQUE NOT NULL,
+                      is_admin BOOLEAN NOT NULL
 
 );
 
-CREATE TABLE admins (
-                       admin_id  INT PRIMARY KEY AUTO_INCREMENT,
-                       user_id INT NOT NULL,
-                       CONSTRAINT admins_users_user_id_fk
-                           FOREIGN KEY (user_id) REFERENCES users(user_id),
-                       phone_number VARCHAR(20)
+CREATE TABLE phone_numbers (
+                        phone_number_id INT PRIMARY KEY AUTO_INCREMENT,
+                        phone_number VARCHAR(20) NOT NULL,
+                        user_id INT NOT NULL,
+                        CONSTRAINT phone_numbers_users_user_id_fk
+                            FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE posts (

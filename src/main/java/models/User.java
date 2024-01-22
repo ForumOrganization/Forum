@@ -34,13 +34,16 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "is_admin")
+    private boolean isAdmin;
+
+    private Role role = Role.UNDEFINED;
+
     @OneToMany(mappedBy = "user")
     private Set<Post> posts;
 
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments;
-
-    private Role role = Role.UNDEFINED;
 
     public User() {
     }
@@ -102,6 +105,14 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -109,7 +120,6 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
 
     public Set<Post> getPosts() {
         return posts;
@@ -126,6 +136,4 @@ public class User {
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
-
-
 }
