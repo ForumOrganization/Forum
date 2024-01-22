@@ -30,14 +30,21 @@ public class User {
     @Column(name = "password")
     private String password;
 
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @OneToMany(mappedBy = "user")
     private Set<Post> posts;
 
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments;
 
-    public User () {
+    private Role role = Role.UNDEFINED;
+
+    public User() {
     }
+
 
     public int getId() {
         return id;
@@ -86,4 +93,39 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+
+    public Set<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(Set<Post> posts) {
+        this.posts = posts;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
+    }
+
+
 }

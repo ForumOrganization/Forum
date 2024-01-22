@@ -4,16 +4,15 @@ CREATE TABLE users (
                       last_name VARCHAR(32) NOT NULL,
                       email VARCHAR(50) UNIQUE NOT NULL,
                       username VARCHAR(50) UNIQUE NOT NULL,
-                      password VARCHAR(50) NOT NULL,
-                      phone_number VARCHAR(20),
+
 );
 
 CREATE TABLE admins (
                        admin_id  INT PRIMARY KEY AUTO_INCREMENT,
-                       first_name VARCHAR(32) NOT NULL,
-                       last_name VARCHAR(32) NOT NULL,
-                       email VARCHAR(255) UNIQUE NOT NULL,
-                       phone_number VARCHAR(20),
+                       user_id INT NOT NULL,
+                       CONSTRAINT admins_users_user_id_fk
+                           FOREIGN KEY (user_id) REFERENCES users(user_id),
+                       phone_number VARCHAR(20)
 );
 
 CREATE TABLE posts (
@@ -22,8 +21,8 @@ CREATE TABLE posts (
                       title VARCHAR(64) NOT NULL,
                       content VARCHAR(8192) NOT NULL,
                       likes_count INT DEFAULT 0,
-                      CONSTRAINT comments_users_user_id_fk
-                          FOREIGN KEY (user_id) REFERENCES users(user_id),
+                      CONSTRAINT posts_users_user_id_fk
+                          FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
 CREATE TABLE comments (
