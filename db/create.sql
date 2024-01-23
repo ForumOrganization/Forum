@@ -6,7 +6,8 @@ CREATE TABLE users (
                       username VARCHAR(50) UNIQUE NOT NULL,
                       password VARCHAR(50) NOT NULL,
                       role ENUM('USER', 'ADMIN'),
-                      is_deleted BOOLEAN DEFAULT FALSE
+                      is_deleted BOOLEAN DEFAULT FALSE,
+                      status ENUM('BLOCKED', 'ACTIVE')
 );
 
 CREATE TABLE phone_numbers (

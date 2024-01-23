@@ -1,6 +1,7 @@
 package com.example.forum.models;
 
 import com.example.forum.models.enums.Role;
+import com.example.forum.models.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -41,9 +42,15 @@ public class User {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    @OneToMany(mappedBy = "user")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status = Status.ACTIVE;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "createdBy")
     private Set<Post> posts;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<Comment> comments;
 
@@ -112,6 +119,14 @@ public class User {
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public Set<Post> getPosts() {

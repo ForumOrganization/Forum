@@ -1,7 +1,7 @@
 package com.example.forum.controllers;
 
 import com.example.forum.exceptions.AuthorizationException;
-import com.example.forum.exceptions.EntityNotFoundExceptions;
+import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.UserMapper;
 import com.example.forum.models.User;
@@ -54,7 +54,7 @@ public class UserRestController {
             User user = authenticationHelper.tryGetUser(headers);
             checkAccessPermissions(id, user);
             return userService.getById(id);
-        } catch (EntityNotFoundExceptions e) {
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);

@@ -1,6 +1,6 @@
 package com.example.forum.repositories;
 
-import com.example.forum.exceptions.EntityNotFoundExceptions;
+import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.dtos.UserDto;
 import com.example.forum.repositories.contracts.UserRepository;
 import org.hibernate.Session;
@@ -35,7 +35,7 @@ public class UserRepositoryImpl implements UserRepository {
             com.example.forum.models.User user = session.get(com.example.forum.models.User.class, id);
 
             if (user == null) {
-                throw new com.example.forum.exceptions.EntityNotFoundExceptions("User", id);
+                throw new EntityNotFoundException("User", id);
             }
 
             return user;
@@ -51,7 +51,7 @@ public class UserRepositoryImpl implements UserRepository {
             List<com.example.forum.models.User> result = query.list();
 
             if (result.size() == 0) {
-                throw new EntityNotFoundExceptions("User", "username", username);
+                throw new EntityNotFoundException("User", "username", username);
             }
 
             return result.get(0);

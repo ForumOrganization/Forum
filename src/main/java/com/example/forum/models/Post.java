@@ -1,8 +1,10 @@
 package com.example.forum.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CurrentTimestamp;
 
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -11,6 +13,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_id")
     private int id;
 
     @Column(name = "title")
@@ -24,12 +27,13 @@ public class Post {
     private User createdBy;
 
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     @Column(name = "creation_time")
-    private Timestamp creationTime;
+    private Date creationTime = new Date();
 
-    @OneToMany(mappedBy = "posts")
+    @JsonIgnore
+    @OneToMany(mappedBy = "post")
     private Set<Comment> comments;
 
     public Post() {
@@ -76,11 +80,11 @@ public class Post {
         isDeleted = deleted;
     }
 
-    public Timestamp getCreationTime() {
+    public Date getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(Timestamp creationTime) {
+    public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
     }
 
