@@ -4,8 +4,9 @@ CREATE TABLE users (
                       last_name VARCHAR(32) NOT NULL,
                       email VARCHAR(50) UNIQUE NOT NULL,
                       username VARCHAR(50) UNIQUE NOT NULL,
-                      is_admin BOOLEAN NOT NULL
-
+                      password VARCHAR(50) NOT NULL,
+                      role ENUM('USER', 'ADMIN'),
+                      is_deleted BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE phone_numbers (
@@ -18,13 +19,24 @@ CREATE TABLE phone_numbers (
 
 CREATE TABLE posts (
                       post_id  INT PRIMARY KEY AUTO_INCREMENT,
-                      user_id INT NOT NULL,
+                      created_by INT NOT NULL,
                       title VARCHAR(64) NOT NULL,
                       content VARCHAR(8192) NOT NULL,
-                      likes_count INT DEFAULT 0,
-                      dislikes_count INT DEFAULT 0,
+                      creation_time TIMESTAMP,
                       CONSTRAINT posts_users_user_id_fk
-                          FOREIGN KEY (user_id) REFERENCES users(user_id)
+                          FOREIGN KEY (created_by) REFERENCES users(user_id),
+                      is_deleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE reactions (
+                           reaction_id INT PRIMARY KEY AUTO_INCREMENT,
+                           type_reaction ENUM('LIKES', 'DISLIKES', 'LOVE'),
+                           user_id INT NOT NULL,
+                           post_id INT NOT NULL,
+                            CONSTRAINT reactions_users_user_id_fk
+                               FOREIGN KEY (user_id) REFERENCES users(user_id),
+                            CONSTRAINT reactions_posts_post_id_fk
+                               FOREIGN KEY (post_id) REFERENCES posts(post_id)
 );
 
 CREATE TABLE comments (
@@ -32,6 +44,7 @@ CREATE TABLE comments (
                          user_id INT NOT NULL,
                          post_id INT NOT NULL,
                          content VARCHAR(8192) NOT NULL,
+                         is_deleted BOOLEAN DEFAULT FALSE,
                          CONSTRAINT comments_users_user_id_fk
                             FOREIGN KEY (user_id) REFERENCES users(user_id),
                          CONSTRAINT comments_posts_post_id_fk
