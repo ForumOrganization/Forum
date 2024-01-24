@@ -1,11 +1,13 @@
-package com.example.forum.models;
+package com.example.forum.models.dtos;
 
+import com.example.forum.models.Comment;
+import com.example.forum.models.Post;
 import com.example.forum.models.enums.Role;
 
 import java.util.Objects;
 import java.util.Set;
 
-public class UserResponse {
+public class UserResponseDto {
 
     private int id;
 
@@ -23,10 +25,10 @@ public class UserResponse {
 
     private Set<Comment> comments;
 
-    public UserResponse() {
+    public UserResponseDto() {
     }
 
-    public UserResponse(int id, String username, String firstName, String lastName, String email, Role role, Set<Post> posts, Set<Comment> comments) {
+    public UserResponseDto(int id, String username, String firstName, String lastName, String email, Role role, Set<Post> posts, Set<Comment> comments) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
@@ -105,8 +107,8 @@ public class UserResponse {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserResponse userResponse = (UserResponse) o;
-        return id == userResponse.id;
+        UserResponseDto userResponseDto = (UserResponseDto) o;
+        return id == userResponseDto.id;
     }
 
     @Override

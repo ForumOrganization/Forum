@@ -1,7 +1,7 @@
 package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.models.FilterOptions;
+import com.example.forum.utils.PostFilterOptions;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.PostRepository;
@@ -24,22 +24,22 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public List<Post> getAll(FilterOptions filterOptions) {
+    public List<Post> getAll(PostFilterOptions postFilterOptions) {
         try (Session session = sessionFactory.openSession()) {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
-            filterOptions.getTitle().ifPresent(value -> {
+            postFilterOptions.getTitle().ifPresent(value -> {
                 filters.add("title like :title");
                 params.put("title", String.format("%%%s%%", value));
             });
 
-            filterOptions.getCreatedBy().ifPresent(value -> {
+            postFilterOptions.getCreatedBy().ifPresent(value -> {
                 filters.add("created_by = :createdBy");
                 params.put("createdBy", value);
             });
 
-            filterOptions.getCreationTime().ifPresent(value -> {
+            postFilterOptions.getCreationTime().ifPresent(value -> {
                 filters.add("creation_time > :creationTime");
                 params.put("creationTime", value);
             });
@@ -50,7 +50,7 @@ public class PostRepositoryImpl implements PostRepository {
                         .append(" where ")
                         .append(String.join(" and ", filters));
             }
-            queryString.append(generateOrderBy(filterOptions));
+            queryString.append(generateOrderBy(postFilterOptions));
 
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
@@ -134,14 +134,14 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
-    private String generateOrderBy(FilterOptions filterOptions) {
-        if (filterOptions.getSortBy().isEmpty()) {
+    private String generateOrderBy(PostFilterOptions postFilterOptions) {
+        if (postFilterOptions.getSortBy().isEmpty()) {
             return "";
         }
 
         String orderBy = "";
 
-        switch (filterOptions.getSortBy().get()) {
+        switch (postFilterOptions.getSortBy().get()) {
             case "title":
                 orderBy = "title";
                 break;
@@ -155,7 +155,7 @@ public class PostRepositoryImpl implements PostRepository {
 
         orderBy = String.format(" order by %s", orderBy);
 
-        if (filterOptions.getSortOrder().isPresent() && filterOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
+        if (postFilterOptions.getSortOrder().isPresent() && postFilterOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
             orderBy = String.format("%s desc", orderBy);
         }
 

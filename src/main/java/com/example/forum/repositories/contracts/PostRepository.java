@@ -1,6 +1,6 @@
 package com.example.forum.repositories.contracts;
 
-import com.example.forum.models.FilterOptions;
+import com.example.forum.utils.PostFilterOptions;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 
@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface PostRepository {
 
-    List<Post> getAll(FilterOptions filterOptions);
+    List<Post> getAll(PostFilterOptions postFilterOptions);
 
     Post getById(int id);
 

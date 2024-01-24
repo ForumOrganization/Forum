@@ -6,6 +6,7 @@ import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.UserMapper;
 import com.example.forum.models.*;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,11 +49,11 @@ public class UserRestController {
 
 
     @GetMapping("/{id}")
-    public UserResponse getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    public UserResponseDto getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             userService.getById(id, user);
-            return new UserResponse(user.getId(),
+            return new UserResponseDto(user.getId(),
                     user.getUsername(),
                     user.getFirstName(),
                     user.getLastName(),
@@ -70,21 +71,19 @@ public class UserRestController {
     public User getByName(@RequestParam String name) {
         try {
             return userService.getByUsername(name);
-        } catch (EntityNotFoundExceptions e) {
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
-    @GetMapping("/{id}/post")
+    @GetMapping("/{id}/posts")
     public List<Post> getPosts(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            if (user.getId() != id && !user.getRole().equals(Role.ADMIN)) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
-            }
+          //  userService.getPosts(id, user);
             return new ArrayList<>(user.getPosts());
-        } catch (EntityNotFoundExceptions e) {
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);

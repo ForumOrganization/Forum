@@ -1,6 +1,5 @@
 package com.example.forum.repositories.contracts;
 
-import com.example.forum.models.UserFilterOptions;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
 

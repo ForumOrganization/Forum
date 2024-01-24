@@ -5,7 +5,7 @@ import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.PostMapper;
-import com.example.forum.models.FilterOptions;
+import com.example.forum.utils.PostFilterOptions;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PostCreateInputDto;
@@ -43,8 +43,8 @@ public class PostRestController {
                              @RequestParam(required = false) Date creationTime,
                              @RequestParam(required = false) String sortBy,
                              @RequestParam(required = false) String sortOrder) {
-        FilterOptions filterOptions = new FilterOptions(title, createdBy, creationTime, sortBy, sortOrder);
-        return postService.getAll(filterOptions);
+        PostFilterOptions postFilterOptions = new PostFilterOptions(title, createdBy, creationTime, sortBy, sortOrder);
+        return postService.getAll(postFilterOptions);
     }
 
     @GetMapping("/{id}")

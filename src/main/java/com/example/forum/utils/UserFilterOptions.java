@@ -1,4 +1,7 @@
-package com.example.forum.models;
+package com.example.forum.utils;
+
+import com.example.forum.models.Post;
+import com.example.forum.models.Tag;
 
 import java.util.Optional;
 
