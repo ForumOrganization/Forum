@@ -34,7 +34,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User getById(int id) {
         try (Session session = sessionFactory.openSession()) {
-            User user = session.get(com.example.forum.models.User.class, id);
+            User user = session.get(User.class, id);
 
             if (user == null) {
                 throw new EntityNotFoundException("User", id);
@@ -78,8 +78,20 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getByFirstName(String firstName) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("from User where firstName = :firstName", User.class);
+            query.setParameter("firstName", firstName);
+
+            List<User> result = query.list();
+
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("User", "first name", firstName);
+            }
+
+            return result.get(0);
+        }
     }
+
 
     @Override
     public List<Post> getPosts(int id, User user) {
@@ -92,10 +104,10 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void update(com.example.forum.models.User user) {
+    public void update(User targetUser) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.merge(user);
+            session.merge(targetUser);
             session.getTransaction().commit();
         }
     }

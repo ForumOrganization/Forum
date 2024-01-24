@@ -22,7 +22,7 @@ public interface UserRepository {
 
     void editPosts(int id, User user);
 
-    void update(User user);
+    void update(User targetUser);
 
     User updateToAdmin(User userAdmin, User updateToAdmin);
 

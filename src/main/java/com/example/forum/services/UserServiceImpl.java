@@ -4,6 +4,7 @@ import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByFirstName(String firstName) {
-        return null;
+        return this.userRepository.getByUsername(firstName);
     }
 
     @Override
@@ -61,8 +62,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(User user) {
+    public void update(User targetUser, User executingUser) {
+        checkAccessPermissions(targetUser.getId(), executingUser);
 
+        userRepository.update(targetUser);
     }
 
     @Override
@@ -76,8 +79,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User unBlockUser(User admin, User unBlockUser) {
-        return null;
+    public void unBlockUser(User admin, User unBlockUser) {
+        checkAccessPermissionsAdmin(admin);
+        unBlockUser.setStatus(Status.ACTIVE);
+        userRepository.update(unBlockUser);
     }
 
     @Override
@@ -87,6 +92,12 @@ public class UserServiceImpl implements UserService {
 
     private static void checkAccessPermissions(int targetUserId, User executingUser) {
         if (!executingUser.getRole().name().equals("ADMIN") && executingUser.getId() != targetUserId) {
+            throw new AuthorizationException(MODIFY_BEER_MESSAGE_ERROR);
+        }
+    }
+
+    private static void checkAccessPermissionsAdmin(User executingUser) {
+        if (!executingUser.getRole().name().equals("ADMIN")) {
             throw new AuthorizationException(MODIFY_BEER_MESSAGE_ERROR);
         }
     }

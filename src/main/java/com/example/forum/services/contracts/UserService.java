@@ -11,7 +11,7 @@ public interface UserService {
     //TODO Yoana
     List<UserDto> getAll();
 
-    //TODO Veronika
+    //TODO Veronika - Done
     User getById(int id,User user);
 
     //TODO Siyana
@@ -20,7 +20,7 @@ public interface UserService {
     //TODO Yoana
     User getByEmail(String email);
 
-    //TODO Veronika
+    //TODO Veronika - Done
     User getByFirstName(String firstName);
 
     //TODO Siyana
@@ -29,8 +29,8 @@ public interface UserService {
     //TODO Yoana
     void editPosts(int id, User user);
 
-    //TODO Veronika
-    void update(User user);
+    //TODO Veronika - Done?
+    void update(User targetUser,User executingUser);
 
     //TODO Siyana
     User updateToAdmin(User userAdmin, User updateToAdmin);
@@ -38,8 +38,8 @@ public interface UserService {
     //TODO Yoana
     User blockUser(User admin, User blockUser);
 
-    //TODO Veronika
-    User unBlockUser(User admin, User unBlockUser);
+    //TODO Veronika -Done?
+    void unBlockUser(User admin, User unBlockUser);
 
     //TODO Siyana
     void addPhoneNumberToAdmin(User admin, String phoneNumber);
