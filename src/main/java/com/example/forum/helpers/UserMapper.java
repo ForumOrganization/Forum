@@ -18,7 +18,7 @@ public class UserMapper {
     public User fromDto(int id, UserDto dto) {
         User user = fromDto(dto);
         user.setId(id);
-        User repostioryUser = userService.getById(id);
+        User repostioryUser = userService.getById(id,user);
         user.setFirstName(repostioryUser.getFirstName());
         user.setLastName(repostioryUser.getLastName());
         user.setEmail(repostioryUser.getEmail());

@@ -1,5 +1,6 @@
 package com.example.forum.services.contracts;
 
+import com.example.forum.models.UserFilterOptions;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
 
@@ -9,7 +10,7 @@ public interface UserService {
 
     List<UserDto> getAll();
 
-    User getById(int id);
+    User getById(int id,User user);
 
     User getByUsername(String username);
 }
