@@ -11,7 +11,7 @@ public interface ReactionRepository {
 
     List<Reaction> getAllReactionsByCommentId(Reaction reaction, int commentId);
 
-    Map<Reaction, Integer> countReactionsPost();
+    Map<Reaction, Integer> countReactionsPost(int postId);
 
     Map<Reaction, Integer> countReactionsComment();
 

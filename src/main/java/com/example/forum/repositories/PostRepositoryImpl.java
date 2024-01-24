@@ -115,7 +115,11 @@ public class PostRepositoryImpl implements PostRepository {
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.remove(postToDelete);
+
+            // Perform soft delete by updating the isDeleted flag
+            postToDelete.setDeleted(true);
+            session.merge(postToDelete);
+
             session.getTransaction().commit();
         }
     }

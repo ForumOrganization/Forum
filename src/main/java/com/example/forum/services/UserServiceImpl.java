@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getById(int id,User user) {
-        checkAccessPermissions(id,user);
+    public User getById(int id, User user) {
+        checkAccessPermissions(id, user);
         return this.userRepository.getById(id);
     }
 
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByEmail(String email) {
-        return null;
+        return this.userRepository.getByEmail(email);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void editPosts(int id, User user) {
-
+        this.userRepository.editPosts(id, user);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User blockUser(User admin, User blockUser) {
-        return null;
+        return this.userRepository.blockUser(admin, blockUser);
     }
 
     @Override

@@ -8,6 +8,8 @@ public interface CommentRepository {
 
     List<Comment> getAllCommentsByPostId(int postId);
 
+    public Comment getCommentById(int commentId);
+
     void createComment(Comment comment, int postId);
 
     void updateComment(Comment comment, int postId);

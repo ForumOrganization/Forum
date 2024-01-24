@@ -22,6 +22,10 @@ public class Reaction {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @ManyToOne
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
+
     public Reaction() {
 
     }
@@ -56,5 +60,13 @@ public class Reaction {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public Comment getComment() {
+        return comment;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 }

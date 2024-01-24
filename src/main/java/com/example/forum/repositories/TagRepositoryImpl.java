@@ -1,14 +1,26 @@
 package com.example.forum.repositories;
 
+import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
+import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.TagRepository;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
+
+    private SessionFactory sessionFactory;
+
+    public TagRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Override
     public List<Tag> getAllTags() {
         return null;
@@ -21,7 +33,16 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public List<Post> getAllPostsByTagName(String tagName) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery(
+                    "SELECT p FROM Post p JOIN p.tags t WHERE t.name = :tagName",
+                    Post.class
+            );
+
+            query.setParameter("tagName", tagName);
+
+            return query.getResultList();
+        }
     }
 
     @Override
@@ -35,8 +56,24 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public void createTagInPost(Tag tag, int postId) {
+    public void createTagInPost(Tag tag, int postId, User user) {
+        try (Session session = sessionFactory.openSession()) {
+            Post post = session.get(Post.class, postId);
 
+            if (post == null) {
+                throw new EntityNotFoundException("Post", postId);
+            }
+
+            //TODO Check if the user has permission to create a tag in this post
+
+            post.getTags().add(tag);
+
+            post.setCreatedBy(user);
+
+            session.beginTransaction();
+            session.merge(post);
+            session.getTransaction().commit();
+        }
     }
 
     @Override

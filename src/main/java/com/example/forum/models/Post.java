@@ -31,9 +31,19 @@ public class Post {
     @Column(name = "creation_time")
     private LocalDate creationTime = LocalDate.now();
 
-    @JsonIgnore
     @OneToMany(mappedBy = "post")
     private Set<Comment> comments;
+
+    @OneToMany(mappedBy = "post")
+    private Set<Reaction> reactions;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags;
 
     public Post() {
 
@@ -93,5 +103,21 @@ public class Post {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+    public Set<Reaction> getReactions() {
+        return reactions;
+    }
+
+    public void setReactions(Set<Reaction> reactions) {
+        this.reactions = reactions;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
     }
 }
