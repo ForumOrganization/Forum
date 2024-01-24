@@ -12,7 +12,7 @@ public class Reaction {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type_reaction")
-    private com.example.forum.models.enums.Reaction reaction;
+    private com.example.forum.models.enums.Reaction reaction= com.example.forum.models.enums.Reaction.UNDEFINED;
 
     @OneToOne
     @JoinColumn(name = "user_id")
