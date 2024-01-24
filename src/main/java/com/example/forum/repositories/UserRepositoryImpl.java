@@ -62,13 +62,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User getByEmail(String email) {
-        //TODO Veronika
         return null;
     }
 
     @Override
     public User getByFirstName(String firstName) {
-        //TODO Veronika
         return null;
     }
 
