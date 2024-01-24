@@ -1,6 +1,7 @@
 package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
+import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
 import com.example.forum.repositories.contracts.UserRepository;
@@ -60,11 +61,53 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User getByEmail(String email) {
+        //TODO Veronika
+        return null;
+    }
+
+    @Override
+    public User getByFirstName(String firstName) {
+        //TODO Veronika
+        return null;
+    }
+
+    @Override
+    public List<Post> getPosts(int id, User user) {
+        return null;
+    }
+
+    @Override
+    public void editPosts(int id, User user) {
+
+    }
+
+    @Override
     public void update(com.example.forum.models.User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(user);
             session.getTransaction().commit();
         }
+    }
+
+    @Override
+    public User updateToAdmin(User userAdmin, User updateToAdmin) {
+        return null;
+    }
+
+    @Override
+    public User blockUser(User admin, User blockUser) {
+        return null;
+    }
+
+    @Override
+    public User unBlockUser(User admin, User unBlockUser) {
+        return null;
+    }
+
+    @Override
+    public void addPhoneNumberToAdmin(User admin, String phoneNumber) {
+
     }
 }

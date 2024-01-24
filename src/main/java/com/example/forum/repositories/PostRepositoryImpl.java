@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Repository
@@ -67,7 +68,7 @@ public class PostRepositoryImpl implements PostRepository {
 
             if (posts.isEmpty()) {
                 throw new EntityNotFoundException("Post", "id", String.valueOf(id));
-        }
+            }
 
             return posts.get(0);
         }
@@ -90,24 +91,9 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Set<Post> getByUser(User user) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Post> query = session.createQuery("from Post where createdBy = :created_by", Post.class);
-            query.setParameter("created_by", user);
-
-            List<Post> result = query.list();
-
-            if (result.isEmpty()) {
-                throw new EntityNotFoundException("Post", "user", user.getFirstName());
-            }
-
-            return new HashSet<>(result);
-        }
-    }
-
-    @Override
     public void create(Post post) {
         try (Session session = sessionFactory.openSession()) {
+            post.setCreationTime(LocalDate.now());
             session.beginTransaction();
             session.persist(post);
             session.getTransaction().commit();

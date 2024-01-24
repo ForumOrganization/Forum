@@ -1,6 +1,7 @@
 package com.example.forum.services;
 
 import com.example.forum.exceptions.AuthorizationException;
+import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
 import com.example.forum.repositories.contracts.UserRepository;
@@ -37,6 +38,51 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getByUsername(String username) {
         return this.userRepository.getByUsername(username);
+    }
+
+    @Override
+    public User getByEmail(String email) {
+        return null;
+    }
+
+    @Override
+    public User getByFirstName(String firstName) {
+        return null;
+    }
+
+    @Override
+    public List<Post> getPosts(int id, User user) {
+        return null;
+    }
+
+    @Override
+    public void editPosts(int id, User user) {
+
+    }
+
+    @Override
+    public void update(User user) {
+
+    }
+
+    @Override
+    public User updateToAdmin(User userAdmin, User updateToAdmin) {
+        return null;
+    }
+
+    @Override
+    public User blockUser(User admin, User blockUser) {
+        return null;
+    }
+
+    @Override
+    public User unBlockUser(User admin, User unBlockUser) {
+        return null;
+    }
+
+    @Override
+    public void addPhoneNumberToAdmin(User admin, String phoneNumber) {
+
     }
 
     private static void checkAccessPermissions(int targetUserId, User executingUser) {

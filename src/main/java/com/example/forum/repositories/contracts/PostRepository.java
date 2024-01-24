@@ -15,8 +15,6 @@ public interface PostRepository {
 
     Post getByTitle(String title);
 
-    Set<Post> getByUser(User user);
-
     void create(Post post);
 
     void update(Post post);

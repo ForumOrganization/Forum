@@ -2,9 +2,8 @@ package com.example.forum.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CurrentTimestamp;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -30,7 +29,7 @@ public class Post {
     private Boolean isDeleted = false;
 
     @Column(name = "creation_time")
-    private Date creationTime = new Date();
+    private LocalDate creationTime = LocalDate.now();
 
     @JsonIgnore
     @OneToMany(mappedBy = "post")
@@ -80,11 +79,11 @@ public class Post {
         isDeleted = deleted;
     }
 
-    public Date getCreationTime() {
+    public LocalDate getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(Date creationTime) {
+    public void setCreationTime(LocalDate creationTime) {
         this.creationTime = creationTime;
     }
 

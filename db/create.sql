@@ -23,7 +23,7 @@ CREATE TABLE posts (
                       created_by INT NOT NULL,
                       title VARCHAR(64) NOT NULL,
                       content VARCHAR(8192) NOT NULL,
-                      creation_time TIMESTAMP,
+                      creation_time DATE,
                       CONSTRAINT posts_users_user_id_fk
                           FOREIGN KEY (created_by) REFERENCES users(user_id),
                       is_deleted BOOLEAN DEFAULT FALSE

@@ -42,11 +42,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Set<Post> getByUser(User user) {
-        return this.postRepository.getByUser(user);
-    }
-
-    @Override
     public void create(Post post, User user) {
         boolean duplicateExists = true;
 

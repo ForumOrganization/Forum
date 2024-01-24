@@ -88,9 +88,5 @@ public class UserRestController {
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
         }
-
     }
-
-
-
 }
