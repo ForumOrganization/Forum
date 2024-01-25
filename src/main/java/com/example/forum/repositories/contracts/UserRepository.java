@@ -20,15 +20,9 @@ public interface UserRepository {
 
     List<Post> getPosts(int id, User user);
 
-    void editPosts(int id, User user);
-
     void update(User targetUser);
 
     User updateToAdmin(User userAdmin, User updateToAdmin);
-
-    User blockUser(User admin, User blockUser);
-
-    User unBlockUser(User admin, User unBlockUser);
 
     void addPhoneNumberToAdmin(User admin, String phoneNumber);
 }

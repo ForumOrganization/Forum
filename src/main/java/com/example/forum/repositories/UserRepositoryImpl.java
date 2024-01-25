@@ -47,7 +47,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public com.example.forum.models.User getByUsername(String username) {
         try (Session session = sessionFactory.openSession()) {
-            Query<com.example.forum.models.User> query = session.createQuery("from User where username = :username",User.class);
+            Query<com.example.forum.models.User> query = session.createQuery("from User where username = :username", User.class);
             query.setParameter("username", username);
 
             List<com.example.forum.models.User> result = query.list();
@@ -99,11 +99,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void editPosts(int id, User user) {
-
-    }
-
-    @Override
     public void update(User targetUser) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
@@ -114,16 +109,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User updateToAdmin(User userAdmin, User updateToAdmin) {
-        return null;
-    }
-
-    @Override
-    public User blockUser(User admin, User blockUser) {
-        return null;
-    }
-
-    @Override
-    public User unBlockUser(User admin, User unBlockUser) {
         return null;
     }
 

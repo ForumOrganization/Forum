@@ -1,23 +1,23 @@
 package com.example.forum.services;
 
-import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.utils.PostFilterOptions;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.services.contracts.PostService;
+import com.example.forum.utils.PostFilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
+
+import static com.example.forum.utils.CheckPermission.checkAccessPermissions;
+import static com.example.forum.utils.Messages.MODIFY_POST_ERROR_MESSAGE;
 
 @Service
 public class PostServiceImpl implements PostService {
 
-    private static final String MODIFY_ERROR_MESSAGE = "Only admin or post creator can modify post.";
 
     private PostRepository postRepository;
 
@@ -61,8 +61,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void update(Post post, User user) {
-        checkModifyPermission(post.getId(), user);
-
+        checkAccessPermissions(post.getId(), user, MODIFY_POST_ERROR_MESSAGE);
         boolean duplicateExists = true;
 
         try {
@@ -85,16 +84,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void delete(int id, User user) {
-        checkModifyPermission(id, user);
-
+        checkAccessPermissions(id, user, MODIFY_POST_ERROR_MESSAGE);
         this.postRepository.delete(id);
     }
 
-    private void checkModifyPermission(int postId, User user) {
-        Post post = this.postRepository.getById(postId);
 
-        if (!(user.getRole().name().equals("ADMIN") || post.getCreatedBy().equals(user))) {
-            throw new AuthorizationException(MODIFY_ERROR_MESSAGE);
-        }
-    }
 }

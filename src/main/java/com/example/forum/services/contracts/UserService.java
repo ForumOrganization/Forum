@@ -12,7 +12,7 @@ public interface UserService {
     List<UserDto> getAll();
 
     //TODO Veronika - Done
-    User getById(int id,User user);
+    User getById(int id, User user);
 
     //TODO Siyana
     User getByUsername(String username);
@@ -26,17 +26,14 @@ public interface UserService {
     //TODO Siyana
     List<Post> getPosts(int id, User user);
 
-    //TODO Yoana
-    void editPosts(int id, User user);
-
     //TODO Veronika - Done?
-    void update(User targetUser,User executingUser);
+    void update(User targetUser, User executingUser);
 
     //TODO Siyana
     User updateToAdmin(User userAdmin, User updateToAdmin);
 
     //TODO Yoana
-    User blockUser(User admin, User blockUser);
+    void blockUser(User admin, User blockUser);
 
     //TODO Veronika -Done?
     void unBlockUser(User admin, User unBlockUser);

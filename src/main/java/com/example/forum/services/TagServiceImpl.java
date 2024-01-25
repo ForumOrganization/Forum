@@ -14,6 +14,7 @@ public class TagServiceImpl implements TagService {
 
     private TagRepository tagRepository;
 
+
     public TagServiceImpl(TagRepository tagRepository) {
         this.tagRepository = tagRepository;
     }
@@ -45,6 +46,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void createTagInPost(Tag tag, int postId, User user) {
+        //TODO Check if the user has permission to create a tag in this post
         this.tagRepository.createTagInPost(tag, postId, user);
     }
 

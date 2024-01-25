@@ -73,7 +73,7 @@ public class TagRepositoryImpl implements TagRepository {
             query.setParameter("tagId", tagId);
 
             return query.getSingleResult();
-        } catch (NoResultException e){
+        } catch (NoResultException e) {
             throw new EntityNotFoundException("Tag", tagId);
         }
     }
@@ -86,8 +86,6 @@ public class TagRepositoryImpl implements TagRepository {
             if (post == null) {
                 throw new EntityNotFoundException("Post", postId);
             }
-
-            //TODO Check if the user has permission to create a tag in this post
 
             post.getTags().add(tag);
 

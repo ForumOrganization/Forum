@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.example.forum.utils.CheckPermission.*;
+import static com.example.forum.utils.Messages.*;
+
 @Service
 public class UserServiceImpl implements UserService {
 
-    public static final String MODIFY_BEER_MESSAGE_ERROR = "Only admins or user created the beer can modify beer.";
 
     private final UserRepository userRepository;
 
@@ -32,7 +34,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getById(int id, User user) {
-        checkAccessPermissions(id, user);
         return this.userRepository.getById(id);
     }
 
@@ -57,13 +58,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editPosts(int id, User user) {
-        this.userRepository.editPosts(id, user);
-    }
-
-    @Override
     public void update(User targetUser, User executingUser) {
-        checkAccessPermissionsUser(targetUser.getId(), executingUser);
+        checkAccessPermissionsUser(targetUser.getId(), executingUser, MODIFY_USER_MESSAGE_ERROR);
         userRepository.update(targetUser);
     }
 
@@ -73,13 +69,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User blockUser(User admin, User blockUser) {
-        return this.userRepository.blockUser(admin, blockUser);
+    public void blockUser(User admin, User blockUser) {
+
+        checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
+        blockUser.setStatus(Status.BLOCKED);
+        userRepository.update(blockUser);
     }
 
     @Override
     public void unBlockUser(User admin, User unBlockUser) {
-        checkAccessPermissionsAdmin(admin);
+        checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         unBlockUser.setStatus(Status.ACTIVE);
         userRepository.update(unBlockUser);
     }
@@ -89,20 +88,4 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private static void checkAccessPermissions(int targetUserId, User executingUser) {
-        if (!executingUser.getRole().name().equals("ADMIN") && executingUser.getId() != targetUserId) {
-            throw new AuthorizationException(MODIFY_BEER_MESSAGE_ERROR);
-        }
-    }
-
-    private static void checkAccessPermissionsAdmin(User executingUser) {
-        if (!executingUser.getRole().name().equals("ADMIN")) {
-            throw new AuthorizationException(MODIFY_BEER_MESSAGE_ERROR);
-        }
-    }
-    private static void checkAccessPermissionsUser(int targetUserId, User executingUser) {
-        if (executingUser.getId() != targetUserId) {
-            throw new AuthorizationException(MODIFY_BEER_MESSAGE_ERROR);
-        }
-    }
 }

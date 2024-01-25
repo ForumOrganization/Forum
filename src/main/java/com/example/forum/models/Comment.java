@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "comments")
 public class Comment {
@@ -23,6 +25,10 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "comment", fetch = FetchType.EAGER)
+    private Set<Reaction> reactions;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
