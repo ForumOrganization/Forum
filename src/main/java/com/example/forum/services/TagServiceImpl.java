@@ -25,7 +25,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public List<Post> getAllPostsByTagId(int tagId) {
-        return null;
+        return tagRepository.getAllPostsByTagId(tagId);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getTagById(int tagId) {
-        return null;
+        return tagRepository.getTagById(tagId);
     }
 
     @Override

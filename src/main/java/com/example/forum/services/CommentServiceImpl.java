@@ -38,7 +38,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void updateComment(Comment comment, User user) {
-
         checkModifyPermission(comment.getId(), user);
         this.commentRepository.updateComment(comment);
 

@@ -12,7 +12,6 @@ public interface TagService {
     //TODO Veronika
     List<Tag> getAllTags();
 
-    //TODO Siyana
     List<Post> getAllPostsByTagId(int tagId);
 
     //TODO Yoana
@@ -21,7 +20,6 @@ public interface TagService {
     //TODO Veronika
     List<Tag> getAllTagsByPostId(int postId);
 
-    //TODO Siyana
     Tag getTagById(int tagId);
 
     //TODO Yoana

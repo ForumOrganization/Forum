@@ -5,6 +5,7 @@ import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.TagRepository;
+import jakarta.persistence.NoResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -28,7 +29,18 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public List<Post> getAllPostsByTagId(int tagId) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery(
+                    "SELECT p FROM Post p JOIN p.tags t WHERE t.id = :tagId",
+                    Post.class
+            );
+
+            query.setParameter("tagId", tagId);
+
+            return query.getResultList();
+        }
+
+
     }
 
     @Override
@@ -52,7 +64,18 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public Tag getTagById(int tagId) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<Tag> query = session.createQuery(
+                    "SELECT t FROM Tag t WHERE t.id = :tagId",
+                    Tag.class
+            );
+
+            query.setParameter("tagId", tagId);
+
+            return query.getSingleResult();
+        } catch (NoResultException e){
+            throw new EntityNotFoundException("Tag", tagId);
+        }
     }
 
     @Override
