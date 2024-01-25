@@ -13,7 +13,6 @@ public interface PostService {
     //TODO Veronika
     List<Post> getAll(PostFilterOptions postFilterOptions);
 
-    //TODO Siyana
     Post getById(int id);
 
     //TODO Yoana
@@ -22,8 +21,6 @@ public interface PostService {
     //TODO Veronika
     void create(Post post, User user);
 
-
-    //TODO Siyana
     void update(Post post, User user);
 
     //TODO Yoana

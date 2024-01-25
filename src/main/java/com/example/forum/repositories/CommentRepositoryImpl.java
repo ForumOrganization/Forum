@@ -56,9 +56,12 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public void updateComment(Comment comment, int postId) {
-
-    }
+    public void updateComment(Comment comment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.update(comment);
+            session.getTransaction().commit();
+    }}
 
     @Override
     public void deleteComment(int commentId) {

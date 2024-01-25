@@ -12,7 +12,7 @@ public interface CommentRepository {
 
     void createComment(Comment comment, int postId);
 
-    void updateComment(Comment comment, int postId);
+    void updateComment(Comment comment);
 
     void deleteComment(int commentId);
 }

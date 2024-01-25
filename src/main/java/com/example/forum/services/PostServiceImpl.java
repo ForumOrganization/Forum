@@ -17,7 +17,7 @@ import java.util.Set;
 @Service
 public class PostServiceImpl implements PostService {
 
-    private static final String MODIFY_BEER_ERROR_MESSAGE = "Only admin or post creator can modify post.";
+    private static final String MODIFY_ERROR_MESSAGE = "Only admin or post creator can modify post.";
 
     private PostRepository postRepository;
 
@@ -94,7 +94,7 @@ public class PostServiceImpl implements PostService {
         Post post = this.postRepository.getById(postId);
 
         if (!(user.getRole().name().equals("ADMIN") || post.getCreatedBy().equals(user))) {
-            throw new AuthorizationException(MODIFY_BEER_ERROR_MESSAGE);
+            throw new AuthorizationException(MODIFY_ERROR_MESSAGE);
         }
     }
 }
