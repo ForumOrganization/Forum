@@ -5,9 +5,9 @@ import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.Reaction;
 import com.example.forum.repositories.contracts.ReactionRepository;
-import jakarta.persistence.SecondaryTable;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -26,8 +26,16 @@ public class ReactionRepositoryImpl implements ReactionRepository {
 
     @Override
     public List<Reaction> getAllReactionsByPostId(Reaction reaction, int postId) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<Reaction> query = session.createQuery(
+                    "SELECT r FROM Reaction r WHERE post.id = :postId", Reaction.class);
+
+            query.setParameter("postId", postId);
+
+            return query.getResultList();
+        }
     }
+
 
     @Override
     public List<Reaction> getAllReactionsByCommentId(Reaction reaction, int commentId) {
@@ -55,9 +63,27 @@ public class ReactionRepositoryImpl implements ReactionRepository {
     }
 
     @Override
-    public Map<Reaction, Integer> countReactionsComment() {
-        return null;
+    public Map<Reaction, Integer> countReactionsComment(int commentId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Object[]> query = session.createQuery(
+                    "SELECT r, COUNT(r) FROM Reaction r WHERE r.comment.id = :commentId GROUP BY r",
+                    Object[].class);
+
+            query.setParameter("commentId", commentId);
+
+            List<Object[]> result = query.getResultList();
+
+            Map<Reaction, Integer> reactionCountMap = new HashMap<>();
+            for (Object[] row : result) {
+                Reaction reaction = (Reaction) row[0];
+                Long count = (Long) row[1];
+                reactionCountMap.put(reaction, count.intValue());
+            }
+
+            return reactionCountMap;
+        }
     }
+
 
     @Override
     public void updateReactionPost(Reaction reaction, int postId) {

@@ -21,7 +21,7 @@ public class ReactionServiceImpl implements ReactionService {
 
     @Override
     public List<Reaction> getAllReactionsByPostId(Reaction reaction, int postId) {
-        return null;
+        return reactionRepository.getAllReactionsByPostId(reaction, postId);
     }
 
     @Override
@@ -35,8 +35,8 @@ public class ReactionServiceImpl implements ReactionService {
     }
 
     @Override
-    public Map<Reaction, Integer> countReactionsComment() {
-        return null;
+    public Map<Reaction, Integer> countReactionsComment(int commentId) {
+        return reactionRepository.countReactionsPost(commentId);
     }
 
     @Override

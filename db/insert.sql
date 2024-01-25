@@ -1,8 +1,8 @@
 -- Insert data into 'users' table
 INSERT INTO users (first_name, last_name, email, username, password, role, status)
-VALUES ('John', 'Doe', 'john.doe@example.com', 'johndoe', 'password123', 'USER', 'ACTIVE'),
-       ('Alice', 'Smith', 'alice.smith@example.com', 'alicesmith', 'password456', 'USER', 'ACTIVE'),
-       ('Admin', 'Adminson', 'admin@example.com', 'admin', 'adminpassword', 'ADMIN', 'ACTIVE');
+VALUES ('Yoana', 'Maksimova', 'yoana.maksimova@gmmail.com', 'yoana', 'parola1', 'ADMIN', 'ACTIVE'),
+       ('Siyana', 'Baileva', 'siyana.baileva@gmail.com', 'siyana', 'parola2', 'USER', 'ACTIVE'),
+       ('Veronika', 'Kashaykova', 'veronika.kashaykova@gmail.com', 'veronika', 'parola3', 'USER', 'ACTIVE');
 
 -- Insert data into 'phone_numbers' table
 INSERT INTO phone_numbers (phone_number, user_id)

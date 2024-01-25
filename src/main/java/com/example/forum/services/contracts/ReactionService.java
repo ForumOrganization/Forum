@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface ReactionService {
 
-    //TODO Veronika
+    //TODO Veronika - Done
     List<Reaction> getAllReactionsByPostId(Reaction reaction, int postId);
 
     //TODO Siyana
@@ -16,8 +16,8 @@ public interface ReactionService {
     //TODO Yoana
     Map<Reaction, Integer> countReactionsPost(int postId);
 
-    //TODO Veronika
-    Map<Reaction, Integer> countReactionsComment();
+    //TODO Veronika - Done
+    Map<Reaction, Integer> countReactionsComment(int commentId);
 
     //TODO Siyana
     void updateReactionPost(Reaction reaction, int postId);

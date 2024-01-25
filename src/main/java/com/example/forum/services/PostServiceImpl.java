@@ -2,8 +2,10 @@ package com.example.forum.services;
 
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
+import com.example.forum.exceptions.UnauthorizedOperationException;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
+import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.services.contracts.PostService;
 import com.example.forum.utils.PostFilterOptions;
@@ -14,6 +16,7 @@ import java.util.List;
 
 import static com.example.forum.utils.CheckPermission.checkAccessPermissions;
 import static com.example.forum.utils.Messages.MODIFY_POST_ERROR_MESSAGE;
+import static com.example.forum.utils.Messages.USER_HAS_BEEN_BLOCKED_OR_DELETED;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -43,16 +46,20 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void create(Post post, User user) {
+
+        if(user.getStatus()== Status.BLOCKED || user.isDeleted()){
+            throw new UnauthorizedOperationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
+        }
         boolean duplicateExists = true;
 
         try {
-            this.postRepository.getByTitle(post.getTitle());
+            this.postRepository.getById(post.getId());
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
 
         if (duplicateExists) {
-            throw new DuplicateEntityException("Post", "title", post.getTitle());
+            throw new DuplicateEntityException("Post", "id", String.valueOf(post.getId()));
         }
 
         post.setCreatedBy(user);

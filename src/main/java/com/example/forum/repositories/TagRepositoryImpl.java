@@ -9,6 +9,7 @@ import jakarta.persistence.NoResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,14 +19,19 @@ public class TagRepositoryImpl implements TagRepository {
 
     private SessionFactory sessionFactory;
 
+    @Autowired
     public TagRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     @Override
     public List<Tag> getAllTags() {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<Tag> query = session.createQuery("from Tag", Tag.class);
+            return query.list();
+        }
     }
+
 
     @Override
     public List<Post> getAllPostsByTagId(int tagId) {
@@ -59,8 +65,16 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public List<Tag> getAllTagsByPostId(int postId) {
-        return null;
+        try (Session session = sessionFactory.openSession()) {
+            Query<Tag> query = session.createQuery(
+                    "SELECT t FROM Post p JOIN p.tags t WHERE p.id = :postId", Tag.class);
+
+            query.setParameter("postId", postId);
+
+            return query.getResultList();
+        }
     }
+
 
     @Override
     public Tag getTagById(int tagId) {
@@ -98,7 +112,13 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public void updateTagInPost(int tagId) {
+    public void updateTagInPost(Tag tag) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(tag);
+            session.getTransaction().commit();
+        }
+
 
     }
 

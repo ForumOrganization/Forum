@@ -9,6 +9,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -51,9 +52,12 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public void createComment(Comment comment, int postId) {
-
-    }
+    public void createComment(Comment comment) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(comment);
+            session.getTransaction().commit();
+        }}
 
     @Override
     public void updateComment(Comment comment) {

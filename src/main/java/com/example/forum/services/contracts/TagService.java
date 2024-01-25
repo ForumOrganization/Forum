@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface TagService {
 
-    //TODO Veronika
+    //TODO Veronika - Done
     List<Tag> getAllTags();
 
     List<Post> getAllPostsByTagId(int tagId);
@@ -17,7 +17,7 @@ public interface TagService {
     //TODO Yoana
     List<Post> getAllPostsByTagName(String tagName);
 
-    //TODO Veronika
+    //TODO Veronika - Done
     List<Tag> getAllTagsByPostId(int postId);
 
     Tag getTagById(int tagId);
@@ -25,8 +25,8 @@ public interface TagService {
     //TODO Yoana
     void createTagInPost(Tag tag, int postId, User user);
 
-    //TODO Veronika
-    void updateTagInPost(int tagId, User user);
+    //TODO Veronika - Done
+    void updateTagInPost(Tag tag, User user);
 
     //TODO Siyana
     void deleteTagInPost(int tagId, User user);

@@ -10,7 +10,7 @@ public interface CommentRepository {
 
     public Comment getCommentById(int commentId);
 
-    void createComment(Comment comment, int postId);
+    void createComment(Comment comment);
 
     void updateComment(Comment comment);
 

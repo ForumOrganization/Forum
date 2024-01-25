@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -33,6 +34,7 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
+
 
     public Comment() {
 
@@ -71,6 +73,15 @@ public class Comment {
         this.user = user;
     }
 
+    public Set<Reaction> getReactions() {
+        return reactions;
+    }
+
+    public void setReactions(Set<Reaction> reactions) {
+        this.reactions = reactions;
+    }
+
+
     public Post getPost() {
         return post;
     }
@@ -78,4 +89,6 @@ public class Comment {
     public void setPost(Post post) {
         this.post = post;
     }
+
+
 }

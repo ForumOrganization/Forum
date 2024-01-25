@@ -18,7 +18,7 @@ public interface PostService {
     //TODO Yoana
     Post getByTitle(String title);
 
-    //TODO Veronika
+    //TODO Veronika - Done
     void create(Post post, User user);
 
     void update(Post post, User user);

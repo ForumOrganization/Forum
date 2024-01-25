@@ -70,7 +70,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void blockUser(User admin, User blockUser) {
-
         checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         blockUser.setStatus(Status.BLOCKED);
         userRepository.update(blockUser);

@@ -20,7 +20,7 @@ public interface TagRepository {
 
     void createTagInPost(Tag tag, int postId, User user);
 
-    void updateTagInPost(int tagId);
+    void updateTagInPost(Tag tag);
 
     void deleteTagInPost(int tagId);
 }

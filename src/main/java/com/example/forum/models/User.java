@@ -41,7 +41,7 @@ public class User {
     private Role role = Role.USER;
     @JsonIgnore
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted=Boolean.FALSE;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -114,8 +114,8 @@ public class User {
         this.role = role;
     }
     @JsonIgnore
-    public Boolean getDeleted() {
-        return isDeleted;
+    public Boolean isDeleted() {
+        return Boolean.TRUE.equals(isDeleted);
     }
 
     public void setDeleted(Boolean deleted) {

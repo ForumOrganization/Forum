@@ -13,7 +13,7 @@ public interface ReactionRepository {
 
     Map<Reaction, Integer> countReactionsPost(int postId);
 
-    Map<Reaction, Integer> countReactionsComment();
+    Map<Reaction, Integer> countReactionsComment(int commentId);
 
     void updateReactionPost(Reaction reaction, int postId);
 
