@@ -1,6 +1,7 @@
 package com.example.forum.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     @Column(name = "post_id")
     private int id;
 
@@ -23,20 +25,22 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "created_by")
-    private User createdBy;
+    @JsonIgnoreProperties({"id", "firstName", "lastName", "email", "role", "status", "deleted"})
 
+    private User createdBy;
+    @JsonIgnore
     @Column(name = "is_deleted")
-    private Boolean isDeleted = false;
+    private Boolean isDeleted;
 
     @Column(name = "creation_time")
     private LocalDate creationTime = LocalDate.now();
-
-    @OneToMany(mappedBy = "post")
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     private Set<Comment> comments;
-
-    @OneToMany(mappedBy = "post")
+    @JsonIgnore
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     private Set<Reaction> reactions;
-
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "post_tags",
@@ -81,6 +85,7 @@ public class Post {
         this.createdBy = createdBy;
     }
 
+    @JsonIgnore
     public Boolean getDeleted() {
         return isDeleted;
     }

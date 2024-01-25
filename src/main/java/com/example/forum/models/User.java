@@ -3,6 +3,7 @@ package com.example.forum.models;
 import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 
@@ -38,7 +39,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role = Role.USER;
-
+    @JsonIgnore
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
@@ -47,11 +48,11 @@ public class User {
     private Status status = Status.ACTIVE;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "createdBy")
+    @OneToMany(mappedBy = "createdBy", fetch = FetchType.EAGER)
     private Set<Post> posts;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Comment> comments;
 
     public User() {
@@ -112,7 +113,7 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-
+    @JsonIgnore
     public Boolean getDeleted() {
         return isDeleted;
     }

@@ -8,6 +8,7 @@ public class PhoneNumber {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "phone_number_id")
     private int id;
 
     @Column(name = "phone_number")

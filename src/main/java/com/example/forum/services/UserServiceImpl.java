@@ -63,8 +63,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void update(User targetUser, User executingUser) {
-        checkAccessPermissions(targetUser.getId(), executingUser);
-
+        checkAccessPermissionsUser(targetUser.getId(), executingUser);
         userRepository.update(targetUser);
     }
 
@@ -98,6 +97,11 @@ public class UserServiceImpl implements UserService {
 
     private static void checkAccessPermissionsAdmin(User executingUser) {
         if (!executingUser.getRole().name().equals("ADMIN")) {
+            throw new AuthorizationException(MODIFY_BEER_MESSAGE_ERROR);
+        }
+    }
+    private static void checkAccessPermissionsUser(int targetUserId, User executingUser) {
+        if (executingUser.getId() != targetUserId) {
             throw new AuthorizationException(MODIFY_BEER_MESSAGE_ERROR);
         }
     }

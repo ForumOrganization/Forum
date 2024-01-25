@@ -23,6 +23,7 @@ public class UserMapper {
         user.setLastName(repostioryUser.getLastName());
         user.setEmail(repostioryUser.getEmail());
         user.setPassword(repostioryUser.getPassword());
+        user.setUsername(String.valueOf(userService.getById(id,user)));
 
         return user;
     }

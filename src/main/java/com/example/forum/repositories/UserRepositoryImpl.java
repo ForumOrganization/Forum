@@ -47,7 +47,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public com.example.forum.models.User getByUsername(String username) {
         try (Session session = sessionFactory.openSession()) {
-            Query<com.example.forum.models.User> query = session.createQuery("from User where username = :username", com.example.forum.models.User.class);
+            Query<com.example.forum.models.User> query = session.createQuery("from User where username = :username",User.class);
             query.setParameter("username", username);
 
             List<com.example.forum.models.User> result = query.list();

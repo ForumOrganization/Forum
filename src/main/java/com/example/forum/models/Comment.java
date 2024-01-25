@@ -1,5 +1,7 @@
 package com.example.forum.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,18 +10,20 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
+    @Column(name = "comment_id")
     private int id;
 
     @Column(name = "content")
     private String content;
-
+    @JsonIgnore
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
@@ -44,6 +48,7 @@ public class Comment {
         this.content = content;
     }
 
+    @JsonIgnore
     public Boolean getDeleted() {
         return isDeleted;
     }
