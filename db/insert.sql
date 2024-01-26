@@ -27,7 +27,7 @@ VALUES ('LIKES', 1, 1),
        ('DISLIKES', 2, 1),
        ('LOVE', 3, 2);
 
-INSERT INTO reactions_posts (type_reaction, user_id,comment_id)
+INSERT INTO reactions_comments (type_reaction, user_id,comment_id)
 VALUES ('LOVE', 2, 2),
        ('DISLIKES', 3, 3),
        ('LIKE', 1, 3);
