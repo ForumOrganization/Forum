@@ -1,6 +1,5 @@
 package com.example.forum.services;
 
-import com.example.forum.models.Reaction;
 import com.example.forum.repositories.contracts.ReactionRepository;
 import com.example.forum.services.contracts.ReactionService;
 import org.springframework.beans.factory.annotation.Autowired;

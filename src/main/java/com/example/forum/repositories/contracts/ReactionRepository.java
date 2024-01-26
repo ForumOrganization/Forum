@@ -1,7 +1,5 @@
 package com.example.forum.repositories.contracts;
 
-import com.example.forum.models.Reaction;
-
 import java.util.List;
 import java.util.Map;
 

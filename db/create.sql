@@ -43,21 +43,29 @@ CREATE TABLE comments
     CONSTRAINT comments_posts_post_id_fk
         FOREIGN KEY (post_id) REFERENCES posts (post_id)
 );
-CREATE TABLE reactions
+CREATE TABLE reactions_posts
 (
     reaction_id   INT PRIMARY KEY AUTO_INCREMENT,
     type_reaction ENUM ('LIKES', 'DISLIKES', 'LOVE'),
     user_id       INT NOT NULL,
     post_id       INT NOT NULL,
-    comment_id    INT NOT NULL,
     CONSTRAINT reactions_users_user_id_fk
         FOREIGN KEY (user_id) REFERENCES users (user_id),
     CONSTRAINT reactions_posts_post_id_fk
         FOREIGN KEY (post_id) REFERENCES posts (post_id),
+);
+
+CREATE TABLE reactions_comments
+(
+    reaction_id   INT PRIMARY KEY AUTO_INCREMENT,
+    type_reaction ENUM ('LIKES', 'DISLIKES', 'LOVE'),
+    user_id       INT NOT NULL,
+    comment_id    INT NOT NULL,
+    CONSTRAINT reactions_users_user_id_fk
+        FOREIGN KEY (user_id) REFERENCES users (user_id),
     CONSTRAINT reactions_comments_comment_id_fk
         FOREIGN KEY (comment_id) REFERENCES comments (comment_id)
 );
-
 
 
 CREATE TABLE tags

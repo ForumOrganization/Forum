@@ -3,8 +3,8 @@ package com.example.forum.models;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "reactions")
-public class Reaction {
+@Table(name = "reactions_posts")
+public class Reaction_posts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +23,7 @@ public class Reaction {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
-
-    public Reaction() {
+    public Reaction_posts() {
 
     }
 
@@ -63,11 +59,4 @@ public class Reaction {
         this.post = post;
     }
 
-    public Comment getComment() {
-        return comment;
-    }
-
-    public void setComment(Comment comment) {
-        this.comment = comment;
-    }
 }

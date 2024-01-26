@@ -22,11 +22,15 @@ VALUES (2, 1, 'Nice post!'),
        (1, 2, 'Great content!');
 
 -- Insert data into 'reactions' table
-INSERT INTO reactions (type_reaction, user_id, post_id, comment_id)
-VALUES ('LIKES', 1, 1, 1),
-       ('DISLIKES', 2, 1, 2),
-       ('LOVE', 3, 2, 3);
+INSERT INTO reactions_posts (type_reaction, user_id, post_id)
+VALUES ('LIKES', 1, 1),
+       ('DISLIKES', 2, 1),
+       ('LOVE', 3, 2);
 
+INSERT INTO reactions_posts (type_reaction, user_id,comment_id)
+VALUES ('LOVE', 2, 2),
+       ('DISLIKES', 3, 3),
+       ('LIKE', 1, 3);
 
 
 -- Insert data into 'tags' table
