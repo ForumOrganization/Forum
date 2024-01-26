@@ -26,7 +26,7 @@ public interface UserService {
     //TODO Siyana
     List<Post> getPosts(int id, User user);
 
-    //TODO Veronika - Done?
+    //TODO Veronika - Done
     void update(User targetUser, User executingUser);
 
     //TODO Siyana
@@ -35,7 +35,7 @@ public interface UserService {
     //TODO Yoana
     void blockUser(User admin, User blockUser);
 
-    //TODO Veronika -Done?
+    //TODO Veronika -Done
     void unBlockUser(User admin, User unBlockUser);
 
     //TODO Siyana

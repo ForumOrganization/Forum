@@ -95,9 +95,41 @@ public class UserRestController {
     public User update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody UserDto userDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            User userToBeUpdated = userMapper.fromDto(id,userDto);
+            User userToBeUpdated = userMapper.fromDtoUpdate(id,userDto);
             userService.update(userToBeUpdated, user);
-            return user;
+            return userToBeUpdated;
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+
+    }
+    @PutMapping("/block/{id}")
+    public User blockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToBeBlock = userService.getById(id,user);
+            userService.blockUser(user, userToBeBlock);
+            return userToBeBlock;
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+
+    }
+    @PutMapping("/unblock/{id}")
+    public User unblockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            User userToBeUnblock = userService.getById(id,user);
+            userService.unBlockUser(user, userToBeUnblock);
+            return userToBeUnblock;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
