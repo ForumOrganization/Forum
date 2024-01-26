@@ -1,5 +1,7 @@
 package com.example.forum.services;
 
+import com.example.forum.models.Reaction_comments;
+import com.example.forum.models.Reaction_posts;
 import com.example.forum.repositories.contracts.ReactionRepository;
 import com.example.forum.services.contracts.ReactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,32 +21,32 @@ public class ReactionServiceImpl implements ReactionService {
     }
 
     @Override
-    public List<Reaction> getAllReactionsByPostId(Reaction reaction, int postId) {
+    public List<Reaction_posts> getAllReactionsByPostId(Reaction_posts reaction, int postId) {
         return reactionRepository.getAllReactionsByPostId(reaction, postId);
     }
 
     @Override
-    public List<Reaction> getAllReactionsByCommentId(Reaction reaction, int commentId) {
+    public List<Reaction_comments> getAllReactionsByCommentId(Reaction_comments reaction, int commentId) {
         return null;
     }
 
     @Override
-    public Map<Reaction, Integer> countReactionsPost(int postId) {
+    public Map<Reaction_posts, Integer> countReactionsPost(int postId) {
         return reactionRepository.countReactionsPost(postId);
     }
 
     @Override
-    public Map<Reaction, Integer> countReactionsComment(int commentId) {
-        return reactionRepository.countReactionsPost(commentId);
+    public Map<Reaction_comments, Integer> countReactionsComment(int commentId) {
+        return reactionRepository.countReactionsComment(commentId);
     }
 
     @Override
-    public void updateReactionPost(Reaction reaction, int postId) {
+    public void updateReactionPost(Reaction_posts reaction, int postId) {
 
     }
 
     @Override
-    public void updateReactionComment(Reaction reaction, int commentId) {
+    public void updateReactionComment(Reaction_comments reaction, int commentId) {
         reactionRepository.updateReactionComment(reaction, commentId);
     }
 }

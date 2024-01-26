@@ -3,6 +3,8 @@ package com.example.forum.repositories;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
+import com.example.forum.models.Reaction_comments;
+import com.example.forum.models.Reaction_posts;
 import com.example.forum.repositories.contracts.ReactionRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -24,10 +26,10 @@ public class ReactionRepositoryImpl implements ReactionRepository {
     }
 
     @Override
-    public List<Reaction> getAllReactionsByPostId(Reaction reaction, int postId) {
+    public List<Reaction_posts> getAllReactionsByPostId(Reaction_posts reaction, int postId) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Reaction> query = session.createQuery(
-                    "SELECT r FROM Reaction r WHERE post.id = :postId", Reaction.class);
+            Query<Reaction_posts> query = session.createQuery(
+                    "SELECT r FROM Reaction_posts r WHERE post.id = :postId", Reaction_posts.class);
 
             query.setParameter("postId", postId);
 
@@ -37,12 +39,12 @@ public class ReactionRepositoryImpl implements ReactionRepository {
 
 
     @Override
-    public List<Reaction> getAllReactionsByCommentId(Reaction reaction, int commentId) {
+    public List<Reaction_comments> getAllReactionsByCommentId(Reaction_comments reaction, int commentId) {
         return null;
     }
 
     @Override
-    public Map<Reaction, Integer> countReactionsPost(int postId) {
+    public Map<Reaction_posts, Integer> countReactionsPost(int postId) {
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, postId);
 
@@ -50,10 +52,10 @@ public class ReactionRepositoryImpl implements ReactionRepository {
                 throw new EntityNotFoundException("Post", "postId", String.valueOf(postId));
             }
 
-            Map<Reaction, Integer> reactionCountMap = new HashMap<>();
+            Map<Reaction_posts, Integer> reactionCountMap = new HashMap<>();
 
-            Set<Reaction> reactions = post.getReactions();
-            for (Reaction reaction : reactions) {
+            Set<Reaction_posts> reactions = post.getReactions();
+            for (Reaction_posts reaction : reactions) {
                 reactionCountMap.put(reaction, reactionCountMap.getOrDefault(reaction, 0) + 1);
             }
 
@@ -62,19 +64,19 @@ public class ReactionRepositoryImpl implements ReactionRepository {
     }
 
     @Override
-    public Map<Reaction, Integer> countReactionsComment(int commentId) {
+    public Map<Reaction_comments, Integer> countReactionsComment(int commentId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Object[]> query = session.createQuery(
-                    "SELECT r, COUNT(r) FROM Reaction r WHERE r.comment.id = :commentId GROUP BY r",
+                    "SELECT r, COUNT(r) FROM Reaction_comments r WHERE r.comment.id = :commentId GROUP BY r",
                     Object[].class);
 
             query.setParameter("commentId", commentId);
 
             List<Object[]> result = query.getResultList();
 
-            Map<Reaction, Integer> reactionCountMap = new HashMap<>();
+            Map<Reaction_comments, Integer> reactionCountMap = new HashMap<>();
             for (Object[] row : result) {
-                Reaction reaction = (Reaction) row[0];
+                Reaction_comments reaction = (Reaction_comments) row[0];
                 Long count = (Long) row[1];
                 reactionCountMap.put(reaction, count.intValue());
             }
@@ -85,12 +87,12 @@ public class ReactionRepositoryImpl implements ReactionRepository {
 
 
     @Override
-    public void updateReactionPost(Reaction reaction, int postId) {
+    public void updateReactionPost(Reaction_posts reaction, int postId) {
 
     }
 
     @Override
-    public void updateReactionComment(Reaction reaction, int commentId) {
+    public void updateReactionComment(Reaction_comments reaction, int commentId) {
         try (Session session = sessionFactory.openSession()) {
             Comment comment = session.get(Comment.class, commentId);
 
@@ -98,7 +100,7 @@ public class ReactionRepositoryImpl implements ReactionRepository {
                 throw new EntityNotFoundException("Comment", "commentId", String.valueOf(commentId));
             }
 
-            Reaction existingReaction = findReactionByCommentIdAndUserId(commentId, reaction.getUser().getId());
+            Reaction_comments existingReaction = findReactionByCommentIdAndUserId(commentId, reaction.getUser().getId());
 
             if (existingReaction != null) {
                 existingReaction.setReaction(reaction.getReaction());
@@ -113,9 +115,9 @@ public class ReactionRepositoryImpl implements ReactionRepository {
         }
     }
 
-    private Reaction findReactionByCommentIdAndUserId(int commentId, int userId) {
+    private Reaction_comments findReactionByCommentIdAndUserId(int commentId, int userId) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Reaction where comment.id = :commentId and user.id = :userId", Reaction.class)
+            return session.createQuery("from Reaction_comments where comment.id = :commentId and user.id = :userId", Reaction_comments.class)
                     .setParameter("commentId", commentId)
                     .setParameter("userId", userId)
                     .uniqueResult();

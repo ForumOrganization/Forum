@@ -39,7 +39,7 @@ public class Post {
     private Set<Comment> comments;
     @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
-    private Set<Reaction> reactions;
+    private Set<Reaction_posts> reactions;
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -110,11 +110,11 @@ public class Post {
         this.comments = comments;
     }
 
-    public Set<Reaction> getReactions() {
+    public Set<Reaction_posts> getReactions() {
         return reactions;
     }
 
-    public void setReactions(Set<Reaction> reactions) {
+    public void setReactions(Set<Reaction_posts> reactions) {
         this.reactions = reactions;
     }
 
