@@ -37,7 +37,6 @@ public class ReactionRepositoryImpl implements ReactionRepository {
         }
     }
 
-
     @Override
     public List<Reaction_comments> getAllReactionsByCommentId(int commentId) {
         try (Session session = sessionFactory.openSession()) {
@@ -91,7 +90,6 @@ public class ReactionRepositoryImpl implements ReactionRepository {
             return reactionCountMap;
         }
     }
-
 
     @Override
     public void updateReactionPost(Reaction_posts reaction, int postId) {

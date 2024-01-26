@@ -2,7 +2,7 @@ package com.example.forum.models.dtos;
 
 import jakarta.validation.constraints.Size;
 
-public class PostCreateInputDto {
+public class PostDto {
 
     @Size(min = 16, max = 64, message = "Title should be between 16 and 64 symbols.")
     private String title;
@@ -10,7 +10,7 @@ public class PostCreateInputDto {
     @Size(min = 32, max = 8192, message = "Content should be between 32 and 8192 symbols.")
     private String content;
 
-    public PostCreateInputDto() {
+    public PostDto() {
 
     }
 

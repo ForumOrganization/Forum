@@ -24,6 +24,7 @@ public class UserMapper {
         user.setEmail(repostioryUser.getEmail());
         user.setPassword(repostioryUser.getPassword());
         user.setUsername(repostioryUser.getUsername());
+
         return user;
     }
 

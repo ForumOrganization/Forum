@@ -16,5 +16,5 @@ public interface CommentService {
     void updateComment(Comment comment, User user);
 
     //TODO Yoana
-    void deleteComment(int commentId);
+    void deleteComment(int commentId, User user);
 }

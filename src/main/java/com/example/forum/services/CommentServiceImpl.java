@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.example.forum.utils.Messages.USER_HAS_BEEN_BLOCKED_OR_DELETED;
+import static com.example.forum.utils.CheckPermission.checkAccessPermissions;
+import static com.example.forum.utils.CheckPermission.checkAccessPermissionsUser;
+import static com.example.forum.utils.Messages.*;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -25,12 +27,10 @@ public class CommentServiceImpl implements CommentService {
     private CommentRepository commentRepository;
     private PostRepository postRepository;
 
-    private static final String MODIFY_ERROR_MESSAGE = "Only the creator of a comment can modify it.";
-
     @Autowired
     public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository) {
         this.commentRepository = commentRepository;
-        this.postRepository=postRepository;
+        this.postRepository = postRepository;
     }
 
     @Override
@@ -40,39 +40,35 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void createComment(Comment comment, int postId, User user) {
-        if(user.getStatus()==Status.BLOCKED || user.isDeleted()){
+        checkAccessPermissionsUser(user.getId(), user, MODIFY_USER_MESSAGE_ERROR);
+
+        if (user.getStatus() == Status.BLOCKED || user.isDeleted()) {
             throw new UnauthorizedOperationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
         }
-        Post post=postRepository.getById(postId);
-        if(post==null){
-            throw new EntityNotFoundException("Post","id",String.valueOf(postId));
+
+        Post post = postRepository.getById(postId);
+
+        if (post == null) {
+            throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
         }
+
         comment.setUser(user);
         comment.setPost(post);
+
         this.commentRepository.createComment(comment);
     }
 
-
-
     @Override
     public void updateComment(Comment comment, User user) {
-        checkModifyPermission(comment.getId(), user);
+        checkAccessPermissionsUser(user.getId(), user, MODIFY_USER_MESSAGE_ERROR);
+
         this.commentRepository.updateComment(comment);
-
     }
-
-
 
     @Override
-    public void deleteComment(int commentId) {
-        this.commentRepository.deleteComment(commentId);
-    }
+    public void deleteComment(int commentId, User user) {
+        checkAccessPermissions(user.getId(), user, MODIFY_POST_ERROR_MESSAGE);
 
-    private void checkModifyPermission(int commentId, User user) {
-        Comment comment = this.commentRepository.getCommentById(commentId);
-
-        if (comment.getUser().getId()!=user.getId()) {
-            throw new AuthorizationException(MODIFY_ERROR_MESSAGE);
-        }
+        this.commentRepository.deleteComment(commentId, user);
     }
 }

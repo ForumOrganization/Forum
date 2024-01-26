@@ -26,6 +26,9 @@ public interface UserService {
     //TODO Siyana
     List<Post> getPosts(int id, User user);
 
+    //TODO Veronika
+    void create(User user);
+
     //TODO Veronika - Done
     void update(User targetUser, User executingUser);
 

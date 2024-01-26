@@ -5,11 +5,11 @@ import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.PostMapper;
-import com.example.forum.utils.PostFilterOptions;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
-import com.example.forum.models.dtos.PostCreateInputDto;
+import com.example.forum.models.dtos.PostDto;
 import com.example.forum.services.contracts.PostService;
+import com.example.forum.utils.PostFilterOptions;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,13 +39,27 @@ public class PostRestController {
     }
 
     @GetMapping
-    public List<Post> getAll(@RequestParam(required = false) String title,
+    public List<Post> getAll(@RequestHeader HttpHeaders headers,
+                             @RequestParam(required = false) String title,
                              @RequestParam(required = false) User createdBy,
                              @RequestParam(required = false) Date creationTime,
                              @RequestParam(required = false) String sortBy,
                              @RequestParam(required = false) String sortOrder) {
         PostFilterOptions postFilterOptions = new PostFilterOptions(title, createdBy, creationTime, sortBy, sortOrder);
-        return postService.getAll(postFilterOptions);
+
+        try {
+            User user = this.authenticationHelper.tryGetUser(headers);
+            return postService.getAll(postFilterOptions);
+        } catch (AuthorizationException e) {
+            List<Post> topCommentedPosts = postService.getTopCommentedPosts(postFilterOptions, 10);
+            List<Post> mostRecentPosts = postService.getMostRecentPosts(postFilterOptions, 10);
+
+            List<Post> combinedList = new ArrayList<>();
+            combinedList.addAll(topCommentedPosts);
+            combinedList.addAll(mostRecentPosts);
+
+            return combinedList;
+        }
     }
 
     @GetMapping("/{id}")
@@ -66,7 +81,7 @@ public class PostRestController {
     }
 
     @PostMapping
-    public Post create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostCreateInputDto postDto) {
+    public Post create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto) {
         try {
             User user = this.authenticationHelper.tryGetUser(headers);
             Post post = this.postMapper.fromDto(postDto);
@@ -82,7 +97,7 @@ public class PostRestController {
     }
 
     @PutMapping("/{id}")
-    public Post update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostCreateInputDto postDto) {
+    public Post update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto) {
         try {
             User user = this.authenticationHelper.tryGetUser(headers);
             Post post = this.postMapper.fromDto(id, postDto);

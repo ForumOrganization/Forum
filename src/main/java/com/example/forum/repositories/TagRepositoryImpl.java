@@ -32,7 +32,6 @@ public class TagRepositoryImpl implements TagRepository {
         }
     }
 
-
     @Override
     public List<Post> getAllPostsByTagId(int tagId) {
         try (Session session = sessionFactory.openSession()) {
@@ -42,11 +41,8 @@ public class TagRepositoryImpl implements TagRepository {
             );
 
             query.setParameter("tagId", tagId);
-
             return query.getResultList();
         }
-
-
     }
 
     @Override
@@ -58,7 +54,6 @@ public class TagRepositoryImpl implements TagRepository {
             );
 
             query.setParameter("tagName", tagName);
-
             return query.getResultList();
         }
     }
@@ -70,11 +65,9 @@ public class TagRepositoryImpl implements TagRepository {
                     "SELECT t FROM Post p JOIN p.tags t WHERE p.id = :postId", Tag.class);
 
             query.setParameter("postId", postId);
-
             return query.getResultList();
         }
     }
-
 
     @Override
     public Tag getTagById(int tagId) {
@@ -101,13 +94,28 @@ public class TagRepositoryImpl implements TagRepository {
                 throw new EntityNotFoundException("Post", postId);
             }
 
-            post.getTags().add(tag);
+            Query<Tag> query = session.createQuery(
+                    "SELECT t FROM Tag t WHERE t.name = :name",
+                    Tag.class
+            );
 
-            post.setCreatedBy(user);
+            query.setParameter("name", tag.getName());
 
-            session.beginTransaction();
-            session.merge(post);
-            session.getTransaction().commit();
+            Tag foundTag = query.getSingleResult();
+
+            if (foundTag == null) {
+                session.beginTransaction();
+                session.persist(tag);
+                session.getTransaction().commit();
+            } else {
+                post.getTags().add(tag);
+                post.setCreatedBy(user);
+
+
+                session.beginTransaction();
+                session.merge(post);
+                session.getTransaction().commit();
+            }
         }
     }
 
@@ -118,8 +126,6 @@ public class TagRepositoryImpl implements TagRepository {
             session.merge(tag);
             session.getTransaction().commit();
         }
-
-
     }
 
     @Override

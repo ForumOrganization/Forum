@@ -14,6 +14,7 @@ import java.util.Set;
 @Table(name = "users")
 public class User {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -28,7 +29,6 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Email()
     @Column(name = "email")
     private String email;
 
@@ -39,10 +39,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role = Role.USER;
+
     @JsonIgnore
     @Column(name = "is_deleted")
-    private Boolean isDeleted=Boolean.FALSE;
+    private Boolean isDeleted = Boolean.FALSE;
 
+    @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status = Status.ACTIVE;
@@ -113,7 +115,7 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
-    @JsonIgnore
+
     public Boolean isDeleted() {
         return Boolean.TRUE.equals(isDeleted);
     }

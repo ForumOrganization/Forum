@@ -58,6 +58,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void create(User user) {
+
+    }
+
+    @Override
     public void update(User targetUser, User executingUser) {
         checkAccessPermissionsUser(targetUser.getId(), executingUser, MODIFY_USER_MESSAGE_ERROR);
         userRepository.update(targetUser);

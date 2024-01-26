@@ -9,6 +9,7 @@ import java.util.Set;
 @Table(name = "tags")
 public class Tag {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tag_id")
@@ -17,6 +18,7 @@ public class Tag {
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "tags")
     private Set<Post> posts;
 

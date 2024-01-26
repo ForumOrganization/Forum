@@ -4,37 +4,38 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
 @Table(name = "comments")
 public class Comment {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     @Column(name = "comment_id")
     private int id;
 
     @Column(name = "content")
     private String content;
+
     @JsonIgnore
     @Column(name = "is_deleted")
     private Boolean isDeleted;
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties({"id", "firstName", "lastName", "email", "role", "status", "deleted"})
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    @JsonIgnoreProperties({"id", "content", "createdBy", "creationTime",  "isDeleted"})
+    private Post post;
 
     @JsonIgnore
     @OneToMany(mappedBy = "comment", fetch = FetchType.EAGER)
     private Set<Reaction_comments> reactions;
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
-
 
     public Comment() {
 
@@ -73,15 +74,6 @@ public class Comment {
         this.user = user;
     }
 
-    public Set<Reaction_comments> getReactions() {
-        return reactions;
-    }
-
-    public void setReactions(Set<Reaction_comments> reactions) {
-        this.reactions = reactions;
-    }
-
-
     public Post getPost() {
         return post;
     }
@@ -90,5 +82,11 @@ public class Comment {
         this.post = post;
     }
 
+    public Set<Reaction_comments> getReactions() {
+        return reactions;
+    }
 
+    public void setReactions(Set<Reaction_comments> reactions) {
+        this.reactions = reactions;
+    }
 }

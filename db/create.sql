@@ -27,9 +27,9 @@ CREATE TABLE posts
     title         VARCHAR(64)   NOT NULL,
     content       VARCHAR(8192) NOT NULL,
     creation_time DATE,
+    is_deleted    BOOLEAN DEFAULT FALSE,
     CONSTRAINT posts_users_user_id_fk
-        FOREIGN KEY (created_by) REFERENCES users (user_id),
-    is_deleted    BOOLEAN DEFAULT FALSE
+        FOREIGN KEY (created_by) REFERENCES users (user_id)
 );
 CREATE TABLE comments
 (

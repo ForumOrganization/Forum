@@ -13,6 +13,10 @@ public interface PostService {
     //TODO Veronika
     List<Post> getAll(PostFilterOptions postFilterOptions);
 
+    List<Post> getTopCommentedPosts(PostFilterOptions postFilterOptions, int limit);
+
+    List<Post> getMostRecentPosts(PostFilterOptions postFilterOptions, int limit);
+
     Post getById(int id);
 
     //TODO Yoana

@@ -99,6 +99,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public void create(User user) {
+
+    }
+
+    @Override
     public void update(User targetUser) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();

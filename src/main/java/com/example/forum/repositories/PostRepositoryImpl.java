@@ -103,6 +103,7 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public void update(Post post) {
         try (Session session = sessionFactory.openSession()) {
+            post.setCreationTime(LocalDate.now());
             session.beginTransaction();
             session.merge(post);
             session.getTransaction().commit();
@@ -115,11 +116,8 @@ public class PostRepositoryImpl implements PostRepository {
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-
-            // Perform soft delete by updating the isDeleted flag
             postToDelete.setDeleted(true);
             session.merge(postToDelete);
-
             session.getTransaction().commit();
         }
     }

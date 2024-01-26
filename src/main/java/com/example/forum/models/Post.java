@@ -11,9 +11,9 @@ import java.util.Set;
 @Table(name = "posts")
 public class Post {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     @Column(name = "post_id")
     private int id;
 
@@ -26,20 +26,23 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "created_by")
     @JsonIgnoreProperties({"id", "firstName", "lastName", "email", "role", "status", "deleted"})
-
     private User createdBy;
+
     @JsonIgnore
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
     @Column(name = "creation_time")
     private LocalDate creationTime = LocalDate.now();
+
     @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     private Set<Comment> comments;
+
     @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     private Set<Reaction_posts> reactions;
+
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

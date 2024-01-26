@@ -1,6 +1,7 @@
 package com.example.forum.repositories.contracts;
 
 import com.example.forum.models.Comment;
+import com.example.forum.models.User;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface CommentRepository {
 
     void updateComment(Comment comment);
 
-    void deleteComment(int commentId);
+    void deleteComment(int commentId, User user);
 }

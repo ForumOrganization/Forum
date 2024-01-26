@@ -1,6 +1,7 @@
 package com.example.forum.models.enums;
 
 public enum Role {
+
     USER("USER"),
     ADMIN("ADMIN");
 

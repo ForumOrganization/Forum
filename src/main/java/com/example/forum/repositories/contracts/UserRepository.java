@@ -20,6 +20,8 @@ public interface UserRepository {
 
     List<Post> getPosts(int id, User user);
 
+    void create(User user);
+
     void update(User targetUser);
 
     User updateToAdmin(User userAdmin, User updateToAdmin);

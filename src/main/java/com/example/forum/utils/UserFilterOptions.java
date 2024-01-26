@@ -44,5 +44,4 @@ public class UserFilterOptions {
     public Optional<String> getSortOrder() {
         return sortOrder;
     }
-
 }
