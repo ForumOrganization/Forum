@@ -29,7 +29,7 @@ public class Comment {
 
     @JsonIgnore
     @OneToMany(mappedBy = "comment", fetch = FetchType.EAGER)
-    private Set<Reaction> reactions;
+    private Set<Reaction_comments> reactions;
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
@@ -73,11 +73,11 @@ public class Comment {
         this.user = user;
     }
 
-    public Set<Reaction> getReactions() {
+    public Set<Reaction_comments> getReactions() {
         return reactions;
     }
 
-    public void setReactions(Set<Reaction> reactions) {
+    public void setReactions(Set<Reaction_comments> reactions) {
         this.reactions = reactions;
     }
 
