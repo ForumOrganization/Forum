@@ -113,7 +113,7 @@ public class UserRestController {
     public List<Post> getPosts(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            List<Post> userPosts = userService.getPosts(id, user);
+            List<Post> userPosts = userService.getPosts(id);
             return new ArrayList<>(userPosts);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

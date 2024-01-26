@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.example.forum.utils.CheckPermission.checkAccessPermissionsUser;
+import static com.example.forum.utils.Messages.DELETE_TAG_MESSAGE_ERROR;
 import static com.example.forum.utils.Messages.MODIFY_TAG_ERROR_MESSAGE;
 
 @Service
@@ -79,5 +80,20 @@ public class TagServiceImpl implements TagService {
     @Override
     public void deleteTagInPost(int tagId, User user) {
 
+        Tag tag = getTagById(tagId);
+        checkAccessPermissionsUser(tag.getId(), user, DELETE_TAG_MESSAGE_ERROR);
+        boolean duplicateExists = true;
+        try {
+            Tag existingTag = tagRepository.getTagById(tag.getId());
+            if (existingTag.getId() == tag.getId()) {
+                duplicateExists = false;
+            }
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+        if (duplicateExists) {
+            throw new DuplicateEntityException("Tag", "name", tag.getName());
+        }
+        this.tagRepository.deleteTagInPost(tag);
     }
 }

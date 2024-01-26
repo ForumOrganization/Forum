@@ -93,7 +93,26 @@ public class ReactionRepositoryImpl implements ReactionRepository {
 
     @Override
     public void updateReactionPost(Reaction_posts reaction, int postId) {
+        try (Session session = sessionFactory.openSession()) {
+            Post post = session.get(Post.class, postId);
 
+            if (post == null) {
+                throw new EntityNotFoundException("Post", "postId", String.valueOf(postId));
+            }
+
+            Reaction_posts existingReaction = findReactionByPostIdAndUserId(postId, reaction.getUser().getId());
+
+            if (existingReaction != null) {
+                existingReaction.setReaction(reaction.getReaction());
+                session.merge(existingReaction);
+
+            } else {
+                reaction.setPost(post);
+                session.beginTransaction();
+                session.persist(reaction);
+                session.getTransaction().commit();
+            }
+        }
     }
 
     @Override
@@ -124,6 +143,15 @@ public class ReactionRepositoryImpl implements ReactionRepository {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("from Reaction_comments where comment.id = :commentId and user.id = :userId", Reaction_comments.class)
                     .setParameter("commentId", commentId)
+                    .setParameter("userId", userId)
+                    .uniqueResult();
+        }
+    }
+
+    private Reaction_posts findReactionByPostIdAndUserId(int postId, int userId) {
+        try (Session session = sessionFactory.openSession()) {
+            return session.createQuery("from Reaction_posts where post.id = :postId and user.id = :userId", Reaction_posts.class)
+                    .setParameter("postId", postId)
                     .setParameter("userId", userId)
                     .uniqueResult();
         }

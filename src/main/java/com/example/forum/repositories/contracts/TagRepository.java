@@ -22,5 +22,5 @@ public interface TagRepository {
 
     void updateTagInPost(Tag tag);
 
-    void deleteTagInPost(int tagId);
+    void deleteTagInPost(Tag tag);
 }

@@ -28,6 +28,6 @@ public interface TagService {
     //TODO Veronika - Done
     void updateTagInPost(Tag tag, User user);
 
-    //TODO Siyana
+
     void deleteTagInPost(int tagId, User user);
 }

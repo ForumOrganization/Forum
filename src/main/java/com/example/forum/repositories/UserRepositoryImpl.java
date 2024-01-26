@@ -45,12 +45,12 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public com.example.forum.models.User getByUsername(String username) {
+    public User getByUsername(String username) {
         try (Session session = sessionFactory.openSession()) {
-            Query<com.example.forum.models.User> query = session.createQuery("from User where username = :username", User.class);
+            Query<User> query = session.createQuery("from User where username = :username", User.class);
             query.setParameter("username", username);
 
-            List<com.example.forum.models.User> result = query.list();
+            List<User> result = query.list();
 
             if (result.size() == 0) {
                 throw new EntityNotFoundException("User", "username", username);
@@ -94,8 +94,18 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    public List<Post> getPosts(int id, User user) {
-        return null;
+    public List<Post> getPosts(int userId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery("FROM Post as p where p.createdBy = :userId", Post.class);
+            query.setParameter("id", userId);
+            List<Post> posts = query.list();
+
+            if (posts.isEmpty()) {
+                throw new EntityNotFoundException("Post", "id", String.valueOf(userId));
+            }
+
+            return posts.stream().toList();
+        }
     }
 
     @Override

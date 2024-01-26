@@ -18,7 +18,7 @@ public interface UserRepository {
 
     User getByFirstName(String firstName);
 
-    List<Post> getPosts(int id, User user);
+    List<Post> getPosts(int userId);
 
     void create(User user);
 

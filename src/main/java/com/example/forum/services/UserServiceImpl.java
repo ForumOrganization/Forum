@@ -53,8 +53,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Post> getPosts(int id, User user) {
-        return null;
+    public List<Post> getPosts(int id) {
+        return this.userRepository.getPosts(id);
     }
 
     @Override

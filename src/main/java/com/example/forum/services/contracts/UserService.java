@@ -14,7 +14,6 @@ public interface UserService {
     //TODO Veronika - Done
     User getById(int id, User user);
 
-    //TODO Siyana
     User getByUsername(String username);
 
     //TODO Yoana
@@ -23,8 +22,7 @@ public interface UserService {
     //TODO Veronika - Done
     User getByFirstName(String firstName);
 
-    //TODO Siyana
-    List<Post> getPosts(int id, User user);
+    List<Post> getPosts(int id);
 
     //TODO Veronika
     void create(User user);

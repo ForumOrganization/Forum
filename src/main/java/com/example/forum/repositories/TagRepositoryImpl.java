@@ -129,7 +129,11 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public void deleteTagInPost(int tagId) {
-
+    public void deleteTagInPost(Tag tag) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.remove(tag);
+            session.getTransaction().commit();
+        }
     }
 }

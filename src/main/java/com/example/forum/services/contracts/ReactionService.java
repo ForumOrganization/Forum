@@ -19,7 +19,6 @@ public interface ReactionService {
     //TODO Veronika - Done
     Map<Reaction_comments, Integer> countReactionsComment(int commentId);
 
-    //TODO Siyana
     void updateReactionPost(Reaction_posts reaction, int postId);
 
     //TODO Yoana

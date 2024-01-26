@@ -42,7 +42,7 @@ public class ReactionServiceImpl implements ReactionService {
 
     @Override
     public void updateReactionPost(Reaction_posts reaction, int postId) {
-
+       reactionRepository.updateReactionPost(reaction,postId);
     }
 
     @Override
