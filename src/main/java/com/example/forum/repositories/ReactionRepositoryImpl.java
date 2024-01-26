@@ -39,8 +39,15 @@ public class ReactionRepositoryImpl implements ReactionRepository {
 
 
     @Override
-    public List<Reaction_comments> getAllReactionsByCommentId(Reaction_comments reaction, int commentId) {
-        return null;
+    public List<Reaction_comments> getAllReactionsByCommentId(int commentId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Reaction_comments> query = session.createQuery(
+                    "SELECT r FROM Reaction_comments r WHERE comment.id = :commentId", Reaction_comments.class);
+
+            query.setParameter("commentId", commentId);
+
+            return query.getResultList();
+        }
     }
 
     @Override

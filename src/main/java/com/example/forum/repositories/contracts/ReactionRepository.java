@@ -10,7 +10,7 @@ public interface ReactionRepository {
 
     List<Reaction_posts> getAllReactionsByPostId(Reaction_posts reaction, int postId);
 
-    List<Reaction_comments> getAllReactionsByCommentId(Reaction_comments reaction, int commentId);
+    List<Reaction_comments> getAllReactionsByCommentId(int commentId);
 
     Map<Reaction_posts, Integer> countReactionsPost(int postId);
 

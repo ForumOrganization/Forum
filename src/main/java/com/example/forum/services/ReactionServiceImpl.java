@@ -26,8 +26,8 @@ public class ReactionServiceImpl implements ReactionService {
     }
 
     @Override
-    public List<Reaction_comments> getAllReactionsByCommentId(Reaction_comments reaction, int commentId) {
-        return null;
+    public List<Reaction_comments> getAllReactionsByCommentId(int commentId) {
+        return reactionRepository.getAllReactionsByCommentId(commentId);
     }
 
     @Override

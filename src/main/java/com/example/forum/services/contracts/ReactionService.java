@@ -11,8 +11,7 @@ public interface ReactionService {
     //TODO Veronika - Done
     List<Reaction_posts> getAllReactionsByPostId(Reaction_posts reaction, int postId);
 
-    //TODO Siyana
-    List<Reaction_comments> getAllReactionsByCommentId(Reaction_comments reaction, int commentId);
+    List<Reaction_comments> getAllReactionsByCommentId(int commentId);
 
     //TODO Yoana
     Map<Reaction_posts, Integer> countReactionsPost(int postId);
