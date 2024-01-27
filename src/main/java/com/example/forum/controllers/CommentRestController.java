@@ -4,9 +4,13 @@ import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
+import com.example.forum.helpers.CommentMapper;
 import com.example.forum.models.Comment;
+import com.example.forum.models.Post;
 import com.example.forum.models.User;
+import com.example.forum.models.dtos.CommentDto;
 import com.example.forum.services.contracts.CommentService;
+import com.example.forum.utils.CommentFilterOptions;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -22,22 +26,31 @@ public class CommentRestController {
 
     private final CommentService commentService;
     private final AuthenticationHelper authenticationHelper;
+    private final CommentMapper commentMapper;
 
     @Autowired
-    public CommentRestController(CommentService commentService, AuthenticationHelper authenticationHelper) {
+    public CommentRestController(CommentService commentService, AuthenticationHelper authenticationHelper, CommentMapper commentMapper) {
         this.commentService = commentService;
         this.authenticationHelper = authenticationHelper;
+        this.commentMapper = commentMapper;
     }
 
     @GetMapping("/post/{postId}")
-    public List<Comment> getAllCommentsByPostId(@PathVariable int postId) {
-        return commentService.getAllCommentsByPostId(postId);
+    public List<Comment> getAllCommentsByPostId(@PathVariable int postId,
+                                                @RequestParam(required = false) String content,
+                                                @RequestParam(required = false) Post post,
+                                                @RequestParam(required = false) String sortBy,
+                                                @RequestParam(required = false) String sortOrder){
+        CommentFilterOptions commentFilterOptions = new CommentFilterOptions(post,content, sortBy, sortOrder);
+
+        return commentService.getAllCommentsByPostId(postId,commentFilterOptions);
     }
 
     @PostMapping("/post/{postId}")
-    public Comment createComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @Valid @RequestBody Comment comment) {
+    public Comment createComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @Valid @RequestBody CommentDto commentDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
+            Comment comment = this.commentMapper.fromDto(commentDto);
             commentService.createComment(comment, postId, user);
             return comment;
         } catch (EntityNotFoundException e) {

@@ -8,9 +8,9 @@ public class CommentDto {
     @Size(min = 32, max = 8192, message = "The comment should be between 32 and 8192 symbols long.")
     private String content;
 
-    @Positive(message = "User id can't be negative")
-    @NotNull(message = "User id can't be empty")
-    private int usertId;
+//    @Positive(message = "User id can't be negative")
+//    @NotNull(message = "User id can't be empty")
+//    private int userId;
     @Positive(message = "Post id can't be negative")
     @NotNull(message = "Post id can't be empty")
     private int postId;
@@ -19,7 +19,7 @@ public class CommentDto {
 
     public CommentDto(String content, int usertId, int postId, boolean isDeleted) {
         this.content = content;
-        this.usertId = usertId;
+      //  this.userId = usertId;
         this.postId = postId;
         this.isDeleted = isDeleted;
     }
@@ -32,13 +32,13 @@ public class CommentDto {
         this.content = content;
     }
 
-    public int getUsertId() {
-        return usertId;
-    }
-
-    public void setUsertId(int usertId) {
-        this.usertId = usertId;
-    }
+//    public int getUsertId() {
+//        return userId;
+//    }
+//
+//    public void setUsertId(int usertId) {
+//        this.userId = usertId;
+//    }
 
     public int getPostId() {
         return postId;

@@ -4,6 +4,7 @@ import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Comment;
 import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.CommentRepository;
+import com.example.forum.utils.CommentFilterOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -11,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class CommentRepositoryImpl implements CommentRepository {
@@ -24,18 +28,41 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> getAllCommentsByPostId(int postId) {
+    public List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Comment> query = session.createQuery("from Comment where post.id = :postId", Comment.class);
-            query.setParameter("postId", postId);
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
 
-            List<Comment> result = query.list();
+            filters.add(" post.id = :postId ");
+            params.put("postId", postId);
 
-            if (result.isEmpty()) {
-                throw new EntityNotFoundException("Comment", "postId", String.valueOf(postId));
+
+            commentFilterOptions.getContent().ifPresent(value -> {
+                filters.add("content like :content");
+                params.put("content", String.format("%%%s%%", value));
+            });
+
+//            commentFilterOptions.getPost().ifPresent(value -> {
+//                filters.add(" post.id = :id ");
+//                params.put("id", value);
+//            });
+//
+//            commentFilterOptions.getUser().ifPresent(value -> {
+//                filters.add(" user_id = :id ");
+//                params.put("id", value);
+//            });
+
+            StringBuilder queryString = new StringBuilder("from Comment");
+            if (!filters.isEmpty()) {
+                queryString
+                        .append(" where ")
+                        .append(String.join(" and ", filters));
             }
+            queryString.append(generateOrderBy(commentFilterOptions));
 
-            return result;
+            Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
+            query.setProperties(params);
+            return query.list();
         }
     }
 
@@ -79,5 +106,25 @@ public class CommentRepositoryImpl implements CommentRepository {
             session.remove(commentToDelete);
             session.getTransaction().commit();
         }
+    }private String generateOrderBy(CommentFilterOptions commentFilterOptions) {
+        if (commentFilterOptions.getSortBy().isEmpty()) {
+            return "";
+        }
+
+        String orderBy = "";
+        switch (commentFilterOptions.getSortBy().get()) {
+            case "content":
+                orderBy = "content";
+                break;
+
+        }
+
+        orderBy = String.format(" order by %s", orderBy);
+
+        if (commentFilterOptions.getSortOrder().isPresent() && commentFilterOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
+            orderBy = String.format("%s desc", orderBy);
+        }
+
+        return orderBy;
     }
 }

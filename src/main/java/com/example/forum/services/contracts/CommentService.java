@@ -2,13 +2,14 @@ package com.example.forum.services.contracts;
 
 import com.example.forum.models.Comment;
 import com.example.forum.models.User;
+import com.example.forum.utils.CommentFilterOptions;
 
 import java.util.List;
 
 public interface CommentService {
 
     //TODO Yoana
-    List<Comment> getAllCommentsByPostId(int postId);
+    List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions);
 
     //TODO Veronika - Done
     void createComment(Comment comment, int postId,User user);

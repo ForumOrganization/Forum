@@ -58,7 +58,6 @@ public class User {
     private Set<Comment> comments;
 
 
-
     public User() {
     }
 
@@ -117,6 +116,7 @@ public class User {
     public void setRole(Role role) {
         this.role = role;
     }
+
 
     public Boolean isDeleted() {
         return Boolean.TRUE.equals(isDeleted);

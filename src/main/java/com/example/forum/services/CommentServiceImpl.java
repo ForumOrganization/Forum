@@ -11,6 +11,7 @@ import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.CommentRepository;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.services.contracts.CommentService;
+import com.example.forum.utils.CommentFilterOptions;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,8 +35,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getAllCommentsByPostId(int postId) {
-        return this.commentRepository.getAllCommentsByPostId(postId);
+    public List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions) {
+        return this.commentRepository.getAllCommentsByPostId(postId,commentFilterOptions);
     }
 
     @Override

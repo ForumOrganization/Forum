@@ -21,7 +21,7 @@ public class Comment {
 
     @JsonIgnore
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -30,7 +30,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    @JsonIgnoreProperties({"id", "content", "createdBy", "creationTime",  "isDeleted"})
+    @JsonIgnoreProperties({"id", "content", "createdBy", "creationTime", "deleted"})
     private Post post;
 
     @JsonIgnore
@@ -58,13 +58,14 @@ public class Comment {
     }
 
     @JsonIgnore
-    public Boolean getDeleted() {
-        return isDeleted;
+    public Boolean isDeleted() {
+        return Boolean.TRUE.equals(isDeleted);
     }
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
     }
+
 
     public User getUser() {
         return user;

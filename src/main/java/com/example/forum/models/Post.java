@@ -30,7 +30,7 @@ public class Post {
 
     @JsonIgnore
     @Column(name = "is_deleted")
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 
     @Column(name = "creation_time")
     private LocalDate creationTime = LocalDate.now();
@@ -88,9 +88,8 @@ public class Post {
         this.createdBy = createdBy;
     }
 
-    @JsonIgnore
-    public Boolean getDeleted() {
-        return isDeleted;
+    public Boolean isDeleted() {
+        return Boolean.TRUE.equals(isDeleted);
     }
 
     public void setDeleted(Boolean deleted) {

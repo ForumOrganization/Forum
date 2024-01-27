@@ -2,12 +2,13 @@ package com.example.forum.repositories.contracts;
 
 import com.example.forum.models.Comment;
 import com.example.forum.models.User;
+import com.example.forum.utils.CommentFilterOptions;
 
 import java.util.List;
 
 public interface CommentRepository {
 
-    List<Comment> getAllCommentsByPostId(int postId);
+    List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions);
 
     public Comment getCommentById(int commentId);
 
