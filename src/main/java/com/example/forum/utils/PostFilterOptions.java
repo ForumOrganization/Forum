@@ -8,14 +8,14 @@ import java.util.Optional;
 public class PostFilterOptions {
 
     private Optional<String> title;
-    private Optional<User> createdBy;
+    private Optional<String> createdBy;
     private Optional<Date> creationTime;
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
     public PostFilterOptions(
             String title,
-            User createdBy,
+            String createdBy,
             Date creationTime,
             String sortBy,
             String sortOrder) {
@@ -34,11 +34,11 @@ public class PostFilterOptions {
         this.title = title;
     }
 
-    public Optional<User> getCreatedBy() {
+    public Optional<String> getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(Optional<User> createdBy) {
+    public void setCreatedBy(Optional<String> createdBy) {
         this.createdBy = createdBy;
     }
 
