@@ -66,11 +66,13 @@ public class PostServiceImpl implements PostService {
     public Post getByTitle(String title) {
         return this.postRepository.getByTitle(title);
     }
+    @Override
+    public Post getByComment(int commentId) {
+        return this.postRepository.getByComment(commentId);
+    }
 
     @Override
     public void create(Post post, User user) {
-        checkAccessPermissionsUser(user.getId(), user, MODIFY_USER_MESSAGE_ERROR);
-
         if (user.getStatus() == Status.BLOCKED || user.isDeleted()) {
             throw new UnauthorizedOperationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
         }
@@ -81,7 +83,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void update(Post post, User user) {
-        checkAccessPermissionsUser(user.getId(), user, MODIFY_USER_MESSAGE_ERROR);
+        checkAccessPermissionsUser(post.getCreatedBy().getId(), user, MODIFY_USER_MESSAGE_ERROR);
 
         boolean duplicateExists = true;
 
@@ -105,7 +107,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void delete(int id, User user) {
-        checkAccessPermissions(id, user, MODIFY_POST_ERROR_MESSAGE);
+        Post post= postRepository.getById(id);
+        checkAccessPermissions(post.getCreatedBy().getId(), user, MODIFY_POST_ERROR_MESSAGE);
         this.postRepository.delete(id);
     }
 }

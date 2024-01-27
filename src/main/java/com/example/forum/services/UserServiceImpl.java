@@ -54,6 +54,10 @@ public class UserServiceImpl implements UserService {
     public User getByFirstName(String firstName) {
         return this.userRepository.getByUsername(firstName);
     }
+@Override
+    public User getUserByComment(int commentId) {
+        return this.userRepository.getUserByComment(commentId);
+    }
 
     @Override
     public List<Post> getPosts(int id) {

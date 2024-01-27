@@ -59,7 +59,7 @@ public class UserRepositoryImpl implements UserRepository {
 //                throw new EntityNotFoundException("User", "username", username);
 //            }
 
-            return result.isEmpty()?null:result.get(0);
+            return result.isEmpty() ? null : result.get(0);
         }
     }
 
@@ -75,7 +75,7 @@ public class UserRepositoryImpl implements UserRepository {
 //                throw new EntityNotFoundException("User", "email", email);
 //            }
 
-            return result.isEmpty()?null:result.get(0);
+            return result.isEmpty() ? null : result.get(0);
         }
     }
 
@@ -95,6 +95,22 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public User getUserByComment(int commentId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("select user from Comment c where c.id = :commentId", User.class);
+            query.setParameter("commentId", commentId);
+
+            List<User> result = query.list();
+
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("Comment", "id", String.valueOf(commentId));
+            }
+
+            return result.get(0);
+        }
+
+    }
 
     @Override
     public List<Post> getPosts(int userId) {

@@ -1,5 +1,6 @@
 package com.example.forum.services.contracts;
 
+import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
@@ -13,6 +14,7 @@ public interface UserService {
 
     //TODO Veronika - Done
     User getById(int id, User user);
+
     //TODO Siyana - Done
     User getByUsername(String username);
 
@@ -21,6 +23,10 @@ public interface UserService {
 
     //TODO Veronika - Done
     User getByFirstName(String firstName);
+
+    //TODO Veronika - Done
+    User getUserByComment(int commentId);
+
     //TODO Siyana - Done
     List<Post> getPosts(int id);
 
@@ -29,6 +35,7 @@ public interface UserService {
 
     //TODO Veronika - Done
     void updateUser(User targetUser, User executingUser);
+
     //TODO Siyana - Done
     void updateToAdmin(User userAdmin, User updateToAdmin);
 

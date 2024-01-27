@@ -11,8 +11,11 @@ public interface CommentService {
     //TODO Yoana
     List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions);
 
+    Comment getCommentById(int commentId);
+
     //TODO Veronika - Done
-    void createComment(Comment comment, int postId,User user);
+    void createComment(Comment comment, int postId, User user);
+
     //TODO Siyana - Done
     void updateComment(Comment comment, User user);
 

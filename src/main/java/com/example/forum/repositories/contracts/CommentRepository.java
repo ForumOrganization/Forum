@@ -10,7 +10,7 @@ public interface CommentRepository {
 
     List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions);
 
-    public Comment getCommentById(int commentId);
+    Comment getCommentById(int commentId);
 
     void createComment(Comment comment);
 

@@ -1,9 +1,8 @@
 package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
+import com.example.forum.models.*;
 import com.example.forum.utils.PostFilterOptions;
-import com.example.forum.models.Post;
-import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.PostRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.Callable;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
@@ -91,6 +91,22 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public Post getByComment(int commentId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery("select post from Comment c where c.id = :commentId", Post.class);
+            query.setParameter("commentId", commentId);
+
+            List<Post> result = query.list();
+
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("Comment", "id", String.valueOf(commentId));
+            }
+
+            return result.get(0);
+        }
+    }
+
+    @Override
     public void create(Post post) {
         try (Session session = sessionFactory.openSession()) {
             post.setCreationTime(LocalDate.now());
@@ -116,8 +132,21 @@ public class PostRepositoryImpl implements PostRepository {
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            postToDelete.setDeleted(true);
-            session.merge(postToDelete);
+           // postToDelete.setDeleted(true);
+            for (Reaction_posts reaction : postToDelete.getReactions()) {
+                session.remove(reaction);
+            }
+            for (Comment comment : postToDelete.getComments()) {
+                for (Reaction_comments reaction : comment.getReactions()) {
+                    session.remove(reaction);
+                }
+                session.remove(comment);
+            }
+
+//            postToDelete.getComments()
+//                    .forEach(comment -> comment.setDeleted(true));
+
+            session.remove(postToDelete);
             session.getTransaction().commit();
         }
     }

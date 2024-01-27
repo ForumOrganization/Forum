@@ -9,6 +9,7 @@ import com.example.forum.repositories.contracts.ReactionRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class ReactionRepositoryImpl implements ReactionRepository {
 
     private SessionFactory sessionFactory;
 
+    @Autowired
     public ReactionRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }

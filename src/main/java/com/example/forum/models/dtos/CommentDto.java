@@ -11,17 +11,17 @@ public class CommentDto {
 //    @Positive(message = "User id can't be negative")
 //    @NotNull(message = "User id can't be empty")
 //    private int userId;
-    @Positive(message = "Post id can't be negative")
-    @NotNull(message = "Post id can't be empty")
-    private int postId;
+//    @Positive(message = "Post id can't be negative")
+//    @NotNull(message = "Post id can't be empty")
+//    private int postId;
 
-    private boolean isDeleted = false;
+//    private boolean isDeleted = false;
 
     public CommentDto(String content, int usertId, int postId, boolean isDeleted) {
         this.content = content;
       //  this.userId = usertId;
-        this.postId = postId;
-        this.isDeleted = isDeleted;
+       // this.postId = postId;
+      //  this.isDeleted = isDeleted;
     }
 
     public String getContent() {
@@ -40,21 +40,21 @@ public class CommentDto {
 //        this.userId = usertId;
 //    }
 
-    public int getPostId() {
-        return postId;
-    }
-
-    public void setPostId(int postId) {
-        this.postId = postId;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
+//    public int getPostId() {
+//        return postId;
+//    }
+//
+//    public void setPostId(int postId) {
+//        this.postId = postId;
+//    }
+//
+//    public boolean isDeleted() {
+//        return isDeleted;
+//    }
+//
+//    public void setDeleted(boolean deleted) {
+//        isDeleted = deleted;
+//    }
 
 
 }

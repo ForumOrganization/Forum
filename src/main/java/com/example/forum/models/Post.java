@@ -36,11 +36,14 @@ public class Post {
     private LocalDate creationTime = LocalDate.now();
 
     @JsonIgnore
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post",
+          //  cascade = CascadeType.REMOVE, orphanRemoval = true,
+            fetch = FetchType.EAGER)
     private Set<Comment> comments;
 
     @JsonIgnore
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+
     private Set<Reaction_posts> reactions;
 
     @JsonIgnore

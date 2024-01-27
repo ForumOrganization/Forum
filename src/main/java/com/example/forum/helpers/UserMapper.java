@@ -46,7 +46,6 @@ public class UserMapper {
         updatedUser.setLastName(dto.getLastName());
         updatedUser.setEmail(dto.getEmail());
         updatedUser.setPassword(dto.getPassword());
-       // User existingUser = userService.getById(id,updatedUser);
         updatedUser.setUsername(dto.getUsername());
 
         return updatedUser;

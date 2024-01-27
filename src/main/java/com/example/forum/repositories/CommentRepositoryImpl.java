@@ -2,6 +2,7 @@ package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Comment;
+import com.example.forum.models.Reaction_comments;
 import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.CommentRepository;
 import com.example.forum.utils.CommentFilterOptions;
@@ -103,6 +104,9 @@ public class CommentRepositoryImpl implements CommentRepository {
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
+            for(Reaction_comments reaction: commentToDelete.getReactions()){
+                session.remove(reaction);
+            }
             session.remove(commentToDelete);
             session.getTransaction().commit();
         }

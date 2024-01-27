@@ -36,12 +36,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions) {
-        return this.commentRepository.getAllCommentsByPostId(postId,commentFilterOptions);
+        return this.commentRepository.getAllCommentsByPostId(postId, commentFilterOptions);
+    }
+
+    @Override
+    public Comment getCommentById(int commentId) {
+        return this.commentRepository.getCommentById(commentId);
     }
 
     @Override
     public void createComment(Comment comment, int postId, User user) {
-        checkAccessPermissionsUser(user.getId(), user, MODIFY_USER_MESSAGE_ERROR);
 
         if (user.getStatus() == Status.BLOCKED || user.isDeleted()) {
             throw new UnauthorizedOperationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
@@ -61,15 +65,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void updateComment(Comment comment, User user) {
-        checkAccessPermissionsUser(user.getId(), user, MODIFY_USER_MESSAGE_ERROR);
-
+        checkAccessPermissionsUser(comment.getUser().getId(), user, MODIFY_USER_MESSAGE_ERROR);
         this.commentRepository.updateComment(comment);
     }
 
     @Override
     public void deleteComment(int commentId, User user) {
-        checkAccessPermissions(user.getId(), user, MODIFY_POST_ERROR_MESSAGE);
-
+        Comment comment = commentRepository.getCommentById(commentId);
+        checkAccessPermissions(comment.getUser().getId(), user, MODIFY_POST_ERROR_MESSAGE);
         this.commentRepository.deleteComment(commentId, user);
     }
 }

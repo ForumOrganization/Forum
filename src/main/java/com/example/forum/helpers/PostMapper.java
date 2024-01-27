@@ -20,9 +20,7 @@ public class PostMapper {
         Post post = fromDto(dto);
         post.setId(id);
         Post repositoryPost = postService.getById(id);
-        post.setTitle(repositoryPost.getTitle());
-        post.setContent(repositoryPost.getContent());
-
+        post.setCreatedBy(repositoryPost.getCreatedBy());
         return post;
     }
 

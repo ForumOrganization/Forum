@@ -3,12 +3,14 @@ package com.example.forum.controllers;
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
+import com.example.forum.exceptions.UnauthorizedOperationException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.CommentMapper;
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.CommentDto;
+import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.services.contracts.CommentService;
 import com.example.forum.utils.CommentFilterOptions;
 import jakarta.validation.Valid;
@@ -46,6 +48,15 @@ public class CommentRestController {
         return commentService.getAllCommentsByPostId(postId,commentFilterOptions);
     }
 
+    @GetMapping("/{id}")
+    public Comment getCommentById(@PathVariable int id) {
+        try {
+            return this.commentService.getCommentById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
     @PostMapping("/post/{postId}")
     public Comment createComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @Valid @RequestBody CommentDto commentDto) {
         try {
@@ -57,15 +68,16 @@ public class CommentRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
-        } catch (AuthorizationException e) {
+        } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
-    @PutMapping
-    public Comment updateComment(@RequestHeader HttpHeaders headers, @Valid @RequestBody Comment comment) {
+    @PutMapping("/{id}")
+    public Comment updateComment(@RequestHeader HttpHeaders headers,@PathVariable int id, @Valid @RequestBody CommentDto commentDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
+            Comment comment = this.commentMapper.fromDto(id,commentDto);
             commentService.updateComment(comment, user);
             return comment;
         } catch (EntityNotFoundException e) {

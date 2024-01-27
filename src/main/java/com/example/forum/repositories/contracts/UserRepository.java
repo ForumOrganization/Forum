@@ -19,6 +19,8 @@ public interface UserRepository {
 
     User getByFirstName(String firstName);
 
+    User getUserByComment(int commentId);
+
     List<Post> getPosts(int userId);
 
     void registerUser(User user);

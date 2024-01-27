@@ -10,7 +10,9 @@ VALUES ('1234567890', 1),
 
 INSERT INTO posts (created_by, title, content, creation_time)
 VALUES (1, 'First Post', 'This is the content of the first post.', NOW()),
-       (2, 'Second Post', 'Content for the second post goes here.', NOW());
+       (2, 'Second Post', 'Content for the second post goes here.', NOW()),
+       (3, 'Third Post', 'This for the third post goes here.', NOW()),
+       (1, 'Fourth Post', 'Content for the fourth post goes here.', NOW());
 
 INSERT INTO comments (user_id, post_id, content)
 VALUES (2, 1, 'Nice post!'),
