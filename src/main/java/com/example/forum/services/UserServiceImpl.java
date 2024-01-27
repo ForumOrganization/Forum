@@ -1,9 +1,11 @@
 package com.example.forum.services;
 
 import com.example.forum.exceptions.AuthorizationException;
+import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.services.contracts.UserService;
@@ -69,8 +71,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateToAdmin(User userAdmin, User updateToAdmin) {
-        return null;
+    public void updateToAdmin(User targetUser, User executingUser) {
+        checkAccessPermissionsUser(targetUser.getId(), executingUser, UPDATE_TO_ADMIN_ERROR_MESSAGE);
+        targetUser.setRole(Role.ADMIN);
+        userRepository.update(targetUser);
     }
 
     @Override
@@ -89,6 +93,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addPhoneNumberToAdmin(User admin, String phoneNumber) {
+        checkAccessPermissionsAdmin(admin, UPDATE_PHONENUMBER_ERROR_MESSAGE);
+        PhoneNumber phone = new PhoneNumber();
+        phone.setUser(admin);
+        phone.setPhoneNumber(phoneNumber);
+        userRepository.addPhoneNumberToAdmin(admin, phone);
 
     }
 

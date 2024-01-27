@@ -12,7 +12,7 @@ public interface CommentService {
 
     //TODO Veronika - Done
     void createComment(Comment comment, int postId,User user);
-
+    //TODO Siyana - Done
     void updateComment(Comment comment, User user);
 
     //TODO Yoana

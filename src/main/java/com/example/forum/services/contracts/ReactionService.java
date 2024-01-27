@@ -10,7 +10,7 @@ public interface ReactionService {
 
     //TODO Veronika - Done
     List<Reaction_posts> getAllReactionsByPostId(Reaction_posts reaction, int postId);
-
+    //TODO Siyana - Done
     List<Reaction_comments> getAllReactionsByCommentId(int commentId);
 
     //TODO Yoana
@@ -18,7 +18,7 @@ public interface ReactionService {
 
     //TODO Veronika - Done
     Map<Reaction_comments, Integer> countReactionsComment(int commentId);
-
+    //TODO Siyana - Done
     void updateReactionPost(Reaction_posts reaction, int postId);
 
     //TODO Yoana

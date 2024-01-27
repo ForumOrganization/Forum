@@ -16,7 +16,7 @@ public interface PostService {
     List<Post> getTopCommentedPosts(PostFilterOptions postFilterOptions, int limit);
 
     List<Post> getMostRecentPosts(PostFilterOptions postFilterOptions, int limit);
-
+    //TODO Siyana - Done
     Post getById(int id);
 
     //TODO Yoana
@@ -24,7 +24,7 @@ public interface PostService {
 
     //TODO Veronika - Done
     void create(Post post, User user);
-
+    //TODO Siyana - Done
     void update(Post post, User user);
 
     //TODO Yoana

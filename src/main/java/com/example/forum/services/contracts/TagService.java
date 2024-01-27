@@ -11,7 +11,7 @@ public interface TagService {
 
     //TODO Veronika - Done
     List<Tag> getAllTags();
-
+    //TODO Siyana - Done
     List<Post> getAllPostsByTagId(int tagId);
 
     //TODO Yoana
@@ -19,7 +19,7 @@ public interface TagService {
 
     //TODO Veronika - Done
     List<Tag> getAllTagsByPostId(int postId);
-
+    //TODO Siyana - Done
     Tag getTagById(int tagId);
 
     //TODO Yoana
@@ -27,7 +27,7 @@ public interface TagService {
 
     //TODO Veronika - Done
     void updateTagInPost(Tag tag, User user);
-
+    //TODO Siyana - Done
 
     void deleteTagInPost(int tagId, User user);
 }

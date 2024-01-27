@@ -1,9 +1,11 @@
 package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
+import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.enums.Role;
 import com.example.forum.repositories.contracts.UserRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,6 +13,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -123,12 +126,20 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User updateToAdmin(User userAdmin, User updateToAdmin) {
-        return null;
+    public void updateToAdmin(User targetUser) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(targetUser);
+            session.getTransaction().commit();
+        }
     }
 
     @Override
-    public void addPhoneNumberToAdmin(User admin, String phoneNumber) {
-
+    public void addPhoneNumberToAdmin(User admin, PhoneNumber phone) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(phone);
+            session.getTransaction().commit();
+        }
     }
 }
