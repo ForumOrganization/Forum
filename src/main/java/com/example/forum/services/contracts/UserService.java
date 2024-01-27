@@ -25,10 +25,10 @@ public interface UserService {
     List<Post> getPosts(int id);
 
     //TODO Veronika
-    void create(User user);
+    void registerUser(User user);
 
     //TODO Veronika - Done
-    void update(User targetUser, User executingUser);
+    void updateUser(User targetUser, User executingUser);
     //TODO Siyana - Done
     void updateToAdmin(User userAdmin, User updateToAdmin);
 

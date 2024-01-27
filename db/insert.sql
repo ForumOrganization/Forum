@@ -1,7 +1,7 @@
 INSERT INTO users (first_name, last_name, email, username, password, role, status)
-VALUES ('Yoana', 'Maksimova', 'yoana.maksimova@gmmail.com', 'yoana', 'parola1', 'ADMIN', 'ACTIVE'),
-       ('Siyana', 'Baileva', 'siyana.baileva@gmail.com', 'siyana', 'parola2', 'USER', 'ACTIVE'),
-       ('Veronika', 'Kashaykova', 'veronika.kashaykova@gmail.com', 'veronika', 'parola3', 'USER', 'ACTIVE');
+VALUES ('Yoana', 'Maksimova', 'yoana.maksimova@gmmail.com', 'yoana', 'Parola_1', 'ADMIN', 'ACTIVE'),
+       ('Siyana', 'Baileva', 'siyana.baileva@gmail.com', 'siyana', 'Parola_2', 'USER', 'ACTIVE'),
+       ('Veronika', 'Kashaykova', 'veronika.kashaykova@gmail.com', 'veronika', 'Parola_3', 'USER', 'ACTIVE');
 
 INSERT INTO phone_numbers (phone_number, user_id)
 VALUES ('1234567890', 1),

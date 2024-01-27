@@ -1,6 +1,7 @@
 package com.example.forum.services;
 
 import com.example.forum.exceptions.AuthorizationException;
+import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
@@ -60,35 +61,51 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void create(User user) {
+    public void registerUser(User user) {
+        if(user.getUsername()==null){
+            throw  new IllegalArgumentException("Username cannot be null");
+        }
 
+        if(userRepository.getByUsername(user.getUsername())!=null){
+          throw new DuplicateEntityException("User","username",user.getUsername());
+        }
+        if(userRepository.getByEmail(user.getEmail())!=null){
+            throw new DuplicateEntityException("User","email",user.getEmail());
+        }
+        userRepository.registerUser(user);
     }
 
     @Override
-    public void update(User targetUser, User executingUser) {
+    public void updateUser(User targetUser, User executingUser) {
         checkAccessPermissionsUser(targetUser.getId(), executingUser, MODIFY_USER_MESSAGE_ERROR);
-        userRepository.update(targetUser);
+        if(!targetUser.getUsername().equals(executingUser.getUsername())){
+            throw  new IllegalArgumentException("Username cannot be changed");
+        }
+        if(userRepository.getByEmail(targetUser.getEmail())!=null){
+            throw new DuplicateEntityException("User","email",targetUser.getEmail());
+        }
+        userRepository.updateUser(targetUser);
     }
 
     @Override
     public void updateToAdmin(User targetUser, User executingUser) {
         checkAccessPermissionsUser(targetUser.getId(), executingUser, UPDATE_TO_ADMIN_ERROR_MESSAGE);
         targetUser.setRole(Role.ADMIN);
-        userRepository.update(targetUser);
+        userRepository.updateUser(targetUser);
     }
 
     @Override
     public void blockUser(User admin, User blockUser) {
         checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         blockUser.setStatus(Status.BLOCKED);
-        userRepository.update(blockUser);
+        userRepository.updateUser(blockUser);
     }
 
     @Override
     public void unBlockUser(User admin, User unBlockUser) {
         checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         unBlockUser.setStatus(Status.ACTIVE);
-        userRepository.update(unBlockUser);
+        userRepository.updateUser(unBlockUser);
     }
 
     @Override

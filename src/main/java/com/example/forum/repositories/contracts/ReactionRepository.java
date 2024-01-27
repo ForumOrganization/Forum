@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface ReactionRepository {
 
-    List<Reaction_posts> getAllReactionsByPostId(Reaction_posts reaction, int postId);
+    List<Reaction_posts> getAllReactionsByPostId(int postId);
 
     List<Reaction_comments> getAllReactionsByCommentId(int commentId);
 

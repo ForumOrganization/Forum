@@ -30,6 +30,7 @@ public class UserMapper {
 
     public User fromDto(UserDto dto) {
         User user = new User();
+        user.setUsername(dto.getUsername());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
@@ -45,8 +46,8 @@ public class UserMapper {
         updatedUser.setLastName(dto.getLastName());
         updatedUser.setEmail(dto.getEmail());
         updatedUser.setPassword(dto.getPassword());
-        User existingUser = userService.getById(id,updatedUser);
-        updatedUser.setUsername(existingUser.getUsername());
+       // User existingUser = userService.getById(id,updatedUser);
+        updatedUser.setUsername(dto.getUsername());
 
         return updatedUser;
     }

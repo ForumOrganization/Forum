@@ -26,7 +26,7 @@ public class ReactionRepositoryImpl implements ReactionRepository {
     }
 
     @Override
-    public List<Reaction_posts> getAllReactionsByPostId(Reaction_posts reaction, int postId) {
+    public List<Reaction_posts> getAllReactionsByPostId(int postId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Reaction_posts> query = session.createQuery(
                     "SELECT r FROM Reaction_posts r WHERE post.id = :postId", Reaction_posts.class);

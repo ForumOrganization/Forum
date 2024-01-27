@@ -9,7 +9,7 @@ import java.util.Map;
 public interface ReactionService {
 
     //TODO Veronika - Done
-    List<Reaction_posts> getAllReactionsByPostId(Reaction_posts reaction, int postId);
+    List<Reaction_posts> getAllReactionsByPostId(int postId);
     //TODO Siyana - Done
     List<Reaction_comments> getAllReactionsByCommentId(int commentId);
 

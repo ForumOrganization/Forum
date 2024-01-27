@@ -55,11 +55,11 @@ public class UserRepositoryImpl implements UserRepository {
 
             List<User> result = query.list();
 
-            if (result.size() == 0) {
-                throw new EntityNotFoundException("User", "username", username);
-            }
+//            if (result.size() == 0) {
+//                throw new EntityNotFoundException("User", "username", username);
+//            }
 
-            return result.get(0);
+            return result.isEmpty()?null:result.get(0);
         }
     }
 
@@ -71,11 +71,11 @@ public class UserRepositoryImpl implements UserRepository {
 
             List<User> result = query.list();
 
-            if (result.size() == 0) {
-                throw new EntityNotFoundException("User", "email", email);
-            }
+//            if (result.size() == 0) {
+//                throw new EntityNotFoundException("User", "email", email);
+//            }
 
-            return result.get(0);
+            return result.isEmpty()?null:result.get(0);
         }
     }
 
@@ -112,12 +112,16 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void create(User user) {
-
+    public void registerUser(User user) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(user);
+            session.getTransaction().commit();
+        }
     }
 
     @Override
-    public void update(User targetUser) {
+    public void updateUser(User targetUser) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(targetUser);

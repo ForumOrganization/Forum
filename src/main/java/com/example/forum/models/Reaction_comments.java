@@ -26,7 +26,6 @@ public class Reaction_comments {
 
     @ManyToOne
     @JoinColumn(name = "comment_id")
-    @JsonIgnoreProperties({"id", "user", "post", "isDeleted"})
     private Comment comment;
 
     public Reaction_comments() {
@@ -45,7 +44,7 @@ public class Reaction_comments {
         return reaction;
     }
 
-    public void setReaction(Reaction reaction) {
+    public void setReaction(com.example.forum.models.enums.Reaction reaction) {
         this.reaction = reaction;
     }
 

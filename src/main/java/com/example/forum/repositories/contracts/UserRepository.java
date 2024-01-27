@@ -21,9 +21,9 @@ public interface UserRepository {
 
     List<Post> getPosts(int userId);
 
-    void create(User user);
+    void registerUser(User user);
 
-    void update(User targetUser);
+    void updateUser(User targetUser);
 
     void updateToAdmin(User targetUser);
 
