@@ -2,39 +2,54 @@ package com.example.forum.utils;
 
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
+import com.example.forum.models.enums.Status;
 
 import java.util.Optional;
 
 public class UserFilterOptions {
-    private Optional<String> name;
-    private Optional<Post> posts;
-    private Optional<Tag> tags;
+    private Optional<String> username;
+    private Optional<String> firstName;
+    private Optional<String> lastName;
+    private Optional<String> email;
+    private Optional<Status> role;
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
     public UserFilterOptions(
-            String name,
-            Post post,
-            Tag tag,
+            String username,
+            String firstName,
+            String lastName,
+            String email,
+            Status role,
             String sortBy,
             String sortOrder) {
-        this.name = Optional.ofNullable(name);
-        this.posts = Optional.ofNullable(post);
-        this.tags = Optional.ofNullable(tag);
+        this.username = Optional.ofNullable(username);
+        this.firstName = Optional.ofNullable(firstName);
+        this.lastName = Optional.ofNullable(lastName);
+        this.email = Optional.ofNullable(email);
+        this.role = Optional.ofNullable(role);
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
     }
 
-    public Optional<String> getName() {
-        return name;
+    public Optional<String> getUsername() {
+        return username;
     }
 
-    public Optional<Post> getPosts() {
-        return posts;
+    public Optional<String> getFirstName() {
+        return firstName;
     }
 
-    public Optional<Tag> getTags() {
-        return tags;
+    public Optional<String> getLastName() {
+        return lastName;
+    }
+
+    public Optional<String> getEmail() {
+        return email;
+    }
+
+    public Optional<Status> getRole() {
+        return role;
     }
 
     public Optional<String> getSortBy() {

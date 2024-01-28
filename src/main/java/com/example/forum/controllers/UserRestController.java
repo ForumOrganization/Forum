@@ -10,7 +10,9 @@ import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
 import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.models.enums.Role;
+import com.example.forum.models.enums.Status;
 import com.example.forum.services.contracts.UserService;
+import com.example.forum.utils.UserFilterOptions;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -41,13 +43,22 @@ public class UserRestController {
     }
 
     @GetMapping
-    public List<UserDto> getAll(@RequestHeader HttpHeaders headers) {
+    public List<UserResponseDto> getAll(@RequestHeader HttpHeaders headers,
+                                        @RequestParam(required = false) String username,
+                                        @RequestParam(required = false) String firstName,
+                                        @RequestParam(required = false) String lastName,
+                                        @RequestParam(required = false) String email,
+                                        @RequestParam(required = false) Status role,
+                                        @RequestParam(required = false) String sortBy,
+                                        @RequestParam(required = false) String sortOrder) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             if (!user.getRole().equals(Role.ADMIN)) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
             }
-            return userService.getAll();
+            UserFilterOptions userFilterOptions = new UserFilterOptions(username, firstName, lastName, email,role, sortBy, sortOrder);
+
+            return userService.getAll(userFilterOptions);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
         }
@@ -58,14 +69,7 @@ public class UserRestController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             User targetUser=userService.getById(id, user);
-            return new UserResponseDto(targetUser.getId(),
-                    targetUser.getUsername(),
-                    targetUser.getFirstName(),
-                    targetUser.getLastName(),
-                    targetUser.getEmail(),
-                    targetUser.getRole(),
-                    targetUser.getPosts(),
-                    targetUser.getComments());
+            return  UserMapper.toDto(targetUser);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthorizationException e) {
@@ -181,6 +185,19 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+    @DeleteMapping("/{id}")
+    public void deleteUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            userService.deleteUser(id, user);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 }

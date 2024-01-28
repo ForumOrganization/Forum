@@ -1,12 +1,12 @@
 package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.models.PhoneNumber;
-import com.example.forum.models.Post;
-import com.example.forum.models.User;
+import com.example.forum.models.*;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.repositories.contracts.UserRepository;
+import com.example.forum.utils.UserFilterOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -14,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -27,10 +30,57 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<UserDto> getAll() {
+    public List<UserResponseDto> getAll(UserFilterOptions userFilterOptions) {
+//        try (Session session = sessionFactory.openSession()) {
+//            return session.createQuery("from User", UserDto.class)
+//                    .list();
+//        }
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from User", UserDto.class)
-                    .list();
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+
+            userFilterOptions.getUsername().ifPresent(value -> {
+                filters.add("username like :username");
+                params.put("username", String.format("%%%s%%", value));
+            });
+
+            userFilterOptions.getFirstName().ifPresent(value -> {
+                filters.add(" firstName like :firstName ");
+                params.put("firstName", String.format("%%%s%%", value));
+            });
+
+            userFilterOptions.getFirstName().ifPresent(value -> {
+                filters.add(" firstName like :firstName ");
+                params.put("firstName", String.format("%%%s%%", value));
+            });
+
+            userFilterOptions.getLastName().ifPresent(value -> {
+                filters.add(" lastName like :lastName ");
+                params.put("lastName", String.format("%%%s%%", value));
+                ;
+            });
+            userFilterOptions.getEmail().ifPresent(value -> {
+                filters.add(" email like :email ");
+                params.put("email", String.format("%%%s%%", value));
+                ;
+            });
+            userFilterOptions.getRole().ifPresent(value -> {
+                filters.add(" role = :role ");
+                params.put("role", value);
+            });
+
+            StringBuilder queryString = new StringBuilder("from User");
+            if (!filters.isEmpty()) {
+                queryString
+                        .append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+            queryString.append(generateOrderBy(userFilterOptions));
+
+            Query<UserResponseDto> query = session.createQuery(queryString.toString(), UserResponseDto.class);
+            query.setProperties(params);
+            return query.list();
         }
     }
 
@@ -115,12 +165,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<Post> getPosts(int userId) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Post> query = session.createQuery("FROM Post as p where p.createdBy = :userId", Post.class);
-            query.setParameter("id", userId);
+            Query<Post> query = session.createQuery("FROM Post as p where p.createdBy.id = :userId", Post.class);
+            query.setParameter("userId", userId);
             List<Post> posts = query.list();
 
             if (posts.isEmpty()) {
-                throw new EntityNotFoundException("Post", "id", String.valueOf(userId));
+                throw new EntityNotFoundException("Post", "userId", String.valueOf(userId));
             }
 
             return posts.stream().toList();
@@ -144,6 +194,42 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
+    @Override
+    public void reactivated(User targetUser) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            for (Post post : targetUser.getPosts()) {
+                for (Comment comment : post.getComments()) {
+                    comment.setDeleted(false);
+                    session.merge(comment);
+                }
+                post.setDeleted(false);
+                session.merge(post);
+            }
+            targetUser.setDeleted(false);
+            session.merge(targetUser);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void deleteUser(int targetUserId) {
+        User userToDelete = getById(targetUserId);
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            for (Post post : userToDelete.getPosts()) {
+                for (Comment comment : post.getComments()) {
+                    comment.setDeleted(true);
+                    session.merge(comment);
+                }
+                post.setDeleted(true);
+                session.merge(post);
+            }
+            userToDelete.setDeleted(true);
+            session.merge(userToDelete);
+            session.getTransaction().commit();
+        }
+    }
 
     @Override
     public void updateToAdmin(User targetUser) {
@@ -161,5 +247,38 @@ public class UserRepositoryImpl implements UserRepository {
             session.persist(phone);
             session.getTransaction().commit();
         }
+    }
+
+    private String generateOrderBy(UserFilterOptions userFilterOptions) {
+        if (userFilterOptions.getSortBy().isEmpty()) {
+            return "";
+        }
+
+        String orderBy = "";
+        switch (userFilterOptions.getSortBy().get()) {
+            case "username":
+                orderBy = "username";
+                break;
+            case "firstName":
+                orderBy = "firstName";
+                break;
+            case "lastName":
+                orderBy = "lastName";
+                break;
+            case "email":
+                orderBy = "email";
+                break;
+            case "role":
+                orderBy = "role";
+                break;
+        }
+
+        orderBy = String.format(" order by %s", orderBy);
+
+        if (userFilterOptions.getSortOrder().isPresent() && userFilterOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
+            orderBy = String.format("%s desc", orderBy);
+        }
+
+        return orderBy;
     }
 }

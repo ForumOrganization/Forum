@@ -4,13 +4,15 @@ import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.dtos.UserResponseDto;
+import com.example.forum.utils.UserFilterOptions;
 
 import java.util.List;
 
 public interface UserService {
 
     //TODO Yoana
-    List<UserDto> getAll();
+    List<UserResponseDto> getAll(UserFilterOptions userFilterOptions);
 
     //TODO Veronika - Done
     User getById(int id, User user);
@@ -35,6 +37,8 @@ public interface UserService {
 
     //TODO Veronika - Done
     void updateUser(User targetUser, User executingUser);
+
+    void deleteUser(int deleteUserId,User executingUser);
 
     //TODO Siyana - Done
     void updateToAdmin(User userAdmin, User updateToAdmin);

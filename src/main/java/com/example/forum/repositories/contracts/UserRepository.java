@@ -4,12 +4,14 @@ import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.dtos.UserResponseDto;
+import com.example.forum.utils.UserFilterOptions;
 
 import java.util.List;
 
 public interface UserRepository {
 
-    List<UserDto> getAll();
+    List<UserResponseDto> getAll(UserFilterOptions userFilterOptions);
 
     User getById(int id);
 
@@ -26,6 +28,8 @@ public interface UserRepository {
     void registerUser(User user);
 
     void updateUser(User targetUser);
+    void reactivated(User targetUser);
+    void deleteUser(int targetUserId);
 
     void updateToAdmin(User targetUser);
 

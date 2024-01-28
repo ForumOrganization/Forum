@@ -6,7 +6,7 @@ CREATE TABLE users
     email      VARCHAR(50) UNIQUE NOT NULL,
     username   VARCHAR(50) UNIQUE NOT NULL,
     password   VARCHAR(50)        NOT NULL,
-    role       ENUM ('USER', 'ADMIN'),
+    role       ENUM ('ADMIN', 'USER'),
     is_deleted BOOLEAN DEFAULT FALSE,
     status     ENUM ('BLOCKED', 'ACTIVE')
 );

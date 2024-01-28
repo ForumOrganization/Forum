@@ -22,10 +22,10 @@ public class Post {
 
     @Column(name = "content")
     private String content;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "created_by")
-    @JsonIgnoreProperties({"id", "firstName", "lastName", "email", "role", "status", "deleted"})
+   // @JsonIgnoreProperties({"id", "firstName", "lastName", "email", "role", "status", "deleted"})
     private User createdBy;
 
     @JsonIgnore
@@ -37,7 +37,7 @@ public class Post {
 
     @JsonIgnore
     @OneToMany(mappedBy = "post",
-          //  cascade = CascadeType.REMOVE, orphanRemoval = true,
+            //  cascade = CascadeType.REMOVE, orphanRemoval = true,
             fetch = FetchType.EAGER)
     private Set<Comment> comments;
 
@@ -91,6 +91,7 @@ public class Post {
         this.createdBy = createdBy;
     }
 
+    @JsonIgnore
     public Boolean isDeleted() {
         return Boolean.TRUE.equals(isDeleted);
     }

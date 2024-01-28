@@ -23,12 +23,12 @@ public class UserResponseDto {
 
     private Set<Post> posts;
 
-    private Set<Comment> comments;
+   // private Set<Comment> comments;
 
     public UserResponseDto() {
     }
 
-    public UserResponseDto(int id, String username, String firstName, String lastName, String email, Role role, Set<Post> posts, Set<Comment> comments) {
+    public UserResponseDto(int id, String username, String firstName, String lastName, String email, Role role, Set<Post> posts) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
@@ -36,7 +36,7 @@ public class UserResponseDto {
         this.email = email;
         this.role = role;
         this.posts = posts;
-        this.comments = comments;
+      //  this.comments = comments;
     }
 
     public int getId() {
@@ -95,13 +95,13 @@ public class UserResponseDto {
         this.posts = posts;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
+//    public Set<Comment> getComments() {
+//        return comments;
+//    }
+//
+//    public void setComments(Set<Comment> comments) {
+//        this.comments = comments;
+//    }
 
     @Override
     public boolean equals(Object o) {

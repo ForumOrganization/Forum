@@ -36,8 +36,8 @@ public class PostRepositoryImpl implements PostRepository {
             });
 
             postFilterOptions.getCreatedBy().ifPresent(value -> {
-                filters.add("post.createdBy.username = :createdBy");
-                params.put("createdBy", value);
+                filters.add("createdBy.username like :createdBy");
+                params.put("createdBy",String.format("%%%s%%", value));
             });
 
             postFilterOptions.getCreationTime().ifPresent(value -> {
@@ -163,7 +163,7 @@ public class PostRepositoryImpl implements PostRepository {
                 orderBy = "title";
                 break;
             case "createdBy":
-                orderBy = "user.username";
+                orderBy = "createdBy.username";
                 break;
             case "creationTime":
                 orderBy = "creationTime";

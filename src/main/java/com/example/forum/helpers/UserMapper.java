@@ -2,6 +2,7 @@ package com.example.forum.helpers;
 
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -49,5 +50,15 @@ public class UserMapper {
         updatedUser.setUsername(dto.getUsername());
 
         return updatedUser;
+    }
+    public static UserResponseDto toDto(User user){
+             return  new UserResponseDto(user.getId(),
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getRole(),
+                user.getPosts());
+               // user.getComments());
     }
 }

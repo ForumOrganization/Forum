@@ -6,10 +6,12 @@ import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.services.contracts.UserService;
+import com.example.forum.utils.UserFilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,8 +33,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAll() {
-        return this.userRepository.getAll();
+    public List<UserResponseDto> getAll(UserFilterOptions userFilterOptions) {
+        return this.userRepository.getAll(userFilterOptions);
     }
 
     @Override
@@ -66,19 +68,27 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(User user) {
-        if(user.getUsername()==null){
-            throw  new IllegalArgumentException("Username cannot be null");
+        if (user.getUsername() == null) {
+            throw new IllegalArgumentException("Username cannot be null");
         }
+        User existingUser = userRepository.getByUsername(user.getUsername());
+        if (existingUser.getUsername().equals(user.getUsername())
+                && existingUser.getFirstName().equals(user.getFirstName())
+                && existingUser.getLastName().equals(user.getLastName())
+                && existingUser.getEmail().equals(user.getEmail())
+                &&existingUser.isDeleted()) {
+            userRepository.reactivated(existingUser);
+        } else {
 
-        if(userRepository.getByUsername(user.getUsername())!=null){
-          throw new DuplicateEntityException("User","username",user.getUsername());
+            if (userRepository.getByUsername(user.getUsername()) != null) {
+                throw new DuplicateEntityException("User", "username", user.getUsername());
+            }
+            if (userRepository.getByEmail(user.getEmail()) != null) {
+                throw new DuplicateEntityException("User", "email", user.getEmail());
+            }
+            userRepository.registerUser(user);
         }
-        if(userRepository.getByEmail(user.getEmail())!=null){
-            throw new DuplicateEntityException("User","email",user.getEmail());
-        }
-        userRepository.registerUser(user);
     }
-
     @Override
     public void updateUser(User targetUser, User executingUser) {
         checkAccessPermissionsUser(targetUser.getId(), executingUser, MODIFY_USER_MESSAGE_ERROR);
@@ -89,6 +99,15 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException("User","email",targetUser.getEmail());
         }
         userRepository.updateUser(targetUser);
+    }
+    @Override
+    public void deleteUser(int deleteUser, User executingUser) {
+        checkAccessPermissions(deleteUser, executingUser, DELETE_USER_MESSAGE_ERROR);
+        User userToDelete=getById(deleteUser,executingUser);
+        if(userToDelete.isDeleted()){
+            throw new DuplicateEntityException("User","id",String.valueOf(deleteUser));
+        }
+        userRepository.deleteUser(deleteUser);
     }
 
     @Override
