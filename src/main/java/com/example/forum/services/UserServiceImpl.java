@@ -2,6 +2,7 @@ package com.example.forum.services;
 
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
+import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerUser(User user) {
         if (user.getUsername() == null) {
-            throw new IllegalArgumentException("Username cannot be null");
+            throw new EntityNotFoundException("User", "username", user.getUsername());
         }
         User existingUser = userRepository.getByUsername(user.getUsername());
         if (existingUser.getUsername().equals(user.getUsername())
@@ -93,7 +94,7 @@ public class UserServiceImpl implements UserService {
     public void updateUser(User targetUser, User executingUser) {
         checkAccessPermissionsUser(targetUser.getId(), executingUser, MODIFY_USER_MESSAGE_ERROR);
         if(!targetUser.getUsername().equals(executingUser.getUsername())){
-            throw  new IllegalArgumentException("Username cannot be changed");
+            throw  new EntityNotFoundException("User", "username", targetUser.getUsername());
         }
         if(userRepository.getByEmail(targetUser.getEmail())!=null){
             throw new DuplicateEntityException("User","email",targetUser.getEmail());
