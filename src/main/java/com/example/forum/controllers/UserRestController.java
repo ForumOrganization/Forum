@@ -172,6 +172,20 @@ public class UserRestController {
         }
     }
 
+    @DeleteMapping ("/{id}")
+    public void updateUserPhoneNumber(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            userService.deletePhoneNumber(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
     @PutMapping("/{id}/block")
     public User blockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {

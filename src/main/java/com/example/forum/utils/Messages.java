@@ -12,6 +12,6 @@ public class Messages {
     public static final String MODIFY_TAG_ERROR_MESSAGE = "Only tag creator can modify tag.";
     public static final String USER_HAS_BEEN_BLOCKED_OR_DELETED = "User has been blocked or deleted.";
     public static final String CREATE_TAG_MESSAGE_ERROR = "Only tag creator and admin can create a tag.";
-
+    public static final String DELETE_PHONENUMBER_MESSAGE_ERROR = "Only admins can delete phone numbers.";
 
 }

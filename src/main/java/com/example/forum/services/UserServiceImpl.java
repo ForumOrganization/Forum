@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
 
             if(admin.getPhoneNumber() == null || admin.getPhoneNumber().isEmpty()){
                 admin.setPhoneNumber(phoneNumber);
-                userRepository.addPhoneNumberToAdmin(phoneNumber);
+                userRepository.addPhoneNumberToAdmin(admin);
             } else {
                 admin.setPhoneNumber(phoneNumber);
                 userRepository.updatePhoneNumber(admin);}
@@ -175,13 +175,11 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException("Admin", "phone number");
         }
     }
-//    @Override
-//    public void updatePhoneNumber(String phoneNumber) {
-//        userRepository.updatePhoneNumber(phoneNumber);
-//    }
 
     @Override
     public void deletePhoneNumber(int userId) {
+        User user = userRepository.getById(userId);
+        checkAccessPermissionsAdmin(user,DELETE_PHONENUMBER_MESSAGE_ERROR);
         userRepository.deletePhoneNumber(userId);
     }
 }

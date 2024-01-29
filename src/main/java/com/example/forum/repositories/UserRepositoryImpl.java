@@ -281,10 +281,10 @@ public class UserRepositoryImpl implements UserRepository {
         return orderBy;
     }
     @Override
-    public void addPhoneNumberToAdmin(String phoneNumber) {
+    public void addPhoneNumberToAdmin(User user) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.persist(phoneNumber);
+            session.persist(user);
             session.getTransaction().commit();
         }
     }
