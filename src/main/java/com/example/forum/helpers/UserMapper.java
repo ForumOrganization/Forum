@@ -25,7 +25,6 @@ public class UserMapper {
 
     public User fromDto(UserDto dto) {
         User user = new User();
-        user.setUsername(dto.getUsername());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
@@ -41,7 +40,7 @@ public class UserMapper {
         updatedUser.setLastName(dto.getLastName());
         updatedUser.setEmail(dto.getEmail());
         updatedUser.setPassword(dto.getPassword());
-        updatedUser.setUsername(dto.getUsername());
+
 
         return updatedUser;
     }
@@ -49,34 +48,47 @@ public class UserMapper {
     public static UserResponseDto toDto(User user) {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(user.getId());
-        userResponseDto.setUsername(user.getUsername());
         userResponseDto.setFirstName(user.getFirstName());
         userResponseDto.setLastName(user.getLastName());
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setRole(user.getRole());
-
-        if (userResponseDto.getPhoneNumber() != null) {
-            userResponseDto.setPhoneNumber(user.getPhoneNumber());
-        }
-
+        userResponseDto.setPhoneNumber(user.getPhoneNumber());
         userResponseDto.setPosts(user.getPosts());
 
         return userResponseDto;
     }
-    public String fromDtoPhoneNumber(int id, PhoneNumberDto dto) {
-        String phoneNumber = fromDtoPhoneNumber(dto);
-        User user = userRepository.getById(id);
-        user.setPhoneNumber(phoneNumber);
+    public User fromDtoUpdatePhoneNumber(int id, PhoneNumberDto dto) {
+        User updatedUser = userRepository.getById(id);
+        updatedUser.setPhoneNumber(dto.getPhoneNumber());
+
+        return updatedUser;
+    }
+
+    public static UserResponseDto toDtoPhoneNumber(User user) {
+
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setId(user.getId());
+        userResponseDto.setFirstName(user.getFirstName());
+        userResponseDto.setLastName(user.getLastName());
+        userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setPosts(user.getPosts());
+        userResponseDto.setRole(user.getRole());
+//        if (userResponseDto.getPhoneNumber() != null) {
+        userResponseDto.setPhoneNumber(user.getPhoneNumber());
+
+//        String phoneNumber = fromDtoPhoneNumber(dto);
+//        User user = userRepository.getById(id);
+//        user.setPhoneNumber(phoneNumber);
 //        PhoneNumber phoneNumberRepository = phoneNumberService.getPhoneNumberByUserId(id);
 //        phoneNumber.setUser(phoneNumberRepository.getUser());
 
-        return phoneNumber;
+        return userResponseDto;
     }
 
-    public String fromDtoPhoneNumber(PhoneNumberDto dto) {
-        User user = new User();
-         user.setPhoneNumber(dto.getPhoneNumber());
-
-        return user.getPhoneNumber();
-    }
+//    public String fromDtoPhoneNumber(PhoneNumberDto dto) {
+//        User user = new User();
+//         user.setPhoneNumber(dto.getPhoneNumber());
+//
+//        return user.getPhoneNumber();
+//    }
 }

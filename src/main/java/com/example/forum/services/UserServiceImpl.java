@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
 
 
 
-        if (phoneNumber != null || !phoneNumber.isEmpty()) {
+        if (phoneNumber != null && !phoneNumber.isEmpty()) {
 
             if (phoneNumber.equals(admin.getPhoneNumber())) {
                 throw new DuplicateEntityException("Admin", "phone number", phoneNumber);

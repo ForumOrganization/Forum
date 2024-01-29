@@ -160,9 +160,9 @@ public class UserRestController {
     public UserResponseDto updateUserPhoneNumber(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PhoneNumberDto phoneNumberDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            String phoneNumber = userMapper.fromDtoPhoneNumber(id, phoneNumberDto);
-            userService.addPhoneNumberToAdmin(user, phoneNumber);
-            return UserMapper.toDto(user);
+            User userPhoneNumber = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto);
+            userService.addPhoneNumberToAdmin(user, userPhoneNumber.getPhoneNumber());
+            return UserMapper.toDtoPhoneNumber(userPhoneNumber);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {
@@ -172,7 +172,7 @@ public class UserRestController {
         }
     }
 
-    @PutMapping("/block/{id}")
+    @PutMapping("/{id}/block")
     public User blockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -188,7 +188,7 @@ public class UserRestController {
         }
     }
 
-    @PutMapping("/unblock/{id}")
+    @PutMapping("/{id}/unblock")
     public User unblockUser(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);

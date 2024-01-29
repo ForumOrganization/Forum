@@ -8,10 +8,7 @@ import org.hibernate.validator.constraints.Email;
 
 public class UserDto {
 
-    @NotNull(message = "Username can't be empty.")
-    @NotBlank(message = "Username name can't be blank.")
-    @Size(min = 4, max = 32, message = "Username name should be between 4 and 32 symbols.")
-    private String username;
+
     @NotNull(message = "First name can't be empty.")
     @NotBlank(message = "First name can't be blank.")
     @Size(min = 4, max = 32, message = "First name should be between 4 and 32 symbols.")
@@ -36,13 +33,6 @@ public class UserDto {
     public UserDto() {
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getFirstName() {
         return firstName;

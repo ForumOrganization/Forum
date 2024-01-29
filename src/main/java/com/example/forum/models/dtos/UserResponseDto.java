@@ -11,7 +11,6 @@ public class UserResponseDto {
 
     private int id;
 
-    private String username;
 
     private String firstName;
 
@@ -31,9 +30,9 @@ public class UserResponseDto {
     public UserResponseDto() {
     }
 
-    public UserResponseDto(int id, String username, String firstName, String lastName, String email, Role role, String phoneNumber, Set<Post> posts) {
+    public UserResponseDto(int id, String firstName, String lastName, String email, Role role, String phoneNumber, Set<Post> posts) {
         this.id = id;
-        this.username = username;
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -50,13 +49,6 @@ public class UserResponseDto {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
 
     public String getFirstName() {
         return firstName;

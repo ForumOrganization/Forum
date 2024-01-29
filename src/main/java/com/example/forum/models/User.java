@@ -21,6 +21,7 @@ public class User {
     @Column(name = "user_id")
     private int id;
 
+    @JsonIgnore
     @Column(name = "username")
     private String username;
 
