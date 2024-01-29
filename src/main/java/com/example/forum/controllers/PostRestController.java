@@ -27,9 +27,7 @@ import java.util.List;
 public class PostRestController {
 
     private final PostService postService;
-
     private final AuthenticationHelper authenticationHelper;
-
     private final PostMapper postMapper;
 
     @Autowired
@@ -47,7 +45,7 @@ public class PostRestController {
                              @RequestParam(required = false) String sortBy,
                              @RequestParam(required = false) String sortOrder) {
         PostFilterOptions postFilterOptions = new PostFilterOptions(title, createdBy, creationTime, sortBy, sortOrder);
-           // return postService.getAll(postFilterOptions);
+        // return postService.getAll(postFilterOptions);
         try {
             User user = this.authenticationHelper.tryGetUser(headers);
             return postService.getAll(postFilterOptions);

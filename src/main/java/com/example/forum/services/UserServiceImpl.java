@@ -1,12 +1,9 @@
 package com.example.forum.services;
 
-import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
-import com.example.forum.models.dtos.UserDto;
 import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
@@ -45,19 +42,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getByUsername(String username) {
+        User user = userRepository.getByUsername(username);
+        checkAccessPermissionsAdmin(user, String.format(SEARCH_ADMIN_MESSAGE_ERROR, "username"));
         return this.userRepository.getByUsername(username);
     }
 
     @Override
     public User getByEmail(String email) {
+        User user = userRepository.getByEmail(email);
+        checkAccessPermissionsAdmin(user, String.format(SEARCH_ADMIN_MESSAGE_ERROR, "email"));
         return this.userRepository.getByEmail(email);
     }
 
     @Override
     public User getByFirstName(String firstName) {
+        User user = userRepository.getByFirstName(firstName);
+        checkAccessPermissionsAdmin(user, String.format(SEARCH_ADMIN_MESSAGE_ERROR, "first name"));
         return this.userRepository.getByUsername(firstName);
     }
-@Override
+
+    @Override
     public User getUserByComment(int commentId) {
         return this.userRepository.getUserByComment(commentId);
     }
@@ -72,42 +76,54 @@ public class UserServiceImpl implements UserService {
         if (user.getUsername() == null) {
             throw new EntityNotFoundException("User", "username", user.getUsername());
         }
+
         User existingUser = userRepository.getByUsername(user.getUsername());
+
         if (existingUser.getUsername().equals(user.getUsername())
                 && existingUser.getFirstName().equals(user.getFirstName())
                 && existingUser.getLastName().equals(user.getLastName())
                 && existingUser.getEmail().equals(user.getEmail())
-                &&existingUser.isDeleted()) {
+                && existingUser.isDeleted()) {
             userRepository.reactivated(existingUser);
         } else {
 
             if (userRepository.getByUsername(user.getUsername()) != null) {
                 throw new DuplicateEntityException("User", "username", user.getUsername());
             }
+
             if (userRepository.getByEmail(user.getEmail()) != null) {
                 throw new DuplicateEntityException("User", "email", user.getEmail());
             }
+
             userRepository.registerUser(user);
         }
     }
+
     @Override
     public void updateUser(User targetUser, User executingUser) {
         checkAccessPermissionsUser(targetUser.getId(), executingUser, MODIFY_USER_MESSAGE_ERROR);
-        if(!targetUser.getUsername().equals(executingUser.getUsername())){
-            throw  new EntityNotFoundException("User", "username", targetUser.getUsername());
+
+        if (!targetUser.getUsername().equals(executingUser.getUsername())) {
+            throw new EntityNotFoundException("User", "username", targetUser.getUsername());
         }
-        if(userRepository.getByEmail(targetUser.getEmail())!=null){
-            throw new DuplicateEntityException("User","email",targetUser.getEmail());
+
+        if (userRepository.getByEmail(targetUser.getEmail()) != null) {
+            throw new DuplicateEntityException("User", "email", targetUser.getEmail());
         }
+
         userRepository.updateUser(targetUser);
     }
+
     @Override
     public void deleteUser(int deleteUser, User executingUser) {
         checkAccessPermissions(deleteUser, executingUser, DELETE_USER_MESSAGE_ERROR);
-        User userToDelete=getById(deleteUser,executingUser);
-        if(userToDelete.isDeleted()){
-            throw new DuplicateEntityException("User","id",String.valueOf(deleteUser));
+
+        User userToDelete = getById(deleteUser, executingUser);
+
+        if (userToDelete.isDeleted()) {
+            throw new DuplicateEntityException("User", "id", String.valueOf(deleteUser));
         }
+
         userRepository.deleteUser(deleteUser);
     }
 

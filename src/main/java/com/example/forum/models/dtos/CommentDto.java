@@ -55,6 +55,4 @@ public class CommentDto {
 //    public void setDeleted(boolean deleted) {
 //        isDeleted = deleted;
 //    }
-
-
 }

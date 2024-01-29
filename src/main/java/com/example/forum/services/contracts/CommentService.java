@@ -8,17 +8,13 @@ import java.util.List;
 
 public interface CommentService {
 
-    //TODO Yoana
     List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions);
 
     Comment getCommentById(int commentId);
 
-    //TODO Veronika - Done
     void createComment(Comment comment, int postId, User user);
 
-    //TODO Siyana - Done
     void updateComment(Comment comment, User user);
 
-    //TODO Yoana
     void deleteComment(int commentId, User user);
 }

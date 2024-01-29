@@ -27,9 +27,6 @@ public class PhoneNumberRepositoryImpl implements PhoneNumberRepository {
         try (Session session = sessionFactory.openSession()) {
             PhoneNumber phoneNumber = session.get(PhoneNumber.class, userId);
 
-//            Query<PhoneNumber> query = session.createQuery("SELECT p FROM PhoneNumber p WHERE p.user.id = :userId", PhoneNumber.class);
-//            query.setParameter("userId", userId);
-
             if (phoneNumber == null) {
                 throw new EntityNotFoundException("Admin", "phone number");
             }

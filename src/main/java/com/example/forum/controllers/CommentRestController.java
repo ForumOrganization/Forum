@@ -10,7 +10,6 @@ import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.CommentDto;
-import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.services.contracts.CommentService;
 import com.example.forum.utils.CommentFilterOptions;
 import jakarta.validation.Valid;
@@ -42,10 +41,10 @@ public class CommentRestController {
                                                 @RequestParam(required = false) String content,
                                                 @RequestParam(required = false) Post post,
                                                 @RequestParam(required = false) String sortBy,
-                                                @RequestParam(required = false) String sortOrder){
-        CommentFilterOptions commentFilterOptions = new CommentFilterOptions(post,content, sortBy, sortOrder);
+                                                @RequestParam(required = false) String sortOrder) {
+        CommentFilterOptions commentFilterOptions = new CommentFilterOptions(post, content, sortBy, sortOrder);
 
-        return commentService.getAllCommentsByPostId(postId,commentFilterOptions);
+        return commentService.getAllCommentsByPostId(postId, commentFilterOptions);
     }
 
     @GetMapping("/{id}")
@@ -74,10 +73,10 @@ public class CommentRestController {
     }
 
     @PutMapping("/{id}")
-    public Comment updateComment(@RequestHeader HttpHeaders headers,@PathVariable int id, @Valid @RequestBody CommentDto commentDto) {
+    public Comment updateComment(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody CommentDto commentDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            Comment comment = this.commentMapper.fromDto(id,commentDto);
+            Comment comment = this.commentMapper.fromDto(id, commentDto);
             commentService.updateComment(comment, user);
             return comment;
         } catch (EntityNotFoundException e) {

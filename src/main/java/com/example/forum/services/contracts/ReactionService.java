@@ -8,19 +8,15 @@ import java.util.Map;
 
 public interface ReactionService {
 
-    //TODO Veronika - Done
     List<Reaction_posts> getAllReactionsByPostId(int postId);
-    //TODO Siyana - Done
+
     List<Reaction_comments> getAllReactionsByCommentId(int commentId);
 
-    //TODO Yoana
     Map<Reaction_posts, Integer> countReactionsPost(int postId);
 
-    //TODO Veronika - Done
     Map<Reaction_comments, Integer> countReactionsComment(int commentId);
-    //TODO Siyana - Done
+
     void updateReactionPost(Reaction_posts reaction, int postId);
 
-    //TODO Yoana
     void updateReactionComment(Reaction_comments reaction, int commentId);
 }

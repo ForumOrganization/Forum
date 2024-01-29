@@ -33,7 +33,6 @@ public class UserMapper {
     }
 
     public User fromDtoUpdate(int id, UserDto dto) {
-
         User updatedUser = new User();
         updatedUser.setId(id);
         updatedUser.setFirstName(dto.getFirstName());
@@ -53,9 +52,11 @@ public class UserMapper {
         userResponseDto.setLastName(user.getLastName());
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setRole(user.getRole());
+
         if (userResponseDto.getPhoneNumber() != null) {
             userResponseDto.setPhoneNumber(userResponseDto.getPhoneNumber());
         }
+
         userResponseDto.setPosts(user.getPosts());
 
         return userResponseDto;

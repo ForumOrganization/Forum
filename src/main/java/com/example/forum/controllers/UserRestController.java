@@ -27,9 +27,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.forum.utils.CheckPermission.checkAccessPermissionsAdmin;
-import static com.example.forum.utils.Messages.SEARCH_ADMIN_MESSAGE_ERROR;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserRestController {
@@ -39,7 +36,6 @@ public class UserRestController {
     private PhoneNumberService phoneNumberService;
     private final AuthenticationHelper authenticationHelper;
     private final UserMapper userMapper;
-
     private final PhoneNumberMapper phoneNumberMapper;
 
     @Autowired
@@ -62,11 +58,13 @@ public class UserRestController {
                                         @RequestParam(required = false) String sortOrder) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
+
             if (!user.getRole().equals(Role.ADMIN)) {
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
             }
-            UserFilterOptions userFilterOptions = new UserFilterOptions(username, firstName, lastName, email, role, sortBy, sortOrder);
 
+            UserFilterOptions userFilterOptions =
+                    new UserFilterOptions(username, firstName, lastName, email, role, sortBy, sortOrder);
             return userService.getAll(userFilterOptions);
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
@@ -90,11 +88,9 @@ public class UserRestController {
     public User getByUsername(@RequestHeader HttpHeaders headers, @RequestParam String username) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            checkAccessPermissionsAdmin(user, String.format(SEARCH_ADMIN_MESSAGE_ERROR, "username"));
             return userService.getByUsername(username);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -102,11 +98,9 @@ public class UserRestController {
     public User getByEmail(@RequestHeader HttpHeaders headers, @RequestParam String email) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            checkAccessPermissionsAdmin(user, String.format(SEARCH_ADMIN_MESSAGE_ERROR, "email"));
             return userService.getByEmail(email);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -114,11 +108,9 @@ public class UserRestController {
     public User getByFirstName(@RequestHeader HttpHeaders headers, @RequestParam String firstName) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            checkAccessPermissionsAdmin(user, String.format(SEARCH_ADMIN_MESSAGE_ERROR, "first name"));
             return userService.getByFirstName(firstName);
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 

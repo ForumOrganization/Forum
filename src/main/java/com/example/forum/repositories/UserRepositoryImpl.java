@@ -1,11 +1,10 @@
 package com.example.forum.repositories;
 
-import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.models.*;
-import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.Comment;
+import com.example.forum.models.Post;
+import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserResponseDto;
-import com.example.forum.models.enums.Role;
 import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.utils.UserFilterOptions;
 import org.hibernate.Session;
@@ -14,14 +13,10 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.example.forum.utils.CheckPermission.checkAccessPermissionsAdmin;
-import static com.example.forum.utils.Messages.UPDATE_PHONENUMBER_ERROR_MESSAGE;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -171,6 +166,7 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery("FROM Post as p where p.createdBy.id = :userId", Post.class);
             query.setParameter("userId", userId);
+
             List<Post> posts = query.list();
 
             if (posts.isEmpty()) {
@@ -203,14 +199,17 @@ public class UserRepositoryImpl implements UserRepository {
     public void reactivated(User targetUser) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
+
             for (Post post : targetUser.getPosts()) {
                 for (Comment comment : post.getComments()) {
                     comment.setDeleted(false);
                     session.merge(comment);
                 }
+
                 post.setDeleted(false);
                 session.merge(post);
             }
+
             targetUser.setDeleted(false);
             session.merge(targetUser);
             session.getTransaction().commit();
@@ -220,16 +219,20 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void deleteUser(int targetUserId) {
         User userToDelete = getById(targetUserId);
+
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
+
             for (Post post : userToDelete.getPosts()) {
                 for (Comment comment : post.getComments()) {
                     comment.setDeleted(true);
                     session.merge(comment);
                 }
+
                 post.setDeleted(true);
                 session.merge(post);
             }
+
             userToDelete.setDeleted(true);
             session.merge(userToDelete);
             session.getTransaction().commit();

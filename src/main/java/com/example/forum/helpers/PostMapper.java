@@ -21,6 +21,7 @@ public class PostMapper {
         post.setId(id);
         Post repositoryPost = postService.getById(id);
         post.setCreatedBy(repositoryPost.getCreatedBy());
+
         return post;
     }
 

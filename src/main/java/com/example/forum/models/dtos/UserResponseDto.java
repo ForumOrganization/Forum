@@ -39,7 +39,6 @@ public class UserResponseDto {
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.posts = posts;
-        //  this.comments = comments;
     }
 
     public int getId() {
@@ -105,14 +104,6 @@ public class UserResponseDto {
     public void setPosts(Set<Post> posts) {
         this.posts = posts;
     }
-
-//    public Set<Comment> getComments() {
-//        return comments;
-//    }
-//
-//    public void setComments(Set<Comment> comments) {
-//        this.comments = comments;
-//    }
 
     @Override
     public boolean equals(Object o) {

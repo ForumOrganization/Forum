@@ -5,7 +5,6 @@ import com.example.forum.models.User;
 
 public class CheckPermission {
 
-
     public static void checkAccessPermissions(int targetUserId, User executingUser, String message) {
         if (!executingUser.getRole().name().equals("ADMIN") && executingUser.getId() != targetUserId) {
             throw new AuthorizationException(message);
@@ -17,6 +16,7 @@ public class CheckPermission {
             throw new AuthorizationException(message);
         }
     }
+
     public static void checkAccessPermissionsUser(int targetUserId, User executingUser,String message) {
         if (executingUser.getId() != targetUserId) {
             throw new AuthorizationException(message);

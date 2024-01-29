@@ -24,7 +24,6 @@ import static com.example.forum.utils.Messages.*;
 @Service
 public class PostServiceImpl implements PostService {
 
-
     private PostRepository postRepository;
 
     @Autowired

@@ -11,7 +11,9 @@ public interface PhoneNumberRepository {
 
     void addPhoneNumberToAdmin(User admin, PhoneNumber phoneNumber);
 
+
     void updatePhoneNumber(PhoneNumber phoneNumber);
+
 
     void deletePhoneNumber(int userId);
 }

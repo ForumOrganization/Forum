@@ -12,7 +12,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,11 +53,13 @@ public class CommentRepositoryImpl implements CommentRepository {
 //            });
 
             StringBuilder queryString = new StringBuilder("from Comment");
+
             if (!filters.isEmpty()) {
                 queryString
                         .append(" where ")
                         .append(String.join(" and ", filters));
             }
+
             queryString.append(generateOrderBy(commentFilterOptions));
 
             Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
@@ -93,7 +94,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     public void updateComment(Comment comment) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.update(comment);
+            session.merge(comment);
             session.getTransaction().commit();
         }
     }
@@ -104,13 +105,17 @@ public class CommentRepositoryImpl implements CommentRepository {
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            for(Reaction_comments reaction: commentToDelete.getReactions()){
+
+            for (Reaction_comments reaction : commentToDelete.getReactions()) {
                 session.remove(reaction);
             }
+
             session.remove(commentToDelete);
             session.getTransaction().commit();
         }
-    }private String generateOrderBy(CommentFilterOptions commentFilterOptions) {
+    }
+
+    private String generateOrderBy(CommentFilterOptions commentFilterOptions) {
         if (commentFilterOptions.getSortBy().isEmpty()) {
             return "";
         }
@@ -120,7 +125,6 @@ public class CommentRepositoryImpl implements CommentRepository {
             case "content":
                 orderBy = "content";
                 break;
-
         }
 
         orderBy = String.format(" order by %s", orderBy);

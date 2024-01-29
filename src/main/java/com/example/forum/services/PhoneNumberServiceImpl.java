@@ -39,7 +39,6 @@ public class PhoneNumberServiceImpl implements PhoneNumberService {
             }
 
             phoneNumberAdmin.setPhoneNumber(phoneNumber.getPhoneNumber());
-
             phoneNumberRepository.addPhoneNumberToAdmin(admin, phoneNumberAdmin);
         } else {
             throw new EntityNotFoundException("Admin", "phone number");

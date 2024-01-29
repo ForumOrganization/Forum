@@ -1,9 +1,12 @@
 package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.models.*;
-import com.example.forum.utils.PostFilterOptions;
+import com.example.forum.models.Comment;
+import com.example.forum.models.Post;
+import com.example.forum.models.Reaction_comments;
+import com.example.forum.models.Reaction_posts;
 import com.example.forum.repositories.contracts.PostRepository;
+import com.example.forum.utils.PostFilterOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -11,8 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.*;
-import java.util.concurrent.Callable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
@@ -37,7 +42,7 @@ public class PostRepositoryImpl implements PostRepository {
 
             postFilterOptions.getCreatedBy().ifPresent(value -> {
                 filters.add("createdBy.username like :createdBy");
-                params.put("createdBy",String.format("%%%s%%", value));
+                params.put("createdBy", String.format("%%%s%%", value));
             });
 
             postFilterOptions.getCreationTime().ifPresent(value -> {
@@ -132,14 +137,16 @@ public class PostRepositoryImpl implements PostRepository {
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-           // postToDelete.setDeleted(true);
+            // postToDelete.setDeleted(true);
             for (Reaction_posts reaction : postToDelete.getReactions()) {
                 session.remove(reaction);
             }
+
             for (Comment comment : postToDelete.getComments()) {
                 for (Reaction_comments reaction : comment.getReactions()) {
                     session.remove(reaction);
                 }
+
                 session.remove(comment);
             }
 

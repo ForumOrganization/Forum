@@ -4,11 +4,8 @@ import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
-import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
-import com.example.forum.utils.CommentFilterOptions;
 import com.example.forum.utils.TagFilterOptions;
-import jakarta.persistence.NoResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -62,38 +59,36 @@ public class TagRepositoryImpl implements TagRepository {
     public Tag getTagById(int tagId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Tag> query = session.createQuery(
-                    "SELECT t FROM Tag t WHERE t.id = :tagId",
-                    Tag.class
-            );
+                    "SELECT t FROM Tag t WHERE t.id = :tagId", Tag.class);
             query.setParameter("tagId", tagId);
             return query.getSingleResult();
         }
     }
+
     @Override
-    public Tag getTagByName(String name){
+    public Tag getTagByName(String name) {
         try (Session session = sessionFactory.openSession()) {
             Query<Tag> query = session.createQuery(
-                    "SELECT t FROM Tag t WHERE t.name = :name",
-                    Tag.class
-            );
+                    "SELECT t FROM Tag t WHERE t.name = :name", Tag.class);
             query.setParameter("name", name);
             return query.getSingleResult();
         }
 
     }
+
     @Override
     public List<Post> getAllPostsByTagId(int tagId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery(
-                    "SELECT p FROM Post p JOIN p.tags t WHERE t.id = :tagId",
-                    Post.class
-            );
-
+                    "SELECT p FROM Post p JOIN p.tags t WHERE t.id = :tagId", Post.class);
             query.setParameter("tagId", tagId);
+
             List<Post> result = query.getResultList();
+
             if (result.isEmpty()) {
-                throw new EntityNotFoundException("Posts", "tagId",String.valueOf(tagId));
+                throw new EntityNotFoundException("Posts", "tagId", String.valueOf(tagId));
             }
+
             return result;
         }
     }
@@ -102,16 +97,16 @@ public class TagRepositoryImpl implements TagRepository {
     public List<Post> getAllPostsByTagName(String tagName) {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery(
-                    "SELECT p FROM Post p JOIN p.tags t WHERE t.name = :tagName",
-                    Post.class
-            );
+                    "SELECT p FROM Post p JOIN p.tags t WHERE t.name = :tagName", Post.class);
 
             query.setParameter("tagName", tagName);
 
             List<Post> result = query.getResultList();
+
             if (result.size() == 0) {
                 throw new EntityNotFoundException("Posts", "tag name");
             }
+
             return result;
         }
     }
@@ -125,9 +120,11 @@ public class TagRepositoryImpl implements TagRepository {
             query.setParameter("postId", postId);
 
             List<Tag> result = query.getResultList();
+
             if (result.size() == 0) {
                 throw new EntityNotFoundException("Tags", "post id");
             }
+
             return result;
         }
     }
@@ -142,9 +139,7 @@ public class TagRepositoryImpl implements TagRepository {
             }
 
             Query<Tag> query = session.createQuery(
-                    "SELECT t FROM Tag t WHERE t.name = :name",
-                    Tag.class
-            );
+                    "SELECT t FROM Tag t WHERE t.name = :name", Tag.class);
 
             query.setParameter("name", tag.getName());
 

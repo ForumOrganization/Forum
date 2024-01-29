@@ -20,7 +20,6 @@ public class CommentMapper {
         this.userService = userService;
     }
 
-
     public Comment fromDto(int id, CommentDto dto) {
         Comment comment = fromDto(dto);
         comment.setId(id);
@@ -37,8 +36,6 @@ public class CommentMapper {
         Comment comment = new Comment();
         comment.setContent(dto.getContent());
 
-
         return comment;
     }
 }
-

@@ -63,6 +63,7 @@ public class ReactionRepositoryImpl implements ReactionRepository {
             Map<Reaction_posts, Integer> reactionCountMap = new HashMap<>();
 
             Set<Reaction_posts> reactions = post.getReactions();
+
             for (Reaction_posts reaction : reactions) {
                 reactionCountMap.put(reaction, reactionCountMap.getOrDefault(reaction, 0) + 1);
             }
@@ -83,6 +84,7 @@ public class ReactionRepositoryImpl implements ReactionRepository {
             List<Object[]> result = query.getResultList();
 
             Map<Reaction_comments, Integer> reactionCountMap = new HashMap<>();
+
             for (Object[] row : result) {
                 Reaction_comments reaction = (Reaction_comments) row[0];
                 Long count = (Long) row[1];
