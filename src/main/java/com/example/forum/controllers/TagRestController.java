@@ -8,6 +8,8 @@ import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.services.contracts.TagService;
+import com.example.forum.utils.TagFilterOptions;
+import jakarta.persistence.NoResultException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,10 +32,18 @@ public class TagRestController {
         this.authenticationHelper = authenticationHelper;
     }
 
+    @GetMapping
+    public List<Tag> getAllTags(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String sortBy,
+            @RequestParam(required = false) String sortOrder) {
+        TagFilterOptions tagFilterOptions = new TagFilterOptions(name, sortBy, sortOrder);
+        return tagService.getAllTags(tagFilterOptions);
+    }
+
     @GetMapping("/{tagId}")
     public ResponseEntity<Tag> getTagById(@PathVariable int tagId) {
         Tag tag = tagService.getTagById(tagId);
-
         if (tag != null) {
             return new ResponseEntity<>(tag, HttpStatus.OK);
         } else {
@@ -41,14 +51,23 @@ public class TagRestController {
         }
     }
 
-    @GetMapping
-    public List<Tag> getAllTags() {
-        return tagService.getAllTags();
+    @GetMapping("/search")
+    public ResponseEntity<Tag> getTagByName(@RequestParam String name) {
+        Tag tag = tagService.getTagByName(name);
+        if (tag != null) {
+            return new ResponseEntity<>(tag, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @GetMapping("/posts/{postId}")
     public List<Tag> getAllTagsByPostId(@PathVariable int postId) {
-        return tagService.getAllTagsByPostId(postId);
+        try{
+            return tagService.getAllTagsByPostId(postId);
+        }catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @GetMapping("/posts/tagName/{tagName}")

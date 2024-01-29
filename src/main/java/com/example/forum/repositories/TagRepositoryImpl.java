@@ -6,6 +6,8 @@ import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
+import com.example.forum.utils.CommentFilterOptions;
+import com.example.forum.utils.TagFilterOptions;
 import jakarta.persistence.NoResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,28 +15,72 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
 
     private SessionFactory sessionFactory;
-    private PostRepository postRepository;
 
     @Autowired
-    public TagRepositoryImpl(SessionFactory sessionFactory, PostRepository postRepository) {
+    public TagRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-        this.postRepository= postRepository;
     }
 
     @Override
-    public List<Tag> getAllTags() {
+    public List<Tag> getAllTags(TagFilterOptions tagFilterOptions) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Tag> query = session.createQuery("from Tag", Tag.class);
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+
+            tagFilterOptions.getName().ifPresent(value -> {
+                filters.add("name like :name");
+                params.put("name", String.format("%%%s%%", value));
+            });
+
+
+            StringBuilder queryString = new StringBuilder("from Tag");
+            if (!filters.isEmpty()) {
+                queryString
+                        .append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+            queryString.append(generateOrderBy(tagFilterOptions));
+
+            Query<Tag> query = session.createQuery(queryString.toString(), Tag.class);
+            query.setProperties(params);
             return query.list();
         }
     }
 
+
+    @Override
+    public Tag getTagById(int tagId) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Tag> query = session.createQuery(
+                    "SELECT t FROM Tag t WHERE t.id = :tagId",
+                    Tag.class
+            );
+            query.setParameter("tagId", tagId);
+            return query.getSingleResult();
+        }
+    }
+    @Override
+    public Tag getTagByName(String name){
+        try (Session session = sessionFactory.openSession()) {
+            Query<Tag> query = session.createQuery(
+                    "SELECT t FROM Tag t WHERE t.name = :name",
+                    Tag.class
+            );
+            query.setParameter("name", name);
+            return query.getSingleResult();
+        }
+
+    }
     @Override
     public List<Post> getAllPostsByTagId(int tagId) {
         try (Session session = sessionFactory.openSession()) {
@@ -44,13 +90,9 @@ public class TagRepositoryImpl implements TagRepository {
             );
 
             query.setParameter("tagId", tagId);
-            Tag tag=getTagById(tagId);
-            if(tag==null){
-                throw new EntityNotFoundException("User", "tag", tagId);
-            }
-            List<Post> result= query.getResultList();
-            if (result.size() == 0) {
-                throw new EntityNotFoundException("User", "post");
+            List<Post> result = query.getResultList();
+            if (result.isEmpty()) {
+                throw new EntityNotFoundException("Posts", "tagId",String.valueOf(tagId));
             }
             return result;
         }
@@ -65,13 +107,10 @@ public class TagRepositoryImpl implements TagRepository {
             );
 
             query.setParameter("tagName", tagName);
-            Tag tag=getTagByName(tagName);
-            if(tag==null){
-                throw new EntityNotFoundException("User", "tag", tagName);
-            }
-            List<Post> result= query.getResultList();
+
+            List<Post> result = query.getResultList();
             if (result.size() == 0) {
-                throw new EntityNotFoundException("User", "post");
+                throw new EntityNotFoundException("Posts", "tag name");
             }
             return result;
         }
@@ -84,35 +123,12 @@ public class TagRepositoryImpl implements TagRepository {
                     "SELECT t FROM Post p JOIN p.tags t WHERE p.id = :postId", Tag.class);
 
             query.setParameter("postId", postId);
-            Post post=postRepository.getById(postId);
-            if(post==null){
-                throw new EntityNotFoundException("User", "post", String.valueOf(postId));
-            }
-            List<Tag> result= query.getResultList();
+
+            List<Tag> result = query.getResultList();
             if (result.size() == 0) {
-                throw new EntityNotFoundException("User", "tags");
+                throw new EntityNotFoundException("Tags", "post id");
             }
             return result;
-        }
-    }
-
-    @Override
-    public Tag getTagById(int tagId) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Tag> query = session.createQuery(
-                    "SELECT t FROM Tag t WHERE t.id = :tagId",
-                    Tag.class
-            );
-
-            query.setParameter("tagId", tagId);
-            Tag tag=query.getSingleResult();
-            if(tag==null){
-                throw new EntityNotFoundException("User", "tag", String.valueOf(tagId));
-            }
-
-            return tag;
-        } catch (NoResultException e) {
-            throw new EntityNotFoundException("Tag", tagId);
         }
     }
 
@@ -141,8 +157,6 @@ public class TagRepositoryImpl implements TagRepository {
             } else {
                 post.getTags().add(tag);
                 post.setCreatedBy(user);
-
-
                 session.beginTransaction();
                 session.merge(post);
                 session.getTransaction().commit();
@@ -160,11 +174,33 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public void deleteTagInPost(Tag tag) {
+    public void deleteTagInPost(int tagId) {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            session.remove(tag);
+            session.remove(tagId);
             session.getTransaction().commit();
         }
+    }
+
+    private String generateOrderBy(TagFilterOptions tagFilterOptions) {
+        if (tagFilterOptions.getSortBy().isEmpty()) {
+            return "";
+        }
+
+        String orderBy = "";
+        switch (tagFilterOptions.getSortBy().get()) {
+            case "name":
+                orderBy = "name";
+                break;
+
+        }
+
+        orderBy = String.format(" order by %s", orderBy);
+
+        if (tagFilterOptions.getSortOrder().isPresent() && tagFilterOptions.getSortOrder().get().equalsIgnoreCase("desc")) {
+            orderBy = String.format("%s desc", orderBy);
+        }
+
+        return orderBy;
     }
 }
