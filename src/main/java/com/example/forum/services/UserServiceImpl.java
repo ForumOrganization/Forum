@@ -129,9 +129,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateToAdmin(User targetUser, User executingUser) {
+        checkAccessPermissionsAdmin(executingUser, UPDATE_PHONENUMBER_ERROR_MESSAGE);
         checkAccessPermissionsUser(targetUser.getId(), executingUser, UPDATE_TO_ADMIN_ERROR_MESSAGE);
+
         targetUser.setRole(Role.ADMIN);
-        userRepository.updateUser(targetUser);
+        userRepository.updateToAdmin(targetUser);
     }
 
     @Override
@@ -156,30 +158,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public void addPhoneNumberToAdmin(User admin, String phoneNumber) {
         checkAccessPermissionsAdmin(admin, UPDATE_PHONENUMBER_ERROR_MESSAGE);
-
-
-
         if (phoneNumber != null && !phoneNumber.isEmpty()) {
-
             if (phoneNumber.equals(admin.getPhoneNumber())) {
                 throw new DuplicateEntityException("Admin", "phone number", phoneNumber);
             }
-
-            if(admin.getPhoneNumber() == null || admin.getPhoneNumber().isEmpty()){
+            if (admin.getPhoneNumber() == null || admin.getPhoneNumber().isEmpty()) {
                 admin.setPhoneNumber(phoneNumber);
                 userRepository.addPhoneNumberToAdmin(admin);
             } else {
                 admin.setPhoneNumber(phoneNumber);
-                userRepository.updatePhoneNumber(admin);}
-        } else{
+                userRepository.updatePhoneNumber(admin);
+            }
+        } else {
             throw new EntityNotFoundException("Admin", "phone number");
         }
     }
 
     @Override
-    public void deletePhoneNumber(int userId) {
-        User user = userRepository.getById(userId);
-        checkAccessPermissionsAdmin(user,DELETE_PHONENUMBER_MESSAGE_ERROR);
+    public void deletePhoneNumber(int userId, User user) {
+        User userToDelete = userRepository.getById(userId);
+        checkAccessPermissionsAdmin(userToDelete, DELETE_PHONENUMBER_MESSAGE_ERROR);
+        checkAccessPermissionsUser(userId, user, DELETE_PHONENUMBER_MESSAGE_ERROR);
         userRepository.deletePhoneNumber(userId);
     }
 }

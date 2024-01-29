@@ -33,7 +33,10 @@ public interface UserRepository {
     void deleteUser(int targetUserId);
 
     void updateToAdmin(User targetUser);
+
     void addPhoneNumberToAdmin(User user);
+
     void deletePhoneNumber(int userId);
+
     void updatePhoneNumber(User admin);
 }

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PostMapper {
-
     private final PostService postService;
 
     @Autowired

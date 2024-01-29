@@ -39,6 +39,6 @@ public interface UserService {
     void updatePhoneNumber(String phoneNumber);
 
 
-    void deletePhoneNumber(int userId);
+    void deletePhoneNumber(int userId, User user);
 
 }

@@ -44,7 +44,7 @@ public class Reaction_comments {
         return reaction;
     }
 
-    public void setReaction(com.example.forum.models.enums.Reaction reaction) {
+    public void setReaction(Reaction reaction) {
         this.reaction = reaction;
     }
 

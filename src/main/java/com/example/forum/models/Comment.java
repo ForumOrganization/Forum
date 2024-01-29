@@ -66,7 +66,6 @@ public class Comment {
         isDeleted = deleted;
     }
 
-
     public User getUser() {
         return user;
     }

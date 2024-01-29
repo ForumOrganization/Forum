@@ -10,7 +10,9 @@ import java.util.List;
 public interface TagRepository {
 
     List<Tag> getAllTags(TagFilterOptions tagFilterOptions);
+
     Tag getTagById(int tagId);
+
     Tag getTagByName(String name);
 
     List<Post> getAllPostsByTagId(int tagId);

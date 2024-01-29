@@ -7,23 +7,18 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 
 public class UserDto {
-
-
     @NotNull(message = "First name can't be empty.")
     @NotBlank(message = "First name can't be blank.")
     @Size(min = 4, max = 32, message = "First name should be between 4 and 32 symbols.")
     private String firstName;
-
     @NotNull(message = "Last name can't be empty.")
     @NotBlank(message = "Last name can't be blank.")
     @Size(min = 4, max = 32, message = "Last name should be between 4 and 32 symbols.")
     private String lastName;
-
     @NotNull(message = "Email must be unique.")
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$",
             message = "Invalid email format")
     private String email;
-
     @NotNull(message = "Password can't be empty.")
     @Size(min = 6, max = 32, message = "Password should be between 8 and 32 symbols.")
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
@@ -32,7 +27,6 @@ public class UserDto {
 
     public UserDto() {
     }
-
 
     public String getFirstName() {
         return firstName;

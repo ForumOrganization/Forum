@@ -26,7 +26,7 @@ public class Reaction_posts {
 
     @ManyToOne
     @JoinColumn(name = "post_id")
-    @JsonIgnoreProperties({"id", "content", "createdBy", "creationTime",  "isDeleted"})
+    @JsonIgnoreProperties({"id", "content", "createdBy", "creationTime", "isDeleted"})
     private Post post;
 
     public Reaction_posts() {

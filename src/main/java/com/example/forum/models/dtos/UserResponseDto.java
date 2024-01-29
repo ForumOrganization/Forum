@@ -10,22 +10,12 @@ import java.util.Set;
 public class UserResponseDto {
 
     private int id;
-
-
     private String firstName;
-
     private String lastName;
-
     private String email;
-
     private Role role = Role.USER;
-
     private String phoneNumber;
-
-
     private Set<Post> posts;
-
-    // private Set<Comment> comments;
 
     public UserResponseDto() {
     }

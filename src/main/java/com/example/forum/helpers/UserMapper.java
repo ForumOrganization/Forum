@@ -5,7 +5,7 @@ import com.example.forum.models.User;
 import com.example.forum.models.dtos.PhoneNumberDto;
 import com.example.forum.models.dtos.UserDto;
 import com.example.forum.models.dtos.UserResponseDto;
-import com.example.forum.repositories.contracts.UserRepository;
+import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,13 +14,11 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
     private final UserService userService;
 
-    private final UserRepository userRepository;
 
     @Autowired
-    public UserMapper(UserService userService,  UserRepository userRepository) {
+    public UserMapper(UserService userService) {
         this.userService = userService;
 
-        this.userRepository = userRepository;
     }
 
     public User fromDto(UserDto dto) {
@@ -41,6 +39,12 @@ public class UserMapper {
         updatedUser.setEmail(dto.getEmail());
         updatedUser.setPassword(dto.getPassword());
 
+        return updatedUser;
+    }
+
+    public User fromDtoUpdateToAdmin(int id, User user) {
+        User updatedUser = userService.getById(id, user);
+        updatedUser.setRole(Role.ADMIN);
 
         return updatedUser;
     }
@@ -57,15 +61,15 @@ public class UserMapper {
 
         return userResponseDto;
     }
-    public User fromDtoUpdatePhoneNumber(int id, PhoneNumberDto dto) {
-        User updatedUser = userRepository.getById(id);
+
+    public User fromDtoUpdatePhoneNumber(int id, PhoneNumberDto dto, User user) {
+        User updatedUser = userService.getById(id, user);
         updatedUser.setPhoneNumber(dto.getPhoneNumber());
 
         return updatedUser;
     }
 
     public static UserResponseDto toDtoPhoneNumber(User user) {
-
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(user.getId());
         userResponseDto.setFirstName(user.getFirstName());
@@ -73,22 +77,9 @@ public class UserMapper {
         userResponseDto.setEmail(user.getEmail());
         userResponseDto.setPosts(user.getPosts());
         userResponseDto.setRole(user.getRole());
-//        if (userResponseDto.getPhoneNumber() != null) {
         userResponseDto.setPhoneNumber(user.getPhoneNumber());
-
-//        String phoneNumber = fromDtoPhoneNumber(dto);
-//        User user = userRepository.getById(id);
-//        user.setPhoneNumber(phoneNumber);
-//        PhoneNumber phoneNumberRepository = phoneNumberService.getPhoneNumberByUserId(id);
-//        phoneNumber.setUser(phoneNumberRepository.getUser());
 
         return userResponseDto;
     }
 
-//    public String fromDtoPhoneNumber(PhoneNumberDto dto) {
-//        User user = new User();
-//         user.setPhoneNumber(dto.getPhoneNumber());
-//
-//        return user.getPhoneNumber();
-//    }
 }

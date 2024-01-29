@@ -24,11 +24,12 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.forum.utils.Messages.UNAUTHORIZED_USER_ERROR_MESSAGE;
+
 @RestController
 @RequestMapping("/api/users")
 public class UserRestController {
 
-    private static final String UNAUTHORIZED_USER_ERROR_MESSAGE = "You are not authorized to browse user information.";
     private final UserService userService;
     private final AuthenticationHelper authenticationHelper;
     private final UserMapper userMapper;
@@ -55,7 +56,7 @@ public class UserRestController {
             User user = authenticationHelper.tryGetUser(headers);
 
             if (!user.getRole().equals(Role.ADMIN)) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,UNAUTHORIZED_USER_ERROR_MESSAGE);
             }
 
             UserFilterOptions userFilterOptions =
@@ -82,7 +83,7 @@ public class UserRestController {
     @GetMapping(value = "/search", params = {"username"})
     public User getByUsername(@RequestHeader HttpHeaders headers, @RequestParam String username) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            authenticationHelper.tryGetUser(headers);
             return userService.getByUsername(username);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -92,7 +93,7 @@ public class UserRestController {
     @GetMapping(value = "/search", params = {"email"})
     public User getByEmail(@RequestHeader HttpHeaders headers, @RequestParam String email) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            authenticationHelper.tryGetUser(headers);
             return userService.getByEmail(email);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -102,7 +103,7 @@ public class UserRestController {
     @GetMapping(value = "/search", params = {"firstName"})
     public User getByFirstName(@RequestHeader HttpHeaders headers, @RequestParam String firstName) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            authenticationHelper.tryGetUser(headers);
             return userService.getByFirstName(firstName);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -112,7 +113,7 @@ public class UserRestController {
     @GetMapping("/{id}/posts")
     public List<Post> getPosts(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
-            User user = authenticationHelper.tryGetUser(headers);
+            authenticationHelper.tryGetUser(headers);
             List<Post> userPosts = userService.getPosts(id);
             return new ArrayList<>(userPosts);
         } catch (EntityNotFoundException e) {
@@ -136,7 +137,7 @@ public class UserRestController {
         } catch (DuplicateEntityException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 
@@ -160,7 +161,7 @@ public class UserRestController {
     public UserResponseDto updateUserPhoneNumber(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PhoneNumberDto phoneNumberDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            User userPhoneNumber = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto);
+            User userPhoneNumber = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto,user);
             userService.addPhoneNumberToAdmin(user, userPhoneNumber.getPhoneNumber());
             return UserMapper.toDtoPhoneNumber(userPhoneNumber);
         } catch (EntityNotFoundException e) {
@@ -171,12 +172,27 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
-    @DeleteMapping ("/{id}")
-    public void updateUserPhoneNumber(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+    @PutMapping("/{id}/admins")
+    public UserResponseDto updateToAdmin(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            userService.deletePhoneNumber(id);
+            User userToBeUpdate = userMapper.fromDtoUpdateToAdmin(id,user);
+            userService.updateToAdmin(user, userToBeUpdate);
+            return UserMapper.toDto(userToBeUpdate);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
+    }
+
+    @DeleteMapping ("/{id}/phone-number")
+    public void deleteUserPhoneNumber(@RequestHeader HttpHeaders headers, @PathVariable int id) {
+        try {
+            User user = authenticationHelper.tryGetUser(headers);
+            userService.deletePhoneNumber(id,user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {

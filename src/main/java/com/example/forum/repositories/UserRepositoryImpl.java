@@ -301,7 +301,6 @@ public class UserRepositoryImpl implements UserRepository {
     public void deletePhoneNumber(int userId) {
         User user = getById(userId);
         String phoneNumberToDelete = user.getPhoneNumber();
-
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.remove(phoneNumberToDelete);

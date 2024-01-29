@@ -16,7 +16,6 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private int id;
-
     @Column(name = "title")
     private String title;
 
@@ -25,7 +24,6 @@ public class Post {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "created_by")
-   // @JsonIgnoreProperties({"id", "firstName", "lastName", "email", "role", "status", "deleted"})
     private User createdBy;
 
     @JsonIgnore
@@ -37,7 +35,6 @@ public class Post {
 
     @JsonIgnore
     @OneToMany(mappedBy = "post",
-            //  cascade = CascadeType.REMOVE, orphanRemoval = true,
             fetch = FetchType.EAGER)
     private Set<Comment> comments;
 
