@@ -1,8 +1,11 @@
 package com.example.forum.helpers;
 
+import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.User;
+import com.example.forum.models.dtos.PhoneNumberDto;
 import com.example.forum.models.dtos.UserDto;
 import com.example.forum.models.dtos.UserResponseDto;
+import com.example.forum.services.contracts.PhoneNumberService;
 import com.example.forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,23 +13,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserMapper {
     private final UserService userService;
+    private final PhoneNumberService phoneNumberService;
 
     @Autowired
-    public UserMapper(UserService userService) {
+    public UserMapper(UserService userService, PhoneNumberService phoneNumberService) {
         this.userService = userService;
-    }
-
-    public User fromDto(int id, UserDto dto) {
-        User user = fromDto(dto);
-        user.setId(id);
-        User repostioryUser = userService.getById(id, user);
-        user.setFirstName(repostioryUser.getFirstName());
-        user.setLastName(repostioryUser.getLastName());
-        user.setEmail(repostioryUser.getEmail());
-        user.setPassword(repostioryUser.getPassword());
-        user.setUsername(repostioryUser.getUsername());
-
-        return user;
+        this.phoneNumberService = phoneNumberService;
     }
 
     public User fromDto(UserDto dto) {
@@ -39,6 +31,7 @@ public class UserMapper {
 
         return user;
     }
+
     public User fromDtoUpdate(int id, UserDto dto) {
 
         User updatedUser = new User();
@@ -51,14 +44,20 @@ public class UserMapper {
 
         return updatedUser;
     }
-    public static UserResponseDto toDto(User user){
-             return  new UserResponseDto(user.getId(),
-                user.getUsername(),
-                user.getFirstName(),
-                user.getLastName(),
-                user.getEmail(),
-                user.getRole(),
-                user.getPosts());
-               // user.getComments());
+
+    public static UserResponseDto toDto(User user) {
+        UserResponseDto userResponseDto = new UserResponseDto();
+        userResponseDto.setId(user.getId());
+        userResponseDto.setUsername(user.getUsername());
+        userResponseDto.setFirstName(user.getFirstName());
+        userResponseDto.setLastName(user.getLastName());
+        userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setRole(user.getRole());
+        if (userResponseDto.getPhoneNumber() != null) {
+            userResponseDto.setPhoneNumber(userResponseDto.getPhoneNumber());
+        }
+        userResponseDto.setPosts(user.getPosts());
+
+        return userResponseDto;
     }
 }

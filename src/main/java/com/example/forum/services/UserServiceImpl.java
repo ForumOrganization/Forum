@@ -131,15 +131,4 @@ public class UserServiceImpl implements UserService {
         unBlockUser.setStatus(Status.ACTIVE);
         userRepository.updateUser(unBlockUser);
     }
-
-    @Override
-    public void addPhoneNumberToAdmin(User admin, String phoneNumber) {
-        checkAccessPermissionsAdmin(admin, UPDATE_PHONENUMBER_ERROR_MESSAGE);
-        PhoneNumber phone = new PhoneNumber();
-        phone.setUser(admin);
-        phone.setPhoneNumber(phoneNumber);
-        userRepository.addPhoneNumberToAdmin(admin, phone);
-
-    }
-
 }

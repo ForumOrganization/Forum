@@ -1,5 +1,6 @@
 package com.example.forum.repositories;
 
+import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.*;
 import com.example.forum.models.dtos.UserDto;
@@ -18,6 +19,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.example.forum.utils.CheckPermission.checkAccessPermissionsAdmin;
+import static com.example.forum.utils.Messages.UPDATE_PHONENUMBER_ERROR_MESSAGE;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -194,6 +198,7 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
+
     @Override
     public void reactivated(User targetUser) {
         try (Session session = sessionFactory.openSession()) {
@@ -236,15 +241,6 @@ public class UserRepositoryImpl implements UserRepository {
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(targetUser);
-            session.getTransaction().commit();
-        }
-    }
-
-    @Override
-    public void addPhoneNumberToAdmin(User admin, PhoneNumber phone) {
-        try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.persist(phone);
             session.getTransaction().commit();
         }
     }

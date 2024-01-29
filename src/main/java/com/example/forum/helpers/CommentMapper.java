@@ -4,7 +4,6 @@ import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.CommentDto;
-import com.example.forum.services.contracts.CommentService;
 import com.example.forum.services.contracts.PostService;
 import com.example.forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +11,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CommentMapper {
-    private final CommentService commentService;
     private final PostService postService;
     private final UserService userService;
 
     @Autowired
-    public CommentMapper(CommentService commentService, PostService postService, UserService userService) {
-        this.commentService = commentService;
+    public CommentMapper(PostService postService, UserService userService) {
         this.postService = postService;
         this.userService = userService;
     }
@@ -28,9 +25,9 @@ public class CommentMapper {
         Comment comment = fromDto(dto);
         comment.setId(id);
         comment.setContent(dto.getContent());
-        Post post=postService.getByComment(id);
+        Post post = postService.getByComment(id);
         comment.setPost(post);
-        User user=userService.getUserByComment(id);
+        User user = userService.getUserByComment(id);
         comment.setUser(user);
 
         return comment;

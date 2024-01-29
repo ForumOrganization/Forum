@@ -28,10 +28,10 @@ public interface UserRepository {
     void registerUser(User user);
 
     void updateUser(User targetUser);
+
     void reactivated(User targetUser);
+
     void deleteUser(int targetUserId);
 
     void updateToAdmin(User targetUser);
-
-    void addPhoneNumberToAdmin(User admin, PhoneNumber phoneNumber);
 }

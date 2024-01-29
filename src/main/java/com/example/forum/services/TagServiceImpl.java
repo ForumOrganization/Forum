@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.example.forum.utils.CheckPermission.checkAccessPermissions;
-import static com.example.forum.utils.CheckPermission.checkAccessPermissionsUser;
 import static com.example.forum.utils.Messages.*;
 
 @Service
@@ -35,6 +34,7 @@ public class TagServiceImpl implements TagService {
     public List<Tag> getAllTags(TagFilterOptions tagFilterOptions) {
         return tagRepository.getAllTags(tagFilterOptions);
     }
+
     @Override
     public Tag getTagById(int tagId) {
 //        Tag tag = tagRepository.getTagById(tagId);
@@ -43,6 +43,7 @@ public class TagServiceImpl implements TagService {
 //        }
         return tagRepository.getTagById(tagId);
     }
+
     @Override
     public Tag getTagByName(String name) {
         return tagRepository.getTagByName(name);

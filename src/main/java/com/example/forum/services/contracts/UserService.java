@@ -1,6 +1,7 @@
 package com.example.forum.services.contracts;
 
 import com.example.forum.models.Comment;
+import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
@@ -48,7 +49,4 @@ public interface UserService {
 
     //TODO Veronika -Done
     void unBlockUser(User admin, User unBlockUser);
-
-    //TODO Siyana - Done
-    void addPhoneNumberToAdmin(User admin, String phoneNumber);
 }

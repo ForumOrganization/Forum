@@ -71,7 +71,7 @@ CREATE TABLE reactions_comments
 CREATE TABLE tags
 (
     tag_id INT PRIMARY KEY AUTO_INCREMENT,
-    name   VARCHAR(255) UNIQUE NOT NULL
+    name   VARCHAR(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE post_tags
