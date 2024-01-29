@@ -58,19 +58,6 @@ public class TagRestController {
         }
     }
 
-    @GetMapping("/posts/{postId}")
-    public List<Tag> getAllTagsByPostId(@PathVariable int postId) {
-        try {
-            return tagService.getAllTagsByPostId(postId);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-    @GetMapping("/posts/tagName/{tagName}")
-    public List<Post> getAllPostsByTagName(@PathVariable String tagName) {
-        return tagService.getAllPostsByTagName(tagName);
-    }
 
     @PostMapping("/posts/{postId}")
     public ResponseEntity<Tag> createTagInPost(@PathVariable int postId, @Valid @RequestBody Tag tag, @RequestHeader HttpHeaders headers) {
