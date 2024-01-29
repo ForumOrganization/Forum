@@ -4,9 +4,7 @@ import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
-import com.example.forum.helpers.PhoneNumberMapper;
 import com.example.forum.helpers.UserMapper;
-import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PhoneNumberDto;
@@ -14,7 +12,6 @@ import com.example.forum.models.dtos.UserDto;
 import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
-import com.example.forum.services.contracts.PhoneNumberService;
 import com.example.forum.services.contracts.UserService;
 import com.example.forum.utils.UserFilterOptions;
 import jakarta.validation.Valid;
@@ -33,18 +30,16 @@ public class UserRestController {
 
     private static final String UNAUTHORIZED_USER_ERROR_MESSAGE = "You are not authorized to browse user information.";
     private final UserService userService;
-    private PhoneNumberService phoneNumberService;
     private final AuthenticationHelper authenticationHelper;
     private final UserMapper userMapper;
-    private final PhoneNumberMapper phoneNumberMapper;
+
 
     @Autowired
-    public UserRestController(UserService userService, PhoneNumberService phoneNumberService, AuthenticationHelper authenticationHelper, UserMapper userMapper, PhoneNumberMapper phoneNumberMapper) {
+    public UserRestController(UserService userService, AuthenticationHelper authenticationHelper, UserMapper userMapper) {
         this.userService = userService;
-        this.phoneNumberService = phoneNumberService;
         this.authenticationHelper = authenticationHelper;
         this.userMapper = userMapper;
-        this.phoneNumberMapper = phoneNumberMapper;
+
     }
 
     @GetMapping
@@ -165,8 +160,8 @@ public class UserRestController {
     public UserResponseDto updateUserPhoneNumber(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PhoneNumberDto phoneNumberDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            PhoneNumber phoneNumber = phoneNumberMapper.fromDto(id, phoneNumberDto);
-            phoneNumberService.addPhoneNumberToAdmin(user, phoneNumber);
+            String phoneNumber = userMapper.fromDtoPhoneNumber(id, phoneNumberDto);
+            userService.addPhoneNumberToAdmin(user, phoneNumber);
             return UserMapper.toDto(user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

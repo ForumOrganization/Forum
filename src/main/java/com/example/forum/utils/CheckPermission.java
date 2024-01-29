@@ -2,6 +2,7 @@ package com.example.forum.utils;
 
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.models.User;
+import com.example.forum.models.enums.Role;
 
 public class CheckPermission {
 
@@ -12,7 +13,7 @@ public class CheckPermission {
     }
 
     public static void checkAccessPermissionsAdmin(User executingUser,String message) {
-        if (!executingUser.getRole().name().equals("ADMIN")) {
+        if (!executingUser.getRole().equals(Role.ADMIN)) {
             throw new AuthorizationException(message);
         }
     }

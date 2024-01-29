@@ -12,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
+@SecondaryTable(name = "phone_numbers", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 public class User {
 
     @JsonIgnore
@@ -43,6 +44,17 @@ public class User {
     @JsonIgnore
     @Column(name = "is_deleted")
     private Boolean isDeleted = Boolean.FALSE;
+
+    @Column(name = "phone_number", table = "phone_numbers")
+    private String phoneNumber;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     @JsonIgnore
     @Enumerated(EnumType.STRING)

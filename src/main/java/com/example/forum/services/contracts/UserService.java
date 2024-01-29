@@ -12,6 +12,7 @@ public interface UserService {
     List<UserResponseDto> getAll(UserFilterOptions userFilterOptions);
 
     User getById(int id, User user);
+    void addPhoneNumberToAdmin(User admin, String phoneNumber);
 
     User getByUsername(String username);
 
@@ -34,4 +35,10 @@ public interface UserService {
     void blockUser(User admin, User blockUser);
 
     void unBlockUser(User admin, User unBlockUser);
+
+    void updatePhoneNumber(String phoneNumber);
+
+
+    void deletePhoneNumber(int userId);
+
 }

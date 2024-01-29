@@ -147,4 +147,41 @@ public class UserServiceImpl implements UserService {
         unBlockUser.setStatus(Status.ACTIVE);
         userRepository.updateUser(unBlockUser);
     }
+
+    @Override
+    public void updatePhoneNumber(String phoneNumber) {
+
+    }
+
+    @Override
+    public void addPhoneNumberToAdmin(User admin, String phoneNumber) {
+        checkAccessPermissionsAdmin(admin, UPDATE_PHONENUMBER_ERROR_MESSAGE);
+
+
+
+        if (phoneNumber != null || !phoneNumber.isEmpty()) {
+
+            if (phoneNumber.equals(admin.getPhoneNumber())) {
+                throw new DuplicateEntityException("Admin", "phone number", phoneNumber);
+            }
+
+            if(admin.getPhoneNumber() == null || admin.getPhoneNumber().isEmpty()){
+                admin.setPhoneNumber(phoneNumber);
+                userRepository.addPhoneNumberToAdmin(phoneNumber);
+            } else {
+                admin.setPhoneNumber(phoneNumber);
+                userRepository.updatePhoneNumber(admin);}
+        } else{
+            throw new EntityNotFoundException("Admin", "phone number");
+        }
+    }
+//    @Override
+//    public void updatePhoneNumber(String phoneNumber) {
+//        userRepository.updatePhoneNumber(phoneNumber);
+//    }
+
+    @Override
+    public void deletePhoneNumber(int userId) {
+        userRepository.deletePhoneNumber(userId);
+    }
 }

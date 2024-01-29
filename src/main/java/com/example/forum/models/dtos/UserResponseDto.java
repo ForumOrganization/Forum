@@ -1,6 +1,6 @@
 package com.example.forum.models.dtos;
 
-import com.example.forum.helpers.PhoneNumberMapper;
+
 import com.example.forum.models.Post;
 import com.example.forum.models.enums.Role;
 
@@ -21,7 +21,8 @@ public class UserResponseDto {
 
     private Role role = Role.USER;
 
-    private PhoneNumberDto phoneNumber;
+    private String phoneNumber;
+
 
     private Set<Post> posts;
 
@@ -30,7 +31,7 @@ public class UserResponseDto {
     public UserResponseDto() {
     }
 
-    public UserResponseDto(int id, String username, String firstName, String lastName, String email, Role role, PhoneNumberDto phoneNumber, Set<Post> posts) {
+    public UserResponseDto(int id, String username, String firstName, String lastName, String email, Role role, String phoneNumber, Set<Post> posts) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
@@ -89,11 +90,11 @@ public class UserResponseDto {
         this.role = role;
     }
 
-    public PhoneNumberDto getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(PhoneNumberDto phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

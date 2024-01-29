@@ -280,4 +280,32 @@ public class UserRepositoryImpl implements UserRepository {
 
         return orderBy;
     }
+    @Override
+    public void addPhoneNumberToAdmin(String phoneNumber) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.persist(phoneNumber);
+            session.getTransaction().commit();
+        }
+    }
+    @Override
+    public void updatePhoneNumber(User admin) {
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.merge(admin);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void deletePhoneNumber(int userId) {
+        User user = getById(userId);
+        String phoneNumberToDelete = user.getPhoneNumber();
+
+        try (Session session = sessionFactory.openSession()) {
+            session.beginTransaction();
+            session.remove(phoneNumberToDelete);
+            session.getTransaction().commit();
+        }
+    }
 }

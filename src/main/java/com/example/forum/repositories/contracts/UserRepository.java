@@ -1,6 +1,5 @@
 package com.example.forum.repositories.contracts;
 
-import com.example.forum.models.PhoneNumber;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
@@ -34,4 +33,7 @@ public interface UserRepository {
     void deleteUser(int targetUserId);
 
     void updateToAdmin(User targetUser);
+    void addPhoneNumberToAdmin(String phoneNumber);
+    void deletePhoneNumber(int userId);
+    void updatePhoneNumber(User admin);
 }
