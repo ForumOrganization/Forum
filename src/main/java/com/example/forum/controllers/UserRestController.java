@@ -34,13 +34,11 @@ public class UserRestController {
     private final AuthenticationHelper authenticationHelper;
     private final UserMapper userMapper;
 
-
     @Autowired
     public UserRestController(UserService userService, AuthenticationHelper authenticationHelper, UserMapper userMapper) {
         this.userService = userService;
         this.authenticationHelper = authenticationHelper;
         this.userMapper = userMapper;
-
     }
 
     @GetMapping
@@ -55,15 +53,18 @@ public class UserRestController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
 
+            //TODO
             if (!user.getRole().equals(Role.ADMIN)) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,UNAUTHORIZED_USER_ERROR_MESSAGE);
+                throw new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
             }
 
             UserFilterOptions userFilterOptions =
                     new UserFilterOptions(username, firstName, lastName, email, role, sortBy, sortOrder);
             return userService.getAll(userFilterOptions);
         } catch (AuthorizationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
         }
     }
 
@@ -87,6 +88,8 @@ public class UserRestController {
             return userService.getByUsername(username);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
         }
     }
 
@@ -97,6 +100,8 @@ public class UserRestController {
             return userService.getByEmail(email);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
         }
     }
 
@@ -107,6 +112,8 @@ public class UserRestController {
             return userService.getByFirstName(firstName);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
         }
     }
 
@@ -128,6 +135,7 @@ public class UserRestController {
         try {
             User user = userMapper.fromDto(userDto);
 
+            //TODO this check
             if (user.getId() == 1) {
                 user.setRole(Role.ADMIN);
             }
@@ -161,7 +169,7 @@ public class UserRestController {
     public UserResponseDto updateUserPhoneNumber(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PhoneNumberDto phoneNumberDto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            User userPhoneNumber = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto,user);
+            User userPhoneNumber = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto, user);
             userService.addPhoneNumberToAdmin(user, userPhoneNumber.getPhoneNumber());
             return UserMapper.toDtoPhoneNumber(userPhoneNumber);
         } catch (EntityNotFoundException e) {
@@ -172,11 +180,12 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     @PutMapping("/{id}/admins")
     public UserResponseDto updateToAdmin(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            User userToBeUpdate = userMapper.fromDtoUpdateToAdmin(id,user);
+            User userToBeUpdate = userMapper.fromDtoUpdateToAdmin(id, user);
             userService.updateToAdmin(user, userToBeUpdate);
             return UserMapper.toDto(userToBeUpdate);
         } catch (EntityNotFoundException e) {
@@ -188,11 +197,11 @@ public class UserRestController {
         }
     }
 
-    @DeleteMapping ("/{id}/phone-number")
+    @DeleteMapping("/{id}/phone-number")
     public void deleteUserPhoneNumber(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            userService.deletePhoneNumber(id,user);
+            userService.deletePhoneNumber(id, user);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (DuplicateEntityException e) {

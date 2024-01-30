@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.getByUsername(firstName);
     }
 
+    //TODO no such method in the controller
     @Override
     public User getUserByComment(int commentId) {
         return this.userRepository.getUserByComment(commentId);
@@ -150,6 +151,7 @@ public class UserServiceImpl implements UserService {
         userRepository.updateUser(unBlockUser);
     }
 
+    //TODO
     @Override
     public void updatePhoneNumber(String phoneNumber) {
 
@@ -162,6 +164,7 @@ public class UserServiceImpl implements UserService {
             if (phoneNumber.equals(admin.getPhoneNumber())) {
                 throw new DuplicateEntityException("Admin", "phone number", phoneNumber);
             }
+
             if (admin.getPhoneNumber() == null || admin.getPhoneNumber().isEmpty()) {
                 admin.setPhoneNumber(phoneNumber);
                 userRepository.addPhoneNumberToAdmin(admin);

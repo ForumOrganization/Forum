@@ -39,7 +39,6 @@ public class UserResponseDto {
         this.id = id;
     }
 
-
     public String getFirstName() {
         return firstName;
     }

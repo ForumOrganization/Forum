@@ -2,7 +2,6 @@ package com.example.forum.repositories.contracts;
 
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
-import com.example.forum.models.dtos.UserDto;
 import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.utils.UserFilterOptions;
 

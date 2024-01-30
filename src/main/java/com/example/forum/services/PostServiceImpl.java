@@ -37,23 +37,15 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getTopCommentedPosts(PostFilterOptions postFilterOptions, int limit) {
-        List<Post> posts = postRepository.getAll(postFilterOptions);
-
-        posts.sort(Comparator.comparingInt(post -> post.getComments().size()));
-        Collections.reverse(posts);
-
-        return posts.stream().limit(limit).collect(Collectors.toList());
+    public List<Post> getTopCommentedPosts() {
+       List<Post> topCommentedPosts = this.postRepository.getTopCommentedPosts();
+       return topCommentedPosts;
     }
 
     @Override
-    public List<Post> getMostRecentPosts(PostFilterOptions postFilterOptions, int limit) {
-        List<Post> posts = postRepository.getAll(postFilterOptions);
-
-        posts.sort(Comparator.comparing(Post::getCreationTime));
-        Collections.reverse(posts);
-
-        return posts.stream().limit(limit).collect(Collectors.toList());
+    public List<Post> getMostRecentPosts() {
+        List<Post> mostRecentPosts = this.postRepository.getMostRecentPosts();
+        return mostRecentPosts;
     }
 
     @Override
@@ -65,6 +57,7 @@ public class PostServiceImpl implements PostService {
     public Post getByTitle(String title) {
         return this.postRepository.getByTitle(title);
     }
+
     @Override
     public Post getByComment(int commentId) {
         return this.postRepository.getByComment(commentId);
@@ -106,7 +99,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void delete(int id, User user) {
-        Post post= postRepository.getById(id);
+        Post post = postRepository.getById(id);
         checkAccessPermissions(post.getCreatedBy().getId(), user, MODIFY_POST_ERROR_MESSAGE);
         this.postRepository.delete(id);
     }

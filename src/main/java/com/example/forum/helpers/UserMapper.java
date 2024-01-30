@@ -14,11 +14,9 @@ import org.springframework.stereotype.Component;
 public class UserMapper {
     private final UserService userService;
 
-
     @Autowired
     public UserMapper(UserService userService) {
         this.userService = userService;
-
     }
 
     public User fromDto(UserDto dto) {
@@ -81,5 +79,4 @@ public class UserMapper {
 
         return userResponseDto;
     }
-
 }

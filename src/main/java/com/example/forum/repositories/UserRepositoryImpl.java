@@ -280,6 +280,7 @@ public class UserRepositoryImpl implements UserRepository {
 
         return orderBy;
     }
+
     @Override
     public void addPhoneNumberToAdmin(User user) {
         try (Session session = sessionFactory.openSession()) {
@@ -288,6 +289,7 @@ public class UserRepositoryImpl implements UserRepository {
             session.getTransaction().commit();
         }
     }
+
     @Override
     public void updatePhoneNumber(User admin) {
         try (Session session = sessionFactory.openSession()) {

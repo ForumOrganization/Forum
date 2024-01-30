@@ -8,12 +8,11 @@ import java.util.List;
 
 public interface PostService {
 
-    //TODO Veronika
     List<Post> getAll(PostFilterOptions postFilterOptions);
 
-    List<Post> getTopCommentedPosts(PostFilterOptions postFilterOptions, int limit);
+    public List<Post> getTopCommentedPosts();
 
-    List<Post> getMostRecentPosts(PostFilterOptions postFilterOptions, int limit);
+    public List<Post> getMostRecentPosts();
 
     Post getById(int id);
 

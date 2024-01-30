@@ -60,7 +60,9 @@ public class TagRepositoryImpl implements TagRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Tag> query = session.createQuery(
                     "SELECT t FROM Tag t WHERE t.id = :tagId", Tag.class);
+
             query.setParameter("tagId", tagId);
+
             return query.getSingleResult();
         }
     }
@@ -70,7 +72,9 @@ public class TagRepositoryImpl implements TagRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Tag> query = session.createQuery(
                     "SELECT t FROM Tag t WHERE t.name = :name", Tag.class);
+
             query.setParameter("name", name);
+
             return query.getSingleResult();
         }
 
@@ -81,6 +85,7 @@ public class TagRepositoryImpl implements TagRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery(
                     "SELECT p FROM Post p JOIN p.tags t WHERE t.id = :tagId", Post.class);
+
             query.setParameter("tagId", tagId);
 
             List<Post> result = query.getResultList();

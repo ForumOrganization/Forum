@@ -1,15 +1,17 @@
 package com.example.forum.repositories.contracts;
 
-import com.example.forum.utils.PostFilterOptions;
 import com.example.forum.models.Post;
-import com.example.forum.models.User;
+import com.example.forum.utils.PostFilterOptions;
 
 import java.util.List;
-import java.util.Set;
 
 public interface PostRepository {
 
     List<Post> getAll(PostFilterOptions postFilterOptions);
+
+    public List<Post> getTopCommentedPosts();
+
+    public List<Post> getMostRecentPosts();
 
     Post getById(int id);
 

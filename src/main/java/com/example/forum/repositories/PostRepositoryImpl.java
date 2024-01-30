@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
@@ -61,6 +58,49 @@ public class PostRepositoryImpl implements PostRepository {
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
             return query.list();
+        }
+    }
+
+    @Override
+    public List<Post> getTopCommentedPosts() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery(
+                            "SELECT p FROM Post p " +
+                                    "LEFT JOIN FETCH p.comments", Post.class)
+                    .setMaxResults(10);
+
+            List<Post> result = query.list();
+
+            //TODO check the exception
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("Posts", "top comments");
+            }
+
+            result.sort(Comparator.comparingInt(post -> post.getComments().size()));
+            Collections.reverse(result);
+
+            return result;
+        }
+    }
+
+    @Override
+    public List<Post> getMostRecentPosts() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery(
+                            "SELECT p FROM Post p " +
+                                    "LEFT JOIN FETCH p.comments " +
+                                    "ORDER BY p.creationTime " +
+                                    "DESC", Post.class)
+                    .setMaxResults(10);
+
+            List<Post> result = query.list();
+
+            //TODO check the exception
+            if (result.size() == 0) {
+                throw new EntityNotFoundException("Posts", "recent time");
+            }
+
+            return result;
         }
     }
 

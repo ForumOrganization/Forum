@@ -2,6 +2,7 @@ package com.example.forum.models.dtos;
 
 public class PhoneNumberDto {
 
+    //TODO check
     private String phoneNumber;
 
     public PhoneNumberDto() {
@@ -11,7 +12,6 @@ public class PhoneNumberDto {
     public PhoneNumberDto(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-
 
     public String getPhoneNumber() {
         return phoneNumber;

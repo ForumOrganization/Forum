@@ -1,7 +1,5 @@
 package com.example.forum.services;
 
-import com.example.forum.exceptions.AuthorizationException;
-import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.exceptions.UnauthorizedOperationException;
 import com.example.forum.models.Comment;
@@ -12,7 +10,6 @@ import com.example.forum.repositories.contracts.CommentRepository;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.services.contracts.CommentService;
 import com.example.forum.utils.CommentFilterOptions;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

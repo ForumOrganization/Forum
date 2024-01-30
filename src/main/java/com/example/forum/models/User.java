@@ -3,9 +3,7 @@ package com.example.forum.models;
 import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 
 import java.util.Objects;
 import java.util.Set;

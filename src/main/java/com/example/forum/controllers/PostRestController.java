@@ -45,13 +45,12 @@ public class PostRestController {
                              @RequestParam(required = false) String sortBy,
                              @RequestParam(required = false) String sortOrder) {
         PostFilterOptions postFilterOptions = new PostFilterOptions(title, createdBy, creationTime, sortBy, sortOrder);
-        // return postService.getAll(postFilterOptions);
         try {
-            User user = this.authenticationHelper.tryGetUser(headers);
+            this.authenticationHelper.tryGetUser(headers);
             return postService.getAll(postFilterOptions);
         } catch (AuthorizationException e) {
-            List<Post> topCommentedPosts = postService.getTopCommentedPosts(postFilterOptions, 10);
-            List<Post> mostRecentPosts = postService.getMostRecentPosts(postFilterOptions, 10);
+            List<Post> topCommentedPosts = postService.getTopCommentedPosts();
+            List<Post> mostRecentPosts = postService.getMostRecentPosts();
 
             List<Post> combinedList = new ArrayList<>();
             combinedList.addAll(topCommentedPosts);
