@@ -8,9 +8,12 @@ public class CommentDto {
     @Size(min = 32, max = 8192, message = "The comment should be between 32 and 8192 symbols long.")
     private String content;
 
+    public CommentDto() {
+
+    }
+
     public CommentDto(String content) {
         this.content = content;
-
     }
 
     public String getContent() {
