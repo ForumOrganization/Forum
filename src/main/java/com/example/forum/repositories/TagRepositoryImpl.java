@@ -61,9 +61,13 @@ public class TagRepositoryImpl implements TagRepository {
             Query<Tag> query = session.createQuery(
                     "SELECT t FROM Tag t WHERE t.id = :tagId", Tag.class);
 
-            query.setParameter("tagId", tagId);
+            query.setParameter("tagId", tagId)
+                    .getResultList();
 
-            return query.getSingleResult();
+            if (query.list().isEmpty()) {
+                throw new EntityNotFoundException("Tag", "this id");
+            } else
+                return query.list().get(0);
         }
     }
 
