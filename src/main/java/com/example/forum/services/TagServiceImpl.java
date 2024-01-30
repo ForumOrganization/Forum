@@ -96,11 +96,19 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void updateTagInPost(Tag tag, User user) {
+    public void updateTagInPost(Tag tag, User user, int postId, int tagId) {
         checkAccessPermissions(tag.getId(), user, MODIFY_TAG_ERROR_MESSAGE);
 
         boolean duplicateExists = true;
+        boolean missingComment = false;
+        boolean missingTag = false;
+        try{Tag tagCheck = tagRepository.getTagById(tagId);}catch (EntityNotFoundException e)
+        {missingTag= true;}
+        if (missingTag){throw new EntityNotFoundException("Tag", "name", tag.getName());}
 
+        try{Post post = postRepository.getById(postId);}
+        catch(EntityNotFoundException e){missingComment= true;}
+        if(missingComment){throw new EntityNotFoundException("Post", "id", String.valueOf(postId));}
         try {
             Tag existingTag = tagRepository.getTagById(tag.getId());
 

@@ -86,7 +86,8 @@ public class TagRestController {
             User user = authenticationHelper.tryGetUser(headers);
 
             Tag tag = this.tagMapper.fromDto(tagId, tagDto);
-            tagService.updateTagInPost(tag, user);
+            tagService.updateTagInPost(tag, user,postId, tagId);
+
             return new ResponseEntity<>(tag, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

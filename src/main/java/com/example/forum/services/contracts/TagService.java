@@ -23,7 +23,7 @@ public interface TagService {
 
     void createTagInPost(Tag tag, int postId, User user);
 
-    void updateTagInPost(Tag tag, User user);
+    void updateTagInPost(Tag tag, User user, int postId, int tagId);
 
     void deleteTagInPost(int tagId, User user);
 }
