@@ -4,9 +4,12 @@ import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
+import com.example.forum.helpers.PostMapper;
+import com.example.forum.helpers.TagMapper;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
+import com.example.forum.models.dtos.TagDto;
 import com.example.forum.services.contracts.TagService;
 import com.example.forum.utils.TagFilterOptions;
 import jakarta.validation.Valid;
@@ -24,10 +27,14 @@ public class TagRestController {
 
     private TagService tagService;
     private AuthenticationHelper authenticationHelper;
+    private PostMapper postMapper;
 
-    public TagRestController(TagService tagService, AuthenticationHelper authenticationHelper) {
+    private TagMapper tagMapper;
+
+    public TagRestController(TagService tagService, AuthenticationHelper authenticationHelper, TagMapper tagMapper) {
         this.tagService = tagService;
         this.authenticationHelper = authenticationHelper;
+        this.tagMapper = tagMapper;
     }
 
     @GetMapping
@@ -58,11 +65,11 @@ public class TagRestController {
         }
     }
 
-
     @PostMapping("/posts/{postId}")
-    public ResponseEntity<Tag> createTagInPost(@PathVariable int postId, @Valid @RequestBody Tag tag, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Tag> createTagInPost(@PathVariable int postId, @Valid @RequestBody TagDto tagDto, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
+            Tag tag = this.tagMapper.fromDto(tagDto);
             tagService.createTagInPost(tag, postId, user);
             return new ResponseEntity<>(tag, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
@@ -73,7 +80,7 @@ public class TagRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
+    //TODO!!!
     @PutMapping("/posts")
     public ResponseEntity<Tag> updateTagInPost(@Valid @RequestBody Tag tag, @RequestHeader HttpHeaders headers) {
         try {
@@ -88,7 +95,7 @@ public class TagRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
+    //TODO!!!
     @DeleteMapping("/posts/{tagId}")
     public ResponseEntity<Void> deleteTagInPost(@PathVariable int tagId, @RequestHeader HttpHeaders headers) {
         try {
