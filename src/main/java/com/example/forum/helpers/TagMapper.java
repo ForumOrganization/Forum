@@ -17,9 +17,8 @@ public class TagMapper {
     }
 
     public Tag fromDto(int id, TagDto dto) {
-        Tag tag = fromDto(dto);
-        tag.setId(id);
-        Tag repositoryTag = tagService.getTagById(id);
+        Tag tag = tagService.getTagById(id);
+        tag.setName(dto.getName());
 
         return tag;
     }

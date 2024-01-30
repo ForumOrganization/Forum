@@ -80,11 +80,12 @@ public class TagRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-    //TODO!!!
-    @PutMapping("/posts")
-    public ResponseEntity<Tag> updateTagInPost(@Valid @RequestBody Tag tag, @RequestHeader HttpHeaders headers) {
+    @PutMapping("/posts/{postId}/tag/{tagId}")
+    public ResponseEntity<Tag> updateTagInPost(@Valid @RequestBody TagDto tagDto,@PathVariable int postId,@PathVariable int tagId, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
+
+            Tag tag = this.tagMapper.fromDto(tagId, tagDto);
             tagService.updateTagInPost(tag, user);
             return new ResponseEntity<>(tag, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
