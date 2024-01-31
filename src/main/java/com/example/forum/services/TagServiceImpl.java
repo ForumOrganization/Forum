@@ -36,56 +36,26 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getTagById(int tagId) {
-        Tag tag = tagRepository.getTagById(tagId);
-
-        if (tag == null) {
-            throw new EntityNotFoundException("Tag", "tagId", String.valueOf(tagId));
-        }
-
         return tagRepository.getTagById(tagId);
     }
 
     @Override
     public Tag getTagByName(String name) {
-        Tag tag = tagRepository.getTagByName(name);
-
-        if (tag == null) {
-            throw new EntityNotFoundException("Tag", "name");
-        }
-
         return tagRepository.getTagByName(name);
     }
 
     @Override
     public List<Post> getAllPostsByTagId(int tagId) {
-        Tag tag = tagRepository.getTagById(tagId);
-
-        if (tag == null) {
-            throw new EntityNotFoundException("Tag", "id", String.valueOf(tagId));
-        }
-
         return tagRepository.getAllPostsByTagId(tagId);
     }
 
     @Override
     public List<Post> getAllPostsByTagName(String tagName) {
-        Tag tag = tagRepository.getTagByName(tagName);
-
-        if (tag == null) {
-            throw new EntityNotFoundException("Tag", "name", tagName);
-        }
-
         return this.tagRepository.getAllPostsByTagName(tagName);
     }
 
     @Override
     public List<Tag> getAllTagsByPostId(int postId) {
-        Post post = postRepository.getById(postId);
-
-        if (post == null) {
-            throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
-        }
-
         return this.tagRepository.getAllTagsByPostId(postId);
     }
 
@@ -102,13 +72,27 @@ public class TagServiceImpl implements TagService {
         boolean duplicateExists = true;
         boolean missingComment = false;
         boolean missingTag = false;
-        try{Tag tagCheck = tagRepository.getTagById(tagId);}catch (EntityNotFoundException e)
-        {missingTag= true;}
-        if (missingTag){throw new EntityNotFoundException("Tag", "name", tag.getName());}
 
-        try{Post post = postRepository.getById(postId);}
-        catch(EntityNotFoundException e){missingComment= true;}
-        if(missingComment){throw new EntityNotFoundException("Post", "id", String.valueOf(postId));}
+        try {
+            tagRepository.getTagById(tagId);
+        } catch (EntityNotFoundException e) {
+            missingTag = true;
+        }
+
+        if (missingTag) {
+            throw new EntityNotFoundException("Tag", "name", tag.getName());
+        }
+
+        try {
+            postRepository.getById(postId);
+        } catch (EntityNotFoundException e) {
+            missingComment = true;
+        }
+
+        if (missingComment) {
+            throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
+        }
+
         try {
             Tag existingTag = tagRepository.getTagById(tag.getId());
 
@@ -127,6 +111,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void deleteTagInPost(int tagId, User user) {
+        tagRepository.getTagById(tagId);
         checkAccessPermissions(tagId, user, DELETE_TAG_MESSAGE_ERROR);
         this.tagRepository.deleteTagInPost(tagId);
     }

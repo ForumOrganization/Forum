@@ -42,16 +42,6 @@ public class CommentRepositoryImpl implements CommentRepository {
                 params.put("content", String.format("%%%s%%", value));
             });
 
-//            commentFilterOptions.getPost().ifPresent(value -> {
-//                filters.add(" post.id = :id ");
-//                params.put("id", value);
-//            });
-//
-//            commentFilterOptions.getUser().ifPresent(value -> {
-//                filters.add(" user_id = :id ");
-//                params.put("id", value);
-//            });
-
             StringBuilder queryString = new StringBuilder("from Comment");
 
             if (!filters.isEmpty()) {
@@ -64,7 +54,13 @@ public class CommentRepositoryImpl implements CommentRepository {
 
             Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
             query.setProperties(params);
-            return query.list();
+            List<Comment> list = query.list();
+
+            if (list.isEmpty()) {
+                throw new EntityNotFoundException("Post", "id");
+            }
+
+            return list;
         }
     }
 

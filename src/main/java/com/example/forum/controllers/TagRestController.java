@@ -4,9 +4,7 @@ import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
-import com.example.forum.helpers.PostMapper;
 import com.example.forum.helpers.TagMapper;
-import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.TagDto;
@@ -27,8 +25,6 @@ public class TagRestController {
 
     private TagService tagService;
     private AuthenticationHelper authenticationHelper;
-    private PostMapper postMapper;
-
     private TagMapper tagMapper;
 
     public TagRestController(TagService tagService, AuthenticationHelper authenticationHelper, TagMapper tagMapper) {
@@ -42,9 +38,13 @@ public class TagRestController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) String sortOrder) {
-
         TagFilterOptions tagFilterOptions = new TagFilterOptions(name, sortBy, sortOrder);
-        return tagService.getAllTags(tagFilterOptions);
+
+        try {
+            return tagService.getAllTags(tagFilterOptions);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @GetMapping("/{tagId}")
@@ -74,20 +74,17 @@ public class TagRestController {
             return new ResponseEntity<>(tag, HttpStatus.CREATED);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (DuplicateEntityException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     @PutMapping("/posts/{postId}/tag/{tagId}")
-    public ResponseEntity<Tag> updateTagInPost(@Valid @RequestBody TagDto tagDto,@PathVariable int postId,@PathVariable int tagId, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<Tag> updateTagInPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @PathVariable int tagId, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-
             Tag tag = this.tagMapper.fromDto(tagId, tagDto);
-            tagService.updateTagInPost(tag, user,postId, tagId);
-
+            tagService.updateTagInPost(tag, user, postId, tagId);
             return new ResponseEntity<>(tag, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -97,6 +94,7 @@ public class TagRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     //TODO!!!
     @DeleteMapping("/posts/{tagId}")
     public ResponseEntity<Void> deleteTagInPost(@PathVariable int tagId, @RequestHeader HttpHeaders headers) {

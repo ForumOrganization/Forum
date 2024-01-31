@@ -49,32 +49,42 @@ public class PostRestController {
             this.authenticationHelper.tryGetUser(headers);
             return postService.getAll(postFilterOptions);
         } catch (AuthorizationException e) {
-            List<Post> topCommentedPosts = postService.getTopCommentedPosts();
-            List<Post> mostRecentPosts = postService.getMostRecentPosts();
+            try {
+                List<Post> topCommentedPosts = postService.getTopCommentedPosts();
+                List<Post> mostRecentPosts = postService.getMostRecentPosts();
 
-            List<Post> combinedList = new ArrayList<>();
-            combinedList.addAll(topCommentedPosts);
-            combinedList.addAll(mostRecentPosts);
+                List<Post> combinedList = new ArrayList<>();
+                combinedList.addAll(topCommentedPosts);
+                combinedList.addAll(mostRecentPosts);
 
-            return combinedList;
+                return combinedList;
+            } catch (EntityNotFoundException exception) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
+            }
         }
     }
 
     @GetMapping("/{id}")
-    public Post getById(@PathVariable int id) {
+    public Post getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
+            authenticationHelper.tryGetUser(headers);
             return this.postService.getById(id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @GetMapping("/search")
-    public Post getByTitle(@RequestParam String title) {
+    public Post getByTitle(@RequestHeader HttpHeaders headers, @RequestParam String title) {
         try {
+            authenticationHelper.tryGetUser(headers);
             return this.postService.getByTitle(title);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UnauthorizedOperationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
@@ -85,10 +95,6 @@ public class PostRestController {
             Post post = this.postMapper.fromDto(postDto);
             postService.create(post, user);
             return post;
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (DuplicateEntityException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         } catch (UnauthorizedOperationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }

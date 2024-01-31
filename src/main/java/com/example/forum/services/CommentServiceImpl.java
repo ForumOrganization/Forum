@@ -50,10 +50,6 @@ public class CommentServiceImpl implements CommentService {
 
         Post post = postRepository.getById(postId);
 
-        if (post == null) {
-            throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
-        }
-
         comment.setUser(user);
         comment.setPost(post);
 
@@ -62,8 +58,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void updateComment(Comment comment, User user) {
+        Comment commentToUpdate = commentRepository.getCommentById(comment.getId());
         checkAccessPermissionsUser(comment.getUser().getId(), user, MODIFY_USER_MESSAGE_ERROR);
-        this.commentRepository.updateComment(comment);
+        this.commentRepository.updateComment(commentToUpdate);
     }
 
     @Override

@@ -50,7 +50,13 @@ public class TagRepositoryImpl implements TagRepository {
 
             Query<Tag> query = session.createQuery(queryString.toString(), Tag.class);
             query.setProperties(params);
-            return query.list();
+            List<Tag> list = query.list();
+
+            if (list.isEmpty()) {
+                throw new EntityNotFoundException("Tag", "id");
+            }
+
+            return list;
         }
     }
 
@@ -66,8 +72,9 @@ public class TagRepositoryImpl implements TagRepository {
 
             if (query.list().isEmpty()) {
                 throw new EntityNotFoundException("Tag", "this id");
-            } else
-                return query.list().get(0);
+            }
+
+            return query.list().get(0);
         }
     }
 
@@ -79,9 +86,14 @@ public class TagRepositoryImpl implements TagRepository {
 
             query.setParameter("name", name);
 
-            return query.getSingleResult();
-        }
+            Tag tag = query.getSingleResult();
 
+            if (tag == null) {
+                throw new EntityNotFoundException("Tag", "id");
+            }
+
+            return tag;
+        }
     }
 
     @Override

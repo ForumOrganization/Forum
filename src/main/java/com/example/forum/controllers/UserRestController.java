@@ -57,7 +57,9 @@ public class UserRestController {
             authenticationHelper.tryGetUser(headers);
             UserFilterOptions userFilterOptions =
                     new UserFilterOptions(username, firstName, lastName, email, role, sortBy, sortOrder);
+
             List<User> users = userService.getAll(userFilterOptions);
+
             return users.stream()
                     .map(userMapper::toDto)
                     .collect(Collectors.toList());
@@ -269,6 +271,4 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
-
 }

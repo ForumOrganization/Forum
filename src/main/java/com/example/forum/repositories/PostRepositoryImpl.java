@@ -71,7 +71,6 @@ public class PostRepositoryImpl implements PostRepository {
 
             List<Post> result = query.list();
 
-            //TODO check the exception
             if (result.size() == 0) {
                 throw new EntityNotFoundException("Posts", "top comments");
             }
@@ -95,7 +94,6 @@ public class PostRepositoryImpl implements PostRepository {
 
             List<Post> result = query.list();
 
-            //TODO check the exception
             if (result.size() == 0) {
                 throw new EntityNotFoundException("Posts", "recent time");
             }
@@ -177,7 +175,7 @@ public class PostRepositoryImpl implements PostRepository {
 
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
-            // postToDelete.setDeleted(true);
+
             for (Reaction_posts reaction : postToDelete.getReactions()) {
                 session.remove(reaction);
             }
@@ -189,9 +187,6 @@ public class PostRepositoryImpl implements PostRepository {
 
                 session.remove(comment);
             }
-
-//            postToDelete.getComments()
-//                    .forEach(comment -> comment.setDeleted(true));
 
             session.remove(postToDelete);
             session.getTransaction().commit();

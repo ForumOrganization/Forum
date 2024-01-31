@@ -20,6 +20,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+import static com.example.forum.utils.Messages.UNAUTHORIZED_USER_ERROR_MESSAGE;
+
 @RestController
 @RequestMapping("/api/comments")
 public class CommentRestController {
@@ -36,22 +38,32 @@ public class CommentRestController {
     }
 
     @GetMapping("/post/{postId}")
-    public List<Comment> getAllCommentsByPostId(@PathVariable int postId,
+    public List<Comment> getAllCommentsByPostId(@RequestHeader HttpHeaders headers, @PathVariable int postId,
                                                 @RequestParam(required = false) String content,
                                                 @RequestParam(required = false) Post post,
                                                 @RequestParam(required = false) String sortBy,
                                                 @RequestParam(required = false) String sortOrder) {
         CommentFilterOptions commentFilterOptions = new CommentFilterOptions(post, content, sortBy, sortOrder);
 
-        return commentService.getAllCommentsByPostId(postId, commentFilterOptions);
+        try {
+            this.authenticationHelper.tryGetUser(headers);
+            return commentService.getAllCommentsByPostId(postId, commentFilterOptions);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
+        }
     }
 
     @GetMapping("/{id}")
-    public Comment getCommentById(@PathVariable int id) {
+    public Comment getCommentById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
+            authenticationHelper.tryGetUser(headers);
             return this.commentService.getCommentById(id);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, UNAUTHORIZED_USER_ERROR_MESSAGE);
         }
     }
 
