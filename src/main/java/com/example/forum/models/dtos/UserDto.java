@@ -6,6 +6,10 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class UserDto {
+    @NotNull(message = "Username name can't be empty.")
+    @NotBlank(message = "Username name can't be blank.")
+    @Size(min = 4, max = 32, message = "Username should be between 4 and 32 symbols.")
+    private String username;
     @NotNull(message = "First name can't be empty.")
     @NotBlank(message = "First name can't be blank.")
     @Size(min = 4, max = 32, message = "First name should be between 4 and 32 symbols.")
@@ -27,7 +31,16 @@ public class UserDto {
             message = "Password must contains at least one uppercase letter, one lowercase letter, one digit, and one special character")
     private String password;
 
+
     public UserDto() {
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFirstName() {
@@ -61,4 +74,6 @@ public class UserDto {
     public void setPassword(String password) {
         this.password = password;
     }
+
+
 }

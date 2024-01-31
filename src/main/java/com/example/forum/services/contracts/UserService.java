@@ -2,24 +2,21 @@ package com.example.forum.services.contracts;
 
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
-import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.utils.UserFilterOptions;
 
 import java.util.List;
 
 public interface UserService {
 
-    List<UserResponseDto> getAll(UserFilterOptions userFilterOptions);
+    List<User> getAll(UserFilterOptions userFilterOptions);
 
-    User getById(int id, User user);
-
-    void addPhoneNumberToAdmin(User admin, String phoneNumber);
+    User getById(int id);
 
     User getByUsername(String username);
 
     User getByEmail(String email);
 
-    User getByFirstName(String firstName);
+    List<User> getByFirstName(String firstName);
 
     User getUserByComment(int commentId);
 
@@ -37,7 +34,7 @@ public interface UserService {
 
     void unBlockUser(User admin, User unBlockUser);
 
-    void updatePhoneNumber(String phoneNumber);
+    void addPhoneNumberToAdmin(User admin, User userPhoneNumberToBeUpdate);
 
     void deletePhoneNumber(int userId, User user);
 }

@@ -128,7 +128,7 @@ public class User {
         this.role = role;
     }
 
-
+    @JsonIgnore
     public Boolean isDeleted() {
         return Boolean.TRUE.equals(isDeleted);
     }

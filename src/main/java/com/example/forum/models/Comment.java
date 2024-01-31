@@ -1,7 +1,6 @@
 package com.example.forum.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -22,15 +21,15 @@ public class Comment {
     @JsonIgnore
     @Column(name = "is_deleted")
     private Boolean isDeleted = Boolean.FALSE;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"id", "firstName", "lastName", "email", "role", "status", "deleted"})
+    // @JsonIgnoreProperties({"id", "firstName", "lastName", "email", "role", "status", "deleted"})
     private User user;
-
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")
-    @JsonIgnoreProperties({"id", "content", "createdBy", "creationTime", "deleted"})
+    //@JsonIgnoreProperties({"id", "content", "createdBy", "creationTime", "deleted"})
     private Post post;
 
     @JsonIgnore

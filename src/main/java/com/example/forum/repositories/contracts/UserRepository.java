@@ -2,22 +2,25 @@ package com.example.forum.repositories.contracts;
 
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
-import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.utils.UserFilterOptions;
 
 import java.util.List;
 
 public interface UserRepository {
 
-    List<UserResponseDto> getAll(UserFilterOptions userFilterOptions);
+    List<User> getAll(UserFilterOptions userFilterOptions);
 
     User getById(int id);
 
     User getByUsername(String username);
 
+    User getByUsernameFindUser(String username);
+
     User getByEmail(String email);
 
-    User getByFirstName(String firstName);
+    User getByEmailFindUser(String email);
+
+    List<User> getByFirstName(String firstName);
 
     User getUserByComment(int commentId);
 
@@ -25,17 +28,15 @@ public interface UserRepository {
 
     void registerUser(User user);
 
-    void updateUser(User targetUser);
-
     void reactivated(User targetUser);
+
+    void updateUser(User targetUser);
 
     void deleteUser(int targetUserId);
 
-    void updateToAdmin(User targetUser);
+    boolean isDataBaseEmpty();
 
-    void addPhoneNumberToAdmin(User user);
+    boolean existsByPhoneNumber(User userPhoneNumberToBeUpdate);
 
-    void deletePhoneNumber(int userId);
 
-    void updatePhoneNumber(User admin);
 }

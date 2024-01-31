@@ -1,10 +1,10 @@
 package com.example.forum.services;
 
 import com.example.forum.exceptions.DuplicateEntityException;
+import com.example.forum.exceptions.EntityAlreadyDeleteException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
-import com.example.forum.models.dtos.UserResponseDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.UserRepository;
@@ -31,37 +31,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponseDto> getAll(UserFilterOptions userFilterOptions) {
+    public List<User> getAll(UserFilterOptions userFilterOptions) {
         return this.userRepository.getAll(userFilterOptions);
     }
 
     @Override
-    public User getById(int id, User user) {
+    public User getById(int id) {
         return this.userRepository.getById(id);
     }
 
     @Override
     public User getByUsername(String username) {
-        User user = userRepository.getByUsername(username);
-        checkAccessPermissionsAdmin(user, String.format(SEARCH_ADMIN_MESSAGE_ERROR, "username"));
         return this.userRepository.getByUsername(username);
     }
 
     @Override
     public User getByEmail(String email) {
-        User user = userRepository.getByEmail(email);
-        checkAccessPermissionsAdmin(user, String.format(SEARCH_ADMIN_MESSAGE_ERROR, "email"));
         return this.userRepository.getByEmail(email);
     }
 
     @Override
-    public User getByFirstName(String firstName) {
-        User user = userRepository.getByFirstName(firstName);
-        checkAccessPermissionsAdmin(user, String.format(SEARCH_ADMIN_MESSAGE_ERROR, "first name"));
-        return this.userRepository.getByUsername(firstName);
+    public List<User> getByFirstName(String firstName) {
+        return this.userRepository.getByFirstName(firstName);
     }
 
-    //TODO no such method in the controller
     @Override
     public User getUserByComment(int commentId) {
         return this.userRepository.getUserByComment(commentId);
@@ -74,28 +67,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(User user) {
-        if (user.getUsername() == null) {
-            throw new EntityNotFoundException("User", "username", user.getUsername());
-        }
-
-        User existingUser = userRepository.getByUsername(user.getUsername());
-
-        if (existingUser.getUsername().equals(user.getUsername())
-                && existingUser.getFirstName().equals(user.getFirstName())
-                && existingUser.getLastName().equals(user.getLastName())
-                && existingUser.getEmail().equals(user.getEmail())
+        setAdminRoleIfDataBaseEmpty(user);
+        User existingUser = userRepository.getByUsernameFindUser(user.getUsername());
+        if (existingUser != null && isSameUser(existingUser, user)
                 && existingUser.isDeleted()) {
             userRepository.reactivated(existingUser);
         } else {
-
-            if (userRepository.getByUsername(user.getUsername()) != null) {
-                throw new DuplicateEntityException("User", "username", user.getUsername());
-            }
-
-            if (userRepository.getByEmail(user.getEmail()) != null) {
-                throw new DuplicateEntityException("User", "email", user.getEmail());
-            }
-
+            checkDuplicateEntity(user);
             userRepository.registerUser(user);
         }
     }
@@ -103,13 +81,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User targetUser, User executingUser) {
         checkAccessPermissionsUser(targetUser.getId(), executingUser, MODIFY_USER_MESSAGE_ERROR);
-
         if (!targetUser.getUsername().equals(executingUser.getUsername())) {
             throw new EntityNotFoundException("User", "username", targetUser.getUsername());
         }
-
-        if (userRepository.getByEmail(targetUser.getEmail()) != null) {
-            throw new DuplicateEntityException("User", "email", targetUser.getEmail());
+        if (!targetUser.getEmail().equals(executingUser.getEmail())) {
+            if (userRepository.getByEmail(targetUser.getEmail()) != null) {
+                throw new DuplicateEntityException("User", "email", targetUser.getEmail());
+            }
         }
 
         userRepository.updateUser(targetUser);
@@ -118,27 +96,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(int deleteUser, User executingUser) {
         checkAccessPermissions(deleteUser, executingUser, DELETE_USER_MESSAGE_ERROR);
-
-        User userToDelete = getById(deleteUser, executingUser);
-
+        User userToDelete = getById(deleteUser);
         if (userToDelete.isDeleted()) {
-            throw new DuplicateEntityException("User", "id", String.valueOf(deleteUser));
+            throw new EntityAlreadyDeleteException("User", "id", String.valueOf(deleteUser));
         }
-
         userRepository.deleteUser(deleteUser);
     }
 
     @Override
     public void updateToAdmin(User targetUser, User executingUser) {
-        checkAccessPermissionsAdmin(executingUser, UPDATE_PHONENUMBER_ERROR_MESSAGE);
-        checkAccessPermissionsUser(targetUser.getId(), executingUser, UPDATE_TO_ADMIN_ERROR_MESSAGE);
-
+        if (targetUser.getRole() == Role.ADMIN) {
+            throw new DuplicateEntityException("User", "id", String.valueOf(targetUser.getId()), " is already an admin.");
+        }
+        checkAccessPermissionsAdmin(executingUser, UPDATE_TO_ADMIN_ERROR_MESSAGE);
         targetUser.setRole(Role.ADMIN);
-        userRepository.updateToAdmin(targetUser);
+        userRepository.updateUser(targetUser);
     }
 
     @Override
     public void blockUser(User admin, User blockUser) {
+        if (blockUser.getStatus() == Status.BLOCKED) {
+            throw new DuplicateEntityException("User", "id", String.valueOf(blockUser.getId()), "has already been blocked");
+        }
         checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         blockUser.setStatus(Status.BLOCKED);
         userRepository.updateUser(blockUser);
@@ -146,32 +125,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void unBlockUser(User admin, User unBlockUser) {
+        if (unBlockUser.getStatus() == Status.ACTIVE) {
+            throw new DuplicateEntityException("User", "id", String.valueOf(unBlockUser.getId()), "has already been activated");
+        }
         checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         unBlockUser.setStatus(Status.ACTIVE);
         userRepository.updateUser(unBlockUser);
     }
 
-    //TODO
     @Override
-    public void updatePhoneNumber(String phoneNumber) {
+    public void addPhoneNumberToAdmin(User admin, User userPhoneNumberToBeUpdate) {
+        checkAccessPermissionsAdmin(admin, UPDATE_PHONE_NUMBER_ERROR_MESSAGE);
+        checkAccessPermissionsUser(admin.getId(), userPhoneNumberToBeUpdate, UPDATE_PHONE_NUMBER_ERROR_MESSAGE);
 
-    }
+        if (userPhoneNumberToBeUpdate.getPhoneNumber() != null
+                && !userPhoneNumberToBeUpdate.getPhoneNumber().isEmpty()) {
 
-    @Override
-    public void addPhoneNumberToAdmin(User admin, String phoneNumber) {
-        checkAccessPermissionsAdmin(admin, UPDATE_PHONENUMBER_ERROR_MESSAGE);
-        if (phoneNumber != null && !phoneNumber.isEmpty()) {
-            if (phoneNumber.equals(admin.getPhoneNumber())) {
-                throw new DuplicateEntityException("Admin", "phone number", phoneNumber);
+            if (userRepository.existsByPhoneNumber(userPhoneNumberToBeUpdate)) {
+                throw new DuplicateEntityException("Admin", "phone number", userPhoneNumberToBeUpdate.getPhoneNumber());
             }
+            admin.setPhoneNumber(userPhoneNumberToBeUpdate.getPhoneNumber());
+            userRepository.updateUser(admin);
 
-            if (admin.getPhoneNumber() == null || admin.getPhoneNumber().isEmpty()) {
-                admin.setPhoneNumber(phoneNumber);
-                userRepository.addPhoneNumberToAdmin(admin);
-            } else {
-                admin.setPhoneNumber(phoneNumber);
-                userRepository.updatePhoneNumber(admin);
-            }
         } else {
             throw new EntityNotFoundException("Admin", "phone number");
         }
@@ -180,8 +155,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deletePhoneNumber(int userId, User user) {
         User userToDelete = userRepository.getById(userId);
-        checkAccessPermissionsAdmin(userToDelete, DELETE_PHONENUMBER_MESSAGE_ERROR);
-        checkAccessPermissionsUser(userId, user, DELETE_PHONENUMBER_MESSAGE_ERROR);
-        userRepository.deletePhoneNumber(userId);
+        checkAccessPermissionsAdmin(userToDelete, DELETE_PHONE_NUMBER_MESSAGE_ERROR);
+        checkAccessPermissionsUser(userId, user, DELETE_PHONE_NUMBER_MESSAGE_ERROR);
+        userToDelete.setPhoneNumber(null);
+        userRepository.updateUser(userToDelete);
+    }
+
+    private void checkDuplicateEntity(User user) {
+        if (userRepository.getByUsernameFindUser(user.getUsername()) != null) {
+            throw new DuplicateEntityException("User", "username", user.getUsername());
+        }
+
+        if (userRepository.getByEmailFindUser(user.getEmail()) != null) {
+            throw new DuplicateEntityException("User", "email", user.getEmail());
+        }
+    }
+
+    private static boolean isSameUser(User existingUser, User user) {
+        return existingUser.getUsername().equals(user.getUsername())
+                && existingUser.getFirstName().equals(user.getFirstName())
+                && existingUser.getLastName().equals(user.getLastName())
+                && existingUser.getEmail().equals(user.getEmail());
+    }
+
+    private void setAdminRoleIfDataBaseEmpty(User user) {
+        if (userRepository.isDataBaseEmpty()) {
+            user.setRole(Role.ADMIN);
+        }
     }
 }

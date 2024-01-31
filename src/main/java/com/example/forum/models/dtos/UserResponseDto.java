@@ -1,14 +1,16 @@
 package com.example.forum.models.dtos;
 
 
+import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Objects;
 import java.util.Set;
 
 public class UserResponseDto {
-
+    @JsonIgnore
     private int id;
     private String firstName;
     private String lastName;
@@ -16,19 +18,21 @@ public class UserResponseDto {
     private Role role = Role.USER;
     private String phoneNumber;
     private Set<Post> posts;
+    private Set<Comment> comments;
 
     public UserResponseDto() {
     }
 
-    public UserResponseDto(int id, String firstName, String lastName, String email, Role role, String phoneNumber, Set<Post> posts) {
+    public UserResponseDto(int id, String firstName, String lastName,
+                           String email, Role role, String phoneNumber, Set<Post> posts, Set<Comment> comments) {
         this.id = id;
-
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.role = role;
         this.phoneNumber = phoneNumber;
         this.posts = posts;
+        this.comments = comments;
     }
 
     public int getId() {
@@ -85,6 +89,14 @@ public class UserResponseDto {
 
     public void setPosts(Set<Post> posts) {
         this.posts = posts;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
