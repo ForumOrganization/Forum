@@ -76,7 +76,6 @@ CREATE TABLE tags
 
 CREATE TABLE post_tags
 (
-    post_tags_id INT PRIMARY KEY AUTO_INCREMENT
     post_id INT NOT NULL,
     tag_id  INT NOT NULL,
     CONSTRAINT post_tags_posts_post_id_fk
