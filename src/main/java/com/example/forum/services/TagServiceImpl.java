@@ -7,6 +7,7 @@ import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
+import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.services.contracts.TagService;
 import com.example.forum.utils.TagFilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public TagServiceImpl(TagRepository tagRepository, PostRepository postRepository) {
+    public TagServiceImpl(TagRepository tagRepository, PostRepository postRepository, UserRepository userRepository) {
         this.tagRepository = tagRepository;
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -61,13 +64,17 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public void createTagInPost(Tag tag, int postId, User user) {
-        checkAccessPermissions(tag.getId(), user, CREATE_TAG_MESSAGE_ERROR);
+        User author = postRepository.getById(postId).getCreatedBy();
+        int authorId = author.getId();
+        checkAccessPermissions(authorId, user, CREATE_TAG_MESSAGE_ERROR);
         this.tagRepository.createTagInPost(tag, postId, user);
     }
 
     @Override
     public void updateTagInPost(Tag tag, User user, int postId, int tagId) {
-        checkAccessPermissions(tag.getId(), user, MODIFY_TAG_ERROR_MESSAGE);
+        User author = postRepository.getById(postId).getCreatedBy();
+        int authorId = author.getId();
+        checkAccessPermissions(authorId, user, MODIFY_TAG_ERROR_MESSAGE);
 
         boolean duplicateExists = true;
         boolean missingComment = false;
