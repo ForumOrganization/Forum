@@ -2,14 +2,18 @@ package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
+import com.example.forum.models.Reaction_comments;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
+import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
 import com.example.forum.utils.TagFilterOptions;
+import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -21,10 +25,12 @@ import java.util.Map;
 public class TagRepositoryImpl implements TagRepository {
 
     private SessionFactory sessionFactory;
+    private PostRepository postRepository;
 
     @Autowired
-    public TagRepositoryImpl(SessionFactory sessionFactory) {
+    public TagRepositoryImpl(SessionFactory sessionFactory, PostRepository postRepository) {
         this.sessionFactory = sessionFactory;
+        this.postRepository = postRepository;
     }
 
     @Override
@@ -86,13 +92,13 @@ public class TagRepositoryImpl implements TagRepository {
 
             query.setParameter("name", name);
 
-            Tag tag = query.getSingleResult();
+            List<Tag> tag = query.list();
 
-            if (tag == null) {
+            if (tag.size() == 0) {
                 throw new EntityNotFoundException("Tag", "id");
             }
 
-            return tag;
+            return tag.get(0);
         }
     }
 
@@ -189,13 +195,41 @@ public class TagRepositoryImpl implements TagRepository {
         }
     }
 
+
     @Override
-    public void deleteTagInPost(int tagId) {
+    public void deleteTagInPost(int postId, int tagId) {
         try (Session session = sessionFactory.openSession()) {
-            session.beginTransaction();
-            session.remove(tagId);
-            session.getTransaction().commit();
+            Tag tag = session.get(Tag.class, tagId);
+
+            if (tag != null) {
+                Post post = session.get(Post.class, postId);
+
+                if (post != null) {
+                    if (tag.getPosts().contains(post)) {
+                        tag.getPosts().remove(post);
+
+                        session.saveOrUpdate(tag);
+                    }
+                }
+            }
         }
+//        try (Session session = sessionFactory.openSession()) {
+//            session.beginTransaction();
+//            Tag tag = getTagById(tagId);
+//            if (tag != null) {
+//                Post post = postRepository.getById(postId);
+//                if (post != null) {
+//                    post.getTags().remove(tag);
+//                }
+//            }
+//
+//            session.getTransaction().commit();
+//        }
+//        try (Session session = sessionFactory.openSession()) {
+//            session.beginTransaction();
+//            session.remove(tagId);
+//            session.getTransaction().commit();
+//        }
     }
 
     private String generateOrderBy(TagFilterOptions tagFilterOptions) {

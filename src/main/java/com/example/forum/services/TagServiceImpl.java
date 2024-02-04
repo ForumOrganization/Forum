@@ -44,7 +44,18 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getTagByName(String name) {
-        return tagRepository.getTagByName(name);
+        boolean missingTag = false;
+        Tag tag = new Tag();
+        try {
+          tag = tagRepository.getTagByName(name);
+        } catch (EntityNotFoundException e) {
+            missingTag = true;
+        }
+
+        if (missingTag) {
+            throw new EntityNotFoundException("Tag", "name", name);
+
+    } return tag;
     }
 
     @Override
@@ -117,9 +128,11 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void deleteTagInPost(int tagId, User user) {
+    public void deleteTagInPost(Tag tag, User user, int postId, int tagId) {
+        User author = postRepository.getById(postId).getCreatedBy();
         tagRepository.getTagById(tagId);
-        checkAccessPermissions(tagId, user, DELETE_TAG_MESSAGE_ERROR);
-        this.tagRepository.deleteTagInPost(tagId);
+        int authorId = author.getId();
+        checkAccessPermissions(authorId, user, DELETE_TAG_MESSAGE_ERROR);
+        this.tagRepository.deleteTagInPost(postId, tagId);
     }
 }

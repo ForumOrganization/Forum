@@ -96,11 +96,13 @@ public class TagRestController {
     }
 
     //TODO!!!
-    @DeleteMapping("/posts/{tagId}")
-    public ResponseEntity<Void> deleteTagInPost(@PathVariable int tagId, @RequestHeader HttpHeaders headers) {
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<Void> deleteTagInPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            tagService.deleteTagInPost(tagId, user);
+            Tag tag = this.tagMapper.fromDto(tagDto);
+            int tagId = tag.getId();
+            tagService.deleteTagInPost(tag, user, postId, tagId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
