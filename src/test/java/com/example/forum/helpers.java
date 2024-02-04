@@ -6,6 +6,7 @@ import com.example.forum.models.User;
 import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 import com.example.forum.utils.CommentFilterOptions;
+import com.example.forum.utils.UserFilterOptions;
 
 import java.time.LocalDate;
 
@@ -22,6 +23,7 @@ public class helpers {
         mockUser.setStatus(Status.ACTIVE);
         mockUser.setPhoneNumber("3333333333");
         mockUser.setRole(Role.ADMIN);
+
 
         return mockUser;
     }
@@ -51,6 +53,16 @@ public class helpers {
         return new CommentFilterOptions(
                 createMockPost(),
                 "content",
+                "sort",
+                "order");
+    }
+    public static UserFilterOptions createMockUserFilterOptions() {
+        return new UserFilterOptions(
+                createMockUser().getUsername(),
+                createMockUser().getFirstName(),
+                createMockUser().getLastName(),
+                createMockUser().getEmail(),
+                Status.ACTIVE,
                 "sort",
                 "order");
     }
