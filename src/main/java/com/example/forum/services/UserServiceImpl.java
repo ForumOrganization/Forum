@@ -85,7 +85,7 @@ public class UserServiceImpl implements UserService {
             throw new EntityNotFoundException("User", "username", targetUser.getUsername());
         }
         if (!targetUser.getEmail().equals(executingUser.getEmail())) {
-            if (userRepository.getByEmail(targetUser.getEmail()) != null) {
+            if (userRepository.getByEmailFindUser(targetUser.getEmail()) != null) {
                 throw new DuplicateEntityException("User", "email", targetUser.getEmail());
             }
         }
