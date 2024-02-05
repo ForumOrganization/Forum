@@ -35,36 +35,46 @@ public class TagRestController {
 
     @GetMapping
     public List<Tag> getAllTags(
+            @RequestHeader HttpHeaders headers,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) String sortOrder) {
         TagFilterOptions tagFilterOptions = new TagFilterOptions(name, sortBy, sortOrder);
 
         try {
+            authenticationHelper.tryGetUser(headers);
             return tagService.getAllTags(tagFilterOptions);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @GetMapping("/{tagId}")
-    public Tag getTagById(@PathVariable int tagId) {
+    public Tag getTagById(@RequestHeader HttpHeaders headers,@PathVariable int tagId) {
         try {
+            authenticationHelper.tryGetUser(headers);
             return tagService.getTagById(tagId);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @GetMapping("/search")
-    public Tag getTagByName(@RequestParam String name) {
+    public Tag getTagByName(@RequestHeader HttpHeaders headers,@RequestParam String name) {
         try {
+            authenticationHelper.tryGetUser(headers);
             return tagService.getTagByName(name);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }catch (AuthorizationException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
+//ToDo is not working- throw wrong exception"tag with name not found"
     @PostMapping("/posts/{postId}")
     public ResponseEntity<Tag> createTagInPost(@PathVariable int postId, @Valid @RequestBody TagDto tagDto, @RequestHeader HttpHeaders headers) {
         try {

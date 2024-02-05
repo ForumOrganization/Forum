@@ -59,7 +59,7 @@ public class TagRepositoryImpl implements TagRepository {
             List<Tag> list = query.list();
 
             if (list.isEmpty()) {
-                throw new EntityNotFoundException("Tag", "id");
+                throw new EntityNotFoundException("Tags");
             }
 
             return list;
@@ -162,7 +162,7 @@ public class TagRepositoryImpl implements TagRepository {
             Post post = session.get(Post.class, postId);
 
             if (post == null) {
-                throw new EntityNotFoundException("Post", postId);
+                throw new EntityNotFoundException("Post", "id",String.valueOf(postId));
             }
 
             Query<Tag> query = session.createQuery(

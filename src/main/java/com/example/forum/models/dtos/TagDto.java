@@ -1,6 +1,9 @@
 package com.example.forum.models.dtos;
 
+import javax.validation.constraints.NotNull;
+
 public class TagDto {
+    @NotNull(message = "Tag name can't be empty")
     private String name;
 
     public TagDto() {
@@ -11,6 +14,6 @@ public class TagDto {
     }
 
     public void setName(String name) {
-        this.name= name;
+        this.name = name;
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 import static com.example.forum.utils.CheckPermission.checkAccessPermissions;
+import static com.example.forum.utils.CheckPermission.checkAccessPermissionsUser;
 import static com.example.forum.utils.Messages.*;
 
 @Service
@@ -77,7 +78,7 @@ public class TagServiceImpl implements TagService {
     public void createTagInPost(Tag tag, int postId, User user) {
         User author = postRepository.getById(postId).getCreatedBy();
         int authorId = author.getId();
-        checkAccessPermissions(authorId, user, CREATE_TAG_MESSAGE_ERROR);
+        checkAccessPermissionsUser(authorId, user, CREATE_TAG_MESSAGE_ERROR);
         this.tagRepository.createTagInPost(tag, postId, user);
     }
 

@@ -57,7 +57,11 @@ public class PostRepositoryImpl implements PostRepository {
 
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
-            return query.list();
+            List<Post> posts=query.list();
+            if (posts.isEmpty()) {
+                throw new EntityNotFoundException("Posts");
+            }
+            return posts;
         }
     }
 //TODO

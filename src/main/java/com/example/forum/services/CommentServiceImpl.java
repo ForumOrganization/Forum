@@ -44,10 +44,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void createComment(Comment comment, int postId, User user) {
-
-        if (user.getStatus() == Status.BLOCKED || user.isDeleted()) {
-            throw new AuthorizationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
-        }
+        checkBlockOrDeleteUser(user);
 
         Post post = postRepository.getById(postId);
 
@@ -59,6 +56,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void updateComment(Comment comment, User user) {
+        checkBlockOrDeleteUser(user);
         Comment commentToUpdate = commentRepository.getCommentById(comment.getId());
         checkAccessPermissionsUser(comment.getUser().getId(), user, MODIFY_USER_MESSAGE_ERROR);
         this.commentRepository.updateComment(commentToUpdate);
@@ -66,8 +64,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public void deleteComment(int commentId, User user) {
+        checkBlockOrDeleteUser(user);
         Comment comment = commentRepository.getCommentById(commentId);
         checkAccessPermissions(comment.getUser().getId(), user, MODIFY_POST_ERROR_MESSAGE);
         this.commentRepository.deleteComment(commentId, user);
+    }
+
+    private static void checkBlockOrDeleteUser(User user) {
+        if (user.getStatus() == Status.BLOCKED || user.isDeleted()) {
+            throw new AuthorizationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
+        }
     }
 }

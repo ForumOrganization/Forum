@@ -1,5 +1,6 @@
 package com.example.forum.services;
 
+import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.exceptions.UnauthorizedOperationException;
@@ -65,9 +66,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void create(Post post, User user) {
-        if (user.getStatus() == Status.BLOCKED || user.isDeleted()) {
-            throw new UnauthorizedOperationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
-        }
+       checkBlockOrDeleteUser(user);
 
         post.setCreatedBy(user);
         this.postRepository.create(post);
@@ -75,6 +74,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void update(Post post, User user) {
+        checkBlockOrDeleteUser(user);
         checkAccessPermissionsUser(post.getCreatedBy().getId(), user, MODIFY_USER_MESSAGE_ERROR);
 
         boolean duplicateExists = true;
@@ -99,8 +99,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void delete(int id, User user) {
+        checkBlockOrDeleteUser(user);
         Post post = postRepository.getById(id);
         checkAccessPermissions(post.getCreatedBy().getId(), user, MODIFY_POST_ERROR_MESSAGE);
         this.postRepository.delete(id);
+    }
+    private static void checkBlockOrDeleteUser(User user) {
+        if (user.getStatus() == Status.BLOCKED || user.isDeleted()) {
+            throw new AuthorizationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
+        }
     }
 }

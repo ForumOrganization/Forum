@@ -2,6 +2,7 @@ package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Comment;
+import com.example.forum.models.Post;
 import com.example.forum.models.Reaction_comments;
 import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.CommentRepository;
@@ -30,6 +31,11 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions) {
         try (Session session = sessionFactory.openSession()) {
+            Post post = session.get(Post.class, postId);
+
+            if (post == null) {
+                throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
+            }
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
@@ -57,7 +63,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             List<Comment> list = query.list();
 
             if (list.isEmpty()) {
-                throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
+                throw new EntityNotFoundException("Comments");
             }
 
             return list;
