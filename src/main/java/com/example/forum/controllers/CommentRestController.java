@@ -67,6 +67,7 @@ public class CommentRestController {
         }
     }
 
+//TODO Validation on the length of the content.
     @PostMapping("/post/{postId}")
     public Comment createComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @Valid @RequestBody CommentDto commentDto) {
         try {
@@ -76,11 +77,11 @@ public class CommentRestController {
             return comment;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UnauthorizedOperationException e) {
+        } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
+    //TODO Validation on the length of the content.
     @PutMapping("/{id}")
     public Comment updateComment(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody CommentDto commentDto) {
         try {

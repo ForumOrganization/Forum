@@ -38,14 +38,14 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getTopCommentedPosts() {
-       List<Post> topCommentedPosts = this.postRepository.getTopCommentedPosts();
-       return topCommentedPosts;
+      return this.postRepository.getTopCommentedPosts();
+
     }
 
     @Override
     public List<Post> getMostRecentPosts() {
-        List<Post> mostRecentPosts = this.postRepository.getMostRecentPosts();
-        return mostRecentPosts;
+        return this.postRepository.getMostRecentPosts();
+
     }
 
     @Override

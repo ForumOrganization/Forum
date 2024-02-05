@@ -36,7 +36,7 @@ public class PostRestController {
         this.authenticationHelper = authenticationHelper;
         this.postMapper = postMapper;
     }
-
+//TODO
     @GetMapping
     public List<Post> getAll(@RequestHeader HttpHeaders headers,
                              @RequestParam(required = false) String title,

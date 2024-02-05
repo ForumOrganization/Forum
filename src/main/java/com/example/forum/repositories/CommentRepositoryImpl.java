@@ -57,7 +57,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             List<Comment> list = query.list();
 
             if (list.isEmpty()) {
-                throw new EntityNotFoundException("Post", "id");
+                throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
             }
 
             return list;

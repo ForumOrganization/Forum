@@ -1,5 +1,6 @@
 package com.example.forum.services;
 
+import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.exceptions.UnauthorizedOperationException;
 import com.example.forum.models.Comment;
@@ -45,7 +46,7 @@ public class CommentServiceImpl implements CommentService {
     public void createComment(Comment comment, int postId, User user) {
 
         if (user.getStatus() == Status.BLOCKED || user.isDeleted()) {
-            throw new UnauthorizedOperationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
+            throw new AuthorizationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
         }
 
         Post post = postRepository.getById(postId);
