@@ -17,14 +17,14 @@ public class TagMapper {
     }
 
     public Tag fromDto(int id, TagDto dto) {
-        Tag tag = tagService.getTagById(id);
-        tag.setName(dto.getName());
-
+        Tag tag = fromDto(dto);
+        tag.setId(id);
         return tag;
     }
 
     public Tag fromDto(TagDto dto) {
-        Tag tag = tagService.getTagByName(dto.getName());
+        Tag tag = new Tag();
+        tag.setName(dto.getName());
         return tag;
     }
 }

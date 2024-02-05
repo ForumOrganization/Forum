@@ -31,7 +31,8 @@ public class ReactionRepositoryImpl implements ReactionRepository {
     public List<Reaction_posts> getAllReactionsByPostId(int postId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Reaction_posts> query = session.createQuery(
-                    "SELECT r FROM Reaction_posts r WHERE post.id = :postId", Reaction_posts.class);
+                    "SELECT r FROM Reaction_posts r WHERE post.id = :postId",
+                    Reaction_posts.class);
 
             query.setParameter("postId", postId);
 
@@ -43,7 +44,8 @@ public class ReactionRepositoryImpl implements ReactionRepository {
     public List<Reaction_comments> getAllReactionsByCommentId(int commentId) {
         try (Session session = sessionFactory.openSession()) {
             Query<Reaction_comments> query = session.createQuery(
-                    "SELECT r FROM Reaction_comments r WHERE comment.id = :commentId", Reaction_comments.class);
+                    "SELECT r FROM Reaction_comments r WHERE comment.id = :commentId",
+                    Reaction_comments.class);
 
             query.setParameter("commentId", commentId);
 
@@ -104,7 +106,8 @@ public class ReactionRepositoryImpl implements ReactionRepository {
                 throw new EntityNotFoundException("Post", "postId", String.valueOf(postId));
             }
 
-            Reaction_posts existingReaction = findReactionByPostIdAndUserId(postId, reaction.getUser().getId());
+            Reaction_posts existingReaction =
+                    findReactionByPostIdAndUserId(postId, reaction.getUser().getId());
 
             if (existingReaction != null) {
                 existingReaction.setReaction(reaction.getReaction());
@@ -128,7 +131,8 @@ public class ReactionRepositoryImpl implements ReactionRepository {
                 throw new EntityNotFoundException("Comment", "commentId", String.valueOf(commentId));
             }
 
-            Reaction_comments existingReaction = findReactionByCommentIdAndUserId(commentId, reaction.getUser().getId());
+            Reaction_comments existingReaction =
+                    findReactionByCommentIdAndUserId(commentId, reaction.getUser().getId());
 
             if (existingReaction != null) {
                 existingReaction.setReaction(reaction.getReaction());
@@ -145,7 +149,9 @@ public class ReactionRepositoryImpl implements ReactionRepository {
 
     private Reaction_comments findReactionByCommentIdAndUserId(int commentId, int userId) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Reaction_comments where comment.id = :commentId and user.id = :userId", Reaction_comments.class)
+            return session.createQuery(
+                            "from Reaction_comments where comment.id = :commentId and user.id = :userId",
+                            Reaction_comments.class)
                     .setParameter("commentId", commentId)
                     .setParameter("userId", userId)
                     .uniqueResult();
@@ -154,7 +160,9 @@ public class ReactionRepositoryImpl implements ReactionRepository {
 
     private Reaction_posts findReactionByPostIdAndUserId(int postId, int userId) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("from Reaction_posts where post.id = :postId and user.id = :userId", Reaction_posts.class)
+            return session.createQuery(
+                            "from Reaction_posts where post.id = :postId and user.id = :userId",
+                            Reaction_posts.class)
                     .setParameter("postId", postId)
                     .setParameter("userId", userId)
                     .uniqueResult();

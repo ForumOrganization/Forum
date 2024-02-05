@@ -166,21 +166,21 @@ public class TagRepositoryImpl implements TagRepository {
             }
 
             Query<Tag> query = session.createQuery(
-                    "SELECT t FROM Tag t WHERE t.name = :name", Tag.class);
+                    "SELECT name FROM Tag t WHERE t.name = :name", Tag.class);
 
             query.setParameter("name", tag.getName());
 
-            Tag foundTag = query.getSingleResult();
+            List<Tag> foundTag = query.getResultList();
 
-            if (foundTag == null) {
+            if (foundTag.isEmpty()) {
                 session.beginTransaction();
                 session.persist(tag);
+                post.getTags().add(tag);
                 session.getTransaction().commit();
             } else {
-                post.getTags().add(tag);
-                post.setCreatedBy(user);
                 session.beginTransaction();
-                session.merge(post);
+                post.getTags().add(tag);
+//                session.merge(post);
                 session.getTransaction().commit();
             }
         }
