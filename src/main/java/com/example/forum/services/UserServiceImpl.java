@@ -157,6 +157,13 @@ public class UserServiceImpl implements UserService {
         User userToDelete = userRepository.getById(userId);
         checkAccessPermissionsAdmin(userToDelete, DELETE_PHONE_NUMBER_MESSAGE_ERROR);
         checkAccessPermissionsUser(userId, user, DELETE_PHONE_NUMBER_MESSAGE_ERROR);
+        if (userToDelete.isDeleted()) {
+            throw new EntityAlreadyDeleteException("User", "id", String.valueOf(userId));
+        }
+        if(userToDelete.getPhoneNumber()==null){
+            throw new EntityAlreadyDeleteException("User's phone number", "id", String.valueOf(userId));
+
+        }
         userToDelete.setPhoneNumber(null);
         userRepository.updateUser(userToDelete);
     }

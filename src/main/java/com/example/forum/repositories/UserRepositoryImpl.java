@@ -187,9 +187,10 @@ public class UserRepositoryImpl implements UserRepository {
             query.setParameter("userId", userId);
 
             List<Post> posts = query.list();
+            getById(userId);
 
             if (posts.isEmpty()) {
-                throw new EntityNotFoundException("Post", "userId", String.valueOf(userId));
+                throw new EntityNotFoundException("User posts", "userId", String.valueOf(userId));
             }
 
             return posts.stream().toList();

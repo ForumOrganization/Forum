@@ -269,6 +269,8 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (EntityAlreadyDeleteException e) {
+            throw new ResponseStatusException(HttpStatus.GONE, e.getMessage());
         }
     }
 }
