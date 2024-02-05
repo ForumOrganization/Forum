@@ -188,6 +188,24 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public void updateTagInPost(Tag tag) {
+//
+//        try (Session session = sessionFactory.openSession()) {
+//            Post post = session.get(Post.class, postId);
+////
+//            if (post != null) {
+//                Tag tag = session.get(Tag.class, tagId);
+//
+//                if (tag != null) {
+//                    session.beginTransaction();
+//                    post.getTags().remove(tag);
+//                    session.merge(post);
+//                    session.getTransaction().commit();
+////
+//
+//                }
+//            }
+////
+//        }
         try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(tag);
@@ -214,38 +232,7 @@ public class TagRepositoryImpl implements TagRepository {
 
                 }
             }
-//        try (Session session = sessionFactory.openSession()) {
-//            Tag tag = session.get(Tag.class, tagId);
 //
-//            if (tag != null) {
-//                Post post = session.get(Post.class, postId);
-//
-//                if (post != null) {
-//                    if (tag.getPosts().contains(post)) {
-//                        tag.getPosts().remove(post);
-//
-//                        session.saveOrUpdate(tag);
-//                    }
-//                }
-//            }
-//        }
-//        try (Session session = sessionFactory.openSession()) {
-//            session.beginTransaction();
-//            Tag tag = getTagById(tagId);
-//            if (tag != null) {
-//                Post post = postRepository.getById(postId);
-//                if (post != null) {
-//                    post.getTags().remove(tag);
-//                }
-//            }
-//
-//            session.getTransaction().commit();
-//        }
-//        try (Session session = sessionFactory.openSession()) {
-//            session.beginTransaction();
-//            session.remove(tagId);
-//            session.getTransaction().commit();
-//        }
     }}
 
     private String generateOrderBy(TagFilterOptions tagFilterOptions) {
