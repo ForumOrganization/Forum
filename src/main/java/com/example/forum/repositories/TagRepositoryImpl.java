@@ -158,31 +158,43 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public void createTagInPost(Tag tag, int postId, User user) {
+
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, postId);
 
             if (post == null) {
-                throw new EntityNotFoundException("Post", "id",String.valueOf(postId));
+                throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
             }
 
             Query<Tag> query = session.createQuery(
-                    "SELECT name FROM Tag t WHERE t.name = :name", Tag.class);
+                    "SELECT t FROM Tag t WHERE t.name = :name", Tag.class);
 
             query.setParameter("name", tag.getName());
 
-            List<Tag> foundTag = query.getResultList();
+            List<Tag> foundTags = query.getResultList();
 
-            if (foundTag.isEmpty()) {
+            if (foundTags.isEmpty()) {
                 session.beginTransaction();
                 session.persist(tag);
+                session.getTransaction().commit();
+
                 post.getTags().add(tag);
+
+                session.beginTransaction();
+                session.merge(post);
                 session.getTransaction().commit();
             } else {
+
+                Tag existingTag = foundTags.get(0);
+                post.getTags().add(existingTag);
+
                 session.beginTransaction();
-                post.getTags().add(tag);
-//                session.merge(post);
+                session.merge(post);
                 session.getTransaction().commit();
             }
+        } catch (Exception e) {
+
+            e.printStackTrace();
         }
     }
 
