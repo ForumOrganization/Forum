@@ -52,7 +52,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getUserByUsername_Should_ReturnUser_When_MatchExists() {
+    public void getUserByUsername_Should_ReturnUser_When_MatchExists() {
         String username = "testUser";
         User user = new User();
 
@@ -64,7 +64,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getUserByEmail_Should_ReturnUser_When_MatchExists() {
+    public void getUserByEmail_Should_ReturnUser_When_MatchExists() {
         String email = "test@example.com";
         User user = new User();
 
@@ -76,7 +76,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getUserByFirstName_Should_ReturnUser_When_MatchExists() {
+    public void getUserByFirstName_Should_ReturnUser_When_MatchExists() {
         String firstName = "John";
 
         Mockito.when(mockRepository.getByFirstName(firstName)).thenReturn(Collections.emptyList());
@@ -87,7 +87,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getUserByCommentId_Should_ReturnUser_When_MatchExists() {
+    public void getUserByCommentId_Should_ReturnUser_When_MatchExists() {
         int commentId = 1;
         User user = createMockUser();
 
@@ -99,7 +99,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void getPostsByUserId_Should_ReturnPosts_When_MatchExists() {
+    public void getPostsByUserId_Should_ReturnPosts_When_MatchExists() {
         int userId = 1;
         Post post = createMockPost();
 
@@ -242,7 +242,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void updateToAdmin_Should_CallRepository_When_UpdatingExistingUser() {
+    public void updateToAdmin_Should_CallRepository_When_UpdatingExistingUser() {
         User targetUser = createMockUser();
         targetUser.setRole(Role.USER);
         User executingUser = createMockUser();
@@ -254,7 +254,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void updateToAdmin_Should_ThrowException_When_TargetUserIsAlreadyAdmin() {
+    public void updateToAdmin_Should_ThrowException_When_TargetUserIsAlreadyAdmin() {
         User targetUser = createMockUser();
         User executingUser = createMockUser();
 
@@ -264,7 +264,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void blockUser_Should_CallRepository_When_BlockUserExist() {
+    public void blockUser_Should_CallRepository_When_BlockUserExist() {
         User admin = createMockUser();
         User blockUser = createMockUser();
 
@@ -275,7 +275,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void blockUser_Should_ThrowException_When_UserAlreadyBlocked() {
+    public void blockUser_Should_ThrowException_When_UserAlreadyBlocked() {
         User admin = createMockUser();
         User blockUser = createMockUser();
         blockUser.setStatus(Status.BLOCKED);
@@ -286,7 +286,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void unblockUser_Should_CallRepository_When_UnBlockUserExist() {
+    public void unblockUser_Should_CallRepository_When_UnBlockUserExist() {
         User admin = createMockUser();
         User unBlockUser = createMockUser();
         unBlockUser.setStatus(Status.BLOCKED);
@@ -298,7 +298,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void unblockUser_Should_ThrowException_When_UserAlreadyUnBlocked() {
+    public void unblockUser_Should_ThrowException_When_UserAlreadyUnBlocked() {
         User admin = createMockUser();
         User blockUser = createMockUser();
 
@@ -308,7 +308,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void addPhoneNumberToAdmin_Should_CallRepository_When_PhoneNumberExist() {
+    public void addPhoneNumberToAdmin_Should_CallRepository_When_PhoneNumberExist() {
         User admin = createMockUser();
         User userPhoneNumberToBeUpdate = createMockUser();
         userPhoneNumberToBeUpdate.setPhoneNumber("123456789");
@@ -323,7 +323,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void addPhoneNumberToAdmin_Should_ThrowException_When_PhoneNumberToAdminIsDuplicate() {
+    public void addPhoneNumberToAdmin_Should_ThrowException_When_PhoneNumberToAdminIsDuplicate() {
         User admin = createMockUser();
         User userPhoneNumberToBeUpdate = createMockUser();
         userPhoneNumberToBeUpdate.setPhoneNumber("123456789");
@@ -337,7 +337,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void addPhoneNumberToAdmin_Should_ThrowException_When_PhoneNumberIsMissing() {
+    public void addPhoneNumberToAdmin_Should_ThrowException_When_PhoneNumberIsMissing() {
         User admin = createMockUser();
         User userPhoneNumberToBeUpdate = createMockUser();
         userPhoneNumberToBeUpdate.setPhoneNumber(null);
@@ -348,7 +348,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void deletePhoneNumber_Should_CallRepository_When_PhoneNumberExist() {
+    public void deletePhoneNumber_Should_CallRepository_When_PhoneNumberExist() {
         User user = createMockUser();
         User userToDDelete = createMockUser();
 
