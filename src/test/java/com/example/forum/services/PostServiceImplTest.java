@@ -45,7 +45,7 @@ public class PostServiceImplTest {
         assertEquals(user, post.getCreatedBy());
     }
     @Test
-    void update_ValidPostAndUser_UpdatesPost() {
+    void update_post_when_valid_user_is_present() {
         Post post = new Post();
         post.setId(1);
         User user = new User();
@@ -73,6 +73,85 @@ public class PostServiceImplTest {
         });
 
         verify(postRepository, never()).update(post);
+    }
+
+    @Test
+    void delete_post_when_valid_user_is_present() {
+        int postId = 1;
+        User user = new User();
+        user.setId(1);
+        Post post = new Post();
+        post.setId(postId);
+        post.setCreatedBy(user);
+
+        when(postRepository.getById(postId)).thenReturn(post);
+
+        assertDoesNotThrow(() -> {
+            postService.delete(postId, user);
+        });
+
+        verify(postRepository, times(1)).delete(postId);
+    }
+
+    @Test
+    void delete_check_when_post_is_not_found() {
+        int postId = 1;
+        User user = new User();
+        user.setId(1);
+
+        when(postRepository.getById(postId)).thenThrow(new EntityNotFoundException("Post", "id", String.valueOf(postId)));
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            postService.delete(postId, user);
+        });
+
+        verify(postRepository, never()).delete(postId);
+    }
+
+    @Test
+    void delete_when_user_is_not_authorized() {
+        int postId = 1;
+        User user = new User();
+        user.setId(1);
+        Post post = new Post();
+        post.setId(postId);
+        post.setCreatedBy(new User()); // Different user created the post
+
+        when(postRepository.getById(postId)).thenReturn(post);
+
+        assertThrows(AuthorizationException.class, () -> {
+            postService.delete(postId, user);
+        });
+
+        verify(postRepository, never()).delete(postId);
+    }
+
+    @Test
+    void delete_when_user_is_blocked() {
+        int postId = 1;
+        User user = new User();
+        user.setId(1);
+        user.setStatus(Status.BLOCKED);
+
+        assertThrows(AuthorizationException.class, () -> {
+            postService.delete(postId, user);
+        });
+
+        verify(postRepository, never()).delete(postId);
+    }
+
+    @Test
+    void delete_when_user_is_deleted() {
+        int postId = 1;
+        User user = new User();
+        user.setId(1);
+        user.setDeleted(true);
+
+        assertThrows(AuthorizationException.class, () -> {
+            postService.delete(postId, user);
+        });
+
+        verify(postRepository, never()).delete(postId);
     }
 
 }
