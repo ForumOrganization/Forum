@@ -1,18 +1,22 @@
 package com.example.forum.services;
 import com.example.forum.exceptions.AuthorizationException;
+import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
+import static org.mockito.Mockito.*;
 import com.example.forum.repositories.TagRepositoryImpl;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
 import com.example.forum.services.TagServiceImpl;
+import com.example.forum.services.contracts.TagService;
 import com.example.forum.utils.TagFilterOptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -36,6 +40,7 @@ public class TagServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+//        TagService tagService = Mockito.mock(TagService.class);
         postRepository = mock(PostRepository.class);
         tagService = new TagServiceImpl(tagRepository, postRepository);
     }
@@ -156,64 +161,30 @@ public class TagServiceImplTest {
         doNothing().when(tagRepository).updateTagInPost(tag);
         assertDoesNotThrow(() -> tagService.updateTagInPost(tag, user, postId, tagId));
     }
-//
-//    @Test
-//    void testUpdateTagInPost_AuthorizationException() {
-//        // Arrange
-//        int postId = 1;
-//        int tagId = 1;
-//        int authorId = 2; // Different from the user ID
-//        User user = new User(3, "user", "password"); // Simulate authorized user
-//        Post post = new Post(postId, "Title", "Content", new User(authorId, "author", "password"));
-//        Tag tag = new Tag(tagId, "Tag");
-//        when(postRepository.getById(postId)).thenReturn(post);
-//
-//        // Act & Assert
-//        AuthorizationException exception = assertThrows(AuthorizationException.class, () -> tagService.updateTagInPost(tag, user, postId, tagId));
-//        assertEquals("Authorization failed", exception.getMessage());
-//    }
-//
-//    @Test
-//    void testUpdateTagInPost_TagNotFoundException() {
-//        // Arrange
-//        int postId = 1;
-//        int tagId = 1;
-//        User user = new User(1, "user", "password"); // Simulate authorized user
-//        when(tagRepository.getTagById(tagId)).thenThrow(new EntityNotFoundException("Tag", tagId));
-//
-//        // Act & Assert
-//        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> tagService.updateTagInPost(new Tag(tagId, "Tag"), user, postId, tagId));
-//        assertEquals("Tag not found with id: " + tagId, exception.getMessage());
-//    }
-//
-//    @Test
-//    void testUpdateTagInPost_PostNotFoundException() {
-//        // Arrange
-//        int postId = 1;
-//        int tagId = 1;
-//        User user = new User(1, "user", "password"); // Simulate authorized user
-//        when(postRepository.getById(postId)).thenThrow(new EntityNotFoundException("Post", postId));
-//
-//        // Act & Assert
-//        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> tagService.updateTagInPost(new Tag(tagId, "Tag"), user, postId, tagId));
-//        assertEquals("Post not found with id: " + postId, exception.getMessage());
-//    }
-//
-//    @Test
-//    void testUpdateTagInPost_DuplicateEntityException() {
-//        // Arrange
-//        int postId = 1;
-//        int tagId = 1;
-//        int authorId = 1;
-//        User user = new User(authorId, "user", "password"); // Simulate authorized user
-//        Post post = new Post(postId, "Title", "Content", user);
-//        Tag tag = new Tag(tagId, "Tag");
-//        when(postRepository.getById(postId)).thenReturn(post);
-//        when(tagRepository.getTagById(tagId)).thenReturn(tag);
-//
-//        // Act & Assert
-//        DuplicateEntityException exception = assertThrows(DuplicateEntityException.class, () -> tagService.updateTagInPost(tag, user, postId, tagId));
-//        assertEquals("Tag with name 'Tag' already exists", exception.getMessage());
-//    }
+
+
+
+    @Test
+    void testUpdateTagInPost_when_post_does_not_exists() {
+        int postId = 1;
+        int tagId = 1;
+        User user = new User();
+        when(postRepository.getById(postId)).thenThrow(new EntityNotFoundException("Post", postId));
+
+    }
+
+    @Test
+    void testUpdateTagInPost_DuplicateEntityException() {
+        int postId = 1;
+        int tagId = 1;
+        int authorId = 1;
+        User user = new User();
+        Post post = new Post();
+        post.setCreatedBy(user);
+        Tag tag = new Tag();
+        when(postRepository.getById(postId)).thenReturn(post);
+        when(tagRepository.getTagById(tagId)).thenReturn(tag);
+
+    }
 
 }
