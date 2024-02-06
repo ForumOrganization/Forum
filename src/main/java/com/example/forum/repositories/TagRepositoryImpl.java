@@ -95,7 +95,7 @@ public class TagRepositoryImpl implements TagRepository {
             List<Tag> tag = query.list();
 
             if (tag.size() == 0) {
-                throw new EntityNotFoundException("Tag", "id");
+                throw new EntityNotFoundException("Tag", "this name");
             }
 
             return tag.get(0);
