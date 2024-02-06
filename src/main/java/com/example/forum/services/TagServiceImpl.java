@@ -129,9 +129,10 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void deleteTagInPost(Tag tag, User user, int postId, int tagId) {
+    public void deleteTagInPost(Tag tag, User user, int postId, String tagName) {
         User author = postRepository.getById(postId).getCreatedBy();
-        tagRepository.getTagById(tagId);
+        Tag tag1 = tagRepository.getTagByName(tagName);
+        int tagId = tag1.getId();
         int authorId = author.getId();
         checkAccessPermissions(authorId, user, DELETE_TAG_MESSAGE_ERROR);
         this.tagRepository.deleteTagInPost(postId, tagId);

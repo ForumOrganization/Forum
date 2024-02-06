@@ -74,7 +74,7 @@ public class TagRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-//ToDo is not working- throw wrong exception"tag with name not found"
+
     @PostMapping("/posts/{postId}")
     public ResponseEntity<Tag> createTagInPost(@PathVariable int postId, @Valid @RequestBody TagDto tagDto, @RequestHeader HttpHeaders headers) {
         try {
@@ -111,8 +111,8 @@ public class TagRestController {
         try {
             User user = authenticationHelper.tryGetUser(headers);
             Tag tag = this.tagMapper.fromDto(tagDto);
-            int tagId = tag.getId();
-            tagService.deleteTagInPost(tag, user, postId, tagId);
+            String tagName = tag.getName();
+            tagService.deleteTagInPost(tag, user, postId, tagName);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
