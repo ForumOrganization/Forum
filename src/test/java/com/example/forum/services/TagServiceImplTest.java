@@ -1,5 +1,6 @@
 package com.example.forum.services;
 import com.example.forum.exceptions.EntityNotFoundException;
+import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.repositories.TagRepositoryImpl;
 import com.example.forum.services.TagServiceImpl;
@@ -89,6 +90,32 @@ public class TagServiceImplTest {
         assertThrows(EntityNotFoundException.class, () -> {
             tagService.getTagByName(tagName);
         });
+    }
+
+    @Test
+    void getAllPostsByTagId_when_posts_exist() {
+        int tagId = 1;
+        List<Post> expectedPosts = new ArrayList<>();
+        expectedPosts.add(new Post());
+        expectedPosts.add(new Post());
+
+        when(tagRepository.getAllPostsByTagId(tagId)).thenReturn(expectedPosts);
+
+        List<Post> actualPosts = tagService.getAllPostsByTagId(tagId);
+
+        assertEquals(expectedPosts, actualPosts);
+    }
+
+    @Test
+    void getAllPostsByTagId_when_no_posts_exist() {
+        int tagId = 1;
+        List<Post> expectedPosts = new ArrayList<>();
+
+        when(tagRepository.getAllPostsByTagId(tagId)).thenReturn(expectedPosts);
+
+        List<Post> actualPosts = tagService.getAllPostsByTagId(tagId);
+
+        assertEquals(expectedPosts, actualPosts);
     }
 
 }
