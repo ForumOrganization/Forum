@@ -43,5 +43,27 @@ public class TagServiceImplTest {
             assertEquals(expectedTags.get(i), actualTags.get(i));
         }
     }
+    @Test
+    void getTagById_TagExists_ReturnsTag() {
+        int tagId = 1;
+        Tag expectedTag = new Tag();
+
+        when(tagRepository.getTagById(tagId)).thenReturn(expectedTag);
+
+        Tag actualTag = tagService.getTagById(tagId);
+
+        assertEquals(expectedTag, actualTag);
+    }
+
+    @Test
+    void getTagById_TagDoesNotExist_ReturnsNull() {
+        int tagId = 1;
+
+        when(tagRepository.getTagById(tagId)).thenReturn(null);
+
+        Tag actualTag = tagService.getTagById(tagId);
+
+        assertEquals(null, actualTag);
+    }
 
 }
