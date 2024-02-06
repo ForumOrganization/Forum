@@ -36,11 +36,11 @@ public class PostServiceImplTest {
     void create_post_when_valid_user_is_present() {
         Post post = new Post();
         User user = new User();
-
-        assertDoesNotThrow(() -> {
-            postService.create(post, user);
-        });
-
+        int postId = post.getId(); // Assuming postId is 1
+        Post existingPost = new Post();
+        existingPost.setCreatedBy(user);
+        when(postRepository.getById(postId)).thenReturn(existingPost);
+        assertDoesNotThrow(() -> postService.create(post, user));
         verify(postRepository, times(1)).create(post);
         assertEquals(user, post.getCreatedBy());
     }

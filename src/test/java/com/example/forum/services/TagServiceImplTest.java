@@ -1,8 +1,12 @@
 package com.example.forum.services;
+import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
+import com.example.forum.models.User;
 import com.example.forum.repositories.TagRepositoryImpl;
+import com.example.forum.repositories.contracts.PostRepository;
+import com.example.forum.repositories.contracts.TagRepository;
 import com.example.forum.services.TagServiceImpl;
 import com.example.forum.utils.TagFilterOptions;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,11 +16,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.client.ExpectedCount.times;
 
 public class TagServiceImplTest {
 
@@ -26,9 +31,13 @@ public class TagServiceImplTest {
     @InjectMocks
     private TagServiceImpl tagService;
 
+    private PostRepository postRepository;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+        postRepository = mock(PostRepository.class);
+        tagService = new TagServiceImpl(tagRepository, postRepository);
     }
 
     @Test
@@ -117,5 +126,94 @@ public class TagServiceImplTest {
 
         assertEquals(expectedPosts, actualPosts);
     }
+
+    @Test
+    void test_CreateTagInPost() {
+        int postId = 1;
+        int authorId = 1;
+        User user = new User(); // Simulate authorized user
+        Post post = new Post();
+        post.setCreatedBy(user);
+        Tag tag = new Tag();
+        when(postRepository.getById(postId)).thenReturn(post);
+        doNothing().when(tagRepository).createTagInPost(tag, postId, user);
+
+        assertDoesNotThrow(() -> tagService.createTagInPost(tag, postId, user));
+    }
+    @Test
+    void testUpdateTagInPost() {
+
+
+        User user = new User();
+        Post post = new Post();
+        post.setCreatedBy(user);
+        int postId = post.getId();
+        Tag tag = new Tag();
+        int tagId = tag.getId();
+        int authorId = tagId;
+        when(postRepository.getById(postId)).thenReturn(post);
+        when(tagRepository.getTagById(tagId)).thenReturn(tag);
+        doNothing().when(tagRepository).updateTagInPost(tag);
+        assertDoesNotThrow(() -> tagService.updateTagInPost(tag, user, postId, tagId));
+    }
+//
+//    @Test
+//    void testUpdateTagInPost_AuthorizationException() {
+//        // Arrange
+//        int postId = 1;
+//        int tagId = 1;
+//        int authorId = 2; // Different from the user ID
+//        User user = new User(3, "user", "password"); // Simulate authorized user
+//        Post post = new Post(postId, "Title", "Content", new User(authorId, "author", "password"));
+//        Tag tag = new Tag(tagId, "Tag");
+//        when(postRepository.getById(postId)).thenReturn(post);
+//
+//        // Act & Assert
+//        AuthorizationException exception = assertThrows(AuthorizationException.class, () -> tagService.updateTagInPost(tag, user, postId, tagId));
+//        assertEquals("Authorization failed", exception.getMessage());
+//    }
+//
+//    @Test
+//    void testUpdateTagInPost_TagNotFoundException() {
+//        // Arrange
+//        int postId = 1;
+//        int tagId = 1;
+//        User user = new User(1, "user", "password"); // Simulate authorized user
+//        when(tagRepository.getTagById(tagId)).thenThrow(new EntityNotFoundException("Tag", tagId));
+//
+//        // Act & Assert
+//        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> tagService.updateTagInPost(new Tag(tagId, "Tag"), user, postId, tagId));
+//        assertEquals("Tag not found with id: " + tagId, exception.getMessage());
+//    }
+//
+//    @Test
+//    void testUpdateTagInPost_PostNotFoundException() {
+//        // Arrange
+//        int postId = 1;
+//        int tagId = 1;
+//        User user = new User(1, "user", "password"); // Simulate authorized user
+//        when(postRepository.getById(postId)).thenThrow(new EntityNotFoundException("Post", postId));
+//
+//        // Act & Assert
+//        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> tagService.updateTagInPost(new Tag(tagId, "Tag"), user, postId, tagId));
+//        assertEquals("Post not found with id: " + postId, exception.getMessage());
+//    }
+//
+//    @Test
+//    void testUpdateTagInPost_DuplicateEntityException() {
+//        // Arrange
+//        int postId = 1;
+//        int tagId = 1;
+//        int authorId = 1;
+//        User user = new User(authorId, "user", "password"); // Simulate authorized user
+//        Post post = new Post(postId, "Title", "Content", user);
+//        Tag tag = new Tag(tagId, "Tag");
+//        when(postRepository.getById(postId)).thenReturn(post);
+//        when(tagRepository.getTagById(tagId)).thenReturn(tag);
+//
+//        // Act & Assert
+//        DuplicateEntityException exception = assertThrows(DuplicateEntityException.class, () -> tagService.updateTagInPost(tag, user, postId, tagId));
+//        assertEquals("Tag with name 'Tag' already exists", exception.getMessage());
+//    }
 
 }

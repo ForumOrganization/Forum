@@ -139,4 +139,6 @@ public class TagServiceImpl implements TagService {
         checkAccessPermissions(authorId, user, DELETE_TAG_MESSAGE_ERROR);
         this.tagRepository.deleteTagInPost(postId, tagId);
     }
+
+
 }
