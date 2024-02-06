@@ -1,26 +1,64 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{ForumForm.html :: head('Login')}"></form>
+<form th:replace="~{HomeView.html :: head('Login')}"></form>
+<link href="../static/css/login.css" th:href="@{/css/login.css}" rel="stylesheet"/>
 <body>
-<form th:replace="~{ForumForm.html :: header}"></form>
-<div class="body-content">
-    <h2>Login Page</h2>
-    <form th:action="@{/auth/login}" th:object="${login}" method="post">
-        <label th:text="#{user.label.username}">Username:</label>
-        <br/>
-        <input type="text" th:field="*{username}"/>
-        <label class="error" th:errors="*{username}">Username error placeholder.</label>
-        <br/>
+<form th:replace="~{HomeView.html :: header}"></form>
 
-        <label th:text="#{user.label.password}">Password:</label>
-        <br/>
-        <input type="text" th:field="*{password}"/>
-        <label class="error" th:errors="*{password}">Password error placeholder.</label>
-        <br/><br/>
+<header>
+    <div id="box">
+        <section id="loginPage">
+            <!--    <div class="body-content">-->
+<!--            <h2>Login</h2>-->
+            <form action="#" th:action="@{/auth/login}" th:object="${login}" method="post">
+                <fieldset>
+                    <legend>Login</legend>
+                    <label for="username" class="username" th:text="#{user.label.username}">Username</label>
+                    <br/>
+                    <input id="username" class="username" name="username" type="text" th:field="*{username}"/>
+                    <label class="error" th:errors="*{username}">Username error placeholder</label>
+                    <br/><br/>
 
-        <input type="submit" value="Login"/>
-    </form>
-</div>
-<form th:replace="~{ForumForm.html :: footer}"></form>
+                    <label for="password" class="password" th:text="#{user.label.password}">Password</label>
+                    <br/>
+                    <input id="password" class="password" name="password" type="password" th:field="*{password}"/>
+                    <label class="error" th:errors="*{password}">Password error placeholder</label>
+                    <br/><br/>
+
+                    <button type="submit" class="login">Login</button>
+
+                    <p class="field">
+                        <span>If you don't have profile click <a href="/auth/register">here</a></span>
+                    </p>
+
+                    <!--        <input type="submit" value="Login"/>-->
+                </fieldset>
+            </form>
+            <!--    </div>-->
+        </section>
+    </div>
+</header>
+
+<!--<section id="loginPage">-->
+<!--    <form>-->
+<!--        <fieldset>-->
+<!--            <legend>Login</legend>-->
+
+<!--            <label for="username" class="vhide">Username</label>-->
+<!--            <input id="username" class="username" name="username" type="text" placeholder="Username">-->
+
+<!--            <label for="password" class="vhide">Password</label>-->
+<!--            <input id="password" class="password" name="password" type="password" placeholder="Password">-->
+
+<!--            <button type="submit" class="login">Login</button>-->
+
+<!--            <p class="field">-->
+<!--                <span>If you don't have profile click <a href="/auth/register">here</a></span>-->
+<!--            </p>-->
+<!--        </fieldset>-->
+<!--    </form>-->
+<!--</section>-->
+
+<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

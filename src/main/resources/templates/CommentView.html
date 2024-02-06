@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{ForumForm.html :: head(${comment.content})}"></form>
+<form th:replace="~{PostForm.html :: head(${comment.content})}"></form>
 <body>
-<form th:replace="~{ForumForm.html :: header}"></form>
+<form th:replace="~{PostForm.html :: header}"></form>
 
 <div class="body-content">
     <h2>Comment</h2>
@@ -16,6 +16,6 @@
         <a href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
     </h3>
 </div>
-<form th:replace="~{BeerForm.html :: footer}"></form>
+<form th:replace="~{PostForm.html :: footer}"></form>
 </body>
 </html>

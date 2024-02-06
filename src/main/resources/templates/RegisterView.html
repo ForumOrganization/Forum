@@ -1,50 +1,90 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{BeerForm.html :: head('Register')}"></form>
+<form th:replace="~{HomeView.html :: head('Register')}"></form>
+<link href="../static/css/login.css" th:href="@{/css/login.css}" rel="stylesheet"/>
 <body>
-<form th:replace="~{BeerForm.html :: header}"></form>
-<div class="body-content">
-    <h2>Login Page</h2>
-    <form th:action="@{/auth/register}" th:object="${register}" method="post">
-        <label th:text="#{user.label.username}">Username:</label>
-        <br/>
-        <input type="text" th:field="*{username}"/>
-        <label class="error" th:errors="*{username}">Username error placeholder.</label>
-        <br/><br/>
+<form th:replace="~{HomeView.html :: header}"></form>
 
-        <label th:text="#{user.label.password}">Password:</label>
-        <br/>
-        <input type="text" th:field="*{password}"/>
-        <label class="error" th:errors="*{password}">Password error placeholder.</label>
-        <br/><br/>
+<section id="registerPage">
+    <!--    <div class="body-content">-->
+    <!--        <h2>Register</h2>-->
 
-        <label th:text="#{user.label.password-confirm}">Confirm Password:</label>
-        <br/>
-        <input type="text" th:field="*{passwordConfirmed}"/>
-        <label class="error" th:errors="*{passwordConfirmed}">Password confirm error placeholder.</label>
-        <br/><br/>
+    <form action="#" th:action="@{/auth/register}" th:object="${register}" method="post">
+        <fieldset>
+            <legend>Register</legend>
 
-        <label th:text="#{user.label.first-name}">First Name:</label>
-        <br/>
-        <input type="text" th:field="*{firstName}"/>
-        <label class="error" th:errors="*{firstName}">First name error placeholder.</label>
-        <br/><br/>
+            <label for="username" class="username" th:text="#{user.label.username}">Username</label>
+            <br/>
+            <input id="username" class="username" name="username" type="text" th:field="*{username}"/>
+            <label class="error" th:errors="*{username}">Username error placeholder</label>
+            <br/><br/>
 
-        <label th:text="#{user.label.last-name}">Last Name:</label>
-        <br/>
-        <input type="text" th:field="*{lastName}"/>
-        <label class="error" th:errors="*{lastName}">Last name error placeholder.</label>
-        <br/><br/>
+            <label for="password" class="password" th:text="#{user.label.password}">Password</label>
+            <br/>
+            <input id="password" class="password" name="password" type="password" th:field="*{password}"/>
+            <label class="error" th:errors="*{password}">Password error placeholder</label>
+            <br/><br/>
 
-        <label th:text="#{user.label.email}">Email:</label>
-        <br/>
-        <input type="text" th:field="*{email}"/>
-        <label class="error" th:errors="*{email}">Email error placeholder.</label>
-        <br/><br/>
+            <label for="conf-pass" class="conf-pass" th:text="#{user.label.password-confirm}">Confirm Password</label>
+            <br/>
+            <input id="conf-pass" class="conf-pass" name="conf-pass" type="password" th:field="*{passwordConfirm}"/>
+            <label class="error" th:errors="*{passwordConfirm}">Password confirm error placeholder</label>
+            <br/><br/>
 
-        <input type="submit" value="Register"/>
+            <label for="first-name" class="first-name" th:text="#{user.label.first-name}">First Name</label>
+            <br/>
+            <input id="first-name" class="first-name" name="first-name" type="text" th:field="*{firstName}"/>
+            <label class="error" th:errors="*{firstName}">First name error placeholder</label>
+            <br/><br/>
+
+            <label for="last-name" class="last-name" th:text="#{user.label.last-name}">Last Name</label>
+            <br/>
+            <input id="last-name" class="last-name" name="last-name" type="text" th:field="*{lastName}"/>
+            <label class="error" th:errors="*{lastName}">Last name error placeholder</label>
+            <br/><br/>
+
+            <label for="email" class="email" th:text="#{user.label.email}">Email</label>
+            <br/>
+            <input id="email" class="email" name="email" type="text" th:field="*{email}"/>
+            <label class="error" th:errors="*{email}">Email error placeholder</label>
+            <br/><br/>
+
+            <button type="submit" class="register">Register</button>
+
+                        <p class="field">
+                            <span>If you already have profile click <a href="/auth/login">here</a></span>
+                        </p>
+<!--            <input type="submit" value="Register"/>-->
+        </fieldset>
     </form>
-</div>
-<form th:replace="~{BeerForm.html :: footer}"></form>
+    <!--    </div>-->
+</section>
+
+
+<!--&lt;!&ndash;Registration&ndash;&gt;-->
+<!--<section id="registerPage">-->
+<!--    <form>-->
+<!--        <fieldset>-->
+<!--            <legend>Register</legend>-->
+
+<!--            <label for="email" class="vhide">Email</label>-->
+<!--            <input id="email" class="email" name="email" type="text" placeholder="Email">-->
+
+<!--            <label for="password" class="vhide">Password</label>-->
+<!--            <input id="password" class="password" name="password" type="password" placeholder="Password">-->
+
+<!--            <label for="conf-pass" class="vhide">Confirm Password:</label>-->
+<!--            <input id="conf-pass" class="conf-pass" name="conf-pass" type="password" placeholder="Confirm Password">-->
+
+<!--            <button type="submit" class="register">Register</button>-->
+
+<!--            <p class="field">-->
+<!--                <span>If you already have profile click <a href="#">here</a></span>-->
+<!--            </p>-->
+<!--        </fieldset>-->
+<!--    </form>-->
+<!--</section>-->
+
+<form th:replace="~{PostForm.html :: footer}"></form>
 </body>
 </html>

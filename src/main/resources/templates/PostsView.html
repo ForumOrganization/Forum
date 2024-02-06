@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{PostForm.html :: head('All Beers')}"></form>
+<body>
+<form th:replace="~{PostForm.html :: header}"></form>
+
+<div class="body-content">
+    <div th:if="${posts.isEmpty()}">
+        <h2 th:text="#{posts.title.empty}">No Posts</h2>
+    </div>
+    <div th:unless="${posts.isEmpty()}">
+        <h2 th:text="#{posts.title}">All Posts</h2>
+
+        <div class="table">
+            <div class="header">
+                <div class="header-cell" th:text="#{post.label.title}">Title</div>
+                <div class="header-cell" th:text="#{post.label.content}">Content</div>
+                <div class="header-cell" th:text="#{post.label.createdBy}">Created By</div>
+            </div>
+            <div class="row" th:each="post : ${posts}">
+                <div class="cell">
+                    <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
+                </div>
+                <div class="cell" th:text="${post.content}">Content</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form th:replace="~{PostForm.html :: footer}"></form>
+</body>
+</html>

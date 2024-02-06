@@ -2,37 +2,67 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="head(title)">
     <meta charset="UTF-8">
-    <title th:text="'Healthy Living Hub | ' + ${title}">Title</title>
-    <link href="../static/css/style.css" th:href="@{/css/styles.css}" rel="stylesheet"/>
+    <title th:text="'Healthy Living Hub | '+ ${title}">Title</title>
+    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
 </head>
-
-<header th:fragment="header">
-    <div>
-        <h3>
-            <a href="#" th:href="@{/}" th:text="#{navigation.home} + ' | '">Home</a>
-            <a href="#" th:href="@{/about}" th:text="#{navigation.about} + ' | '">About</a>
-            <a href="#" th:href="@{/beers}" th:text="#{navigation.all-beers}">Browse all posts</a>
-            <a href="#" th:href="@{/auth/login}" th:text="#{navigation.login} + ' | '"
-               th:unless="${isAuthenticated}">Login</a>
-            <a href="#" th:href="@{/auth/register}" th:text="#{navigation.register} + ' | '"
-               th:unless="${isAuthenticated}">Register</a>
-            <a href="#" th:href="@{/auth/logout}" th:text="#{navigation.logout} + ' | '"
-               th:unless="${isAuthenticated}">Logout</a>
-        </h3>
-    </div>
-</header>
-
 <body>
-<div class="body-content">
-    <h2 th:text="#{home.welcome}">Welcome (design)!</h2>
-    <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>
-    <p>A beer a day keeps the doctor away!</p>
-    <h2 th:if="${isAuthenticated}" th:text="${session.currentUser}"></h2>
+<!--<form th:replace="~{PostForm.html :: header}"></form>-->
+
+<!--<div class="body-content">-->
+<!--    <h2 th:text="#{home.welcome}">Welcome (design)!</h2>-->
+<!--    <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>-->
+<!--    <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>-->
+<!--    <p>Healthy Habits, Happy Hearts!</p>-->
+<!--</div>-->
+
+<!--<form th:replace="~{PostForm.html :: footer}"></form>-->
+
+<div id="box">
+    <header th:fragment="header">
+        <nav>
+            <img src="./images/logo.png">
+            <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
+
+            <ul>
+                <!--All user-->
+                <li><a href="#" th:href="@{/posts}" th:text="#{navigation.all-posts}">Browse all posts</a></li>
+                <li><a class="left" href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a></li>
+                <!--Only guest-->
+                <li><a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a></li>
+                <li><a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a></li>
+                <!--Only user-->
+                <li><a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}"
+                       th:text="#{navigation.create-post}   ">Create Post</a></li>
+                <li><a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <!--Home Page-->
+    <section id="welcomePage">
+        <div id="welcome-message">
+            <h2 th:text="#{home.welcome}">Welcome (design)!</h2>
+            <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
+            <div class="music-img">
+                <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>
+            </div>
+            <p>Healthy Habits, Happy Hearts!</p>
+        </div>
+    </section>
 </div>
-</body>
+<!--</header>-->
+
+<!--<a href="#" th:href="@{/}" th:text="#{navigation.home} + ' | '">Home</a>-->
+<!--<a href="#" th:href="@{/posts}" th:text="#{navigation.all-posts} + ' | '">Browse all posts</a>-->
+<!--<a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}"-->
+<!--   th:text="#{navigation.create-post} + ' | '">Create Post</a>-->
+<!--<a class="left" href="#" th:href="@{/about}" th:text="#{navigation.about} + ' | '">About</a>-->
+<!--<a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login | </a>-->
+<!--<a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a>-->
+<!--<a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>-->
 
 <footer th:fragment="footer">
-    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow()) + ' Healthy Living Hub'}">Healthy Living
-        Hub</small>
+    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow())
+    + ' Healthy Living Hub'}">Healthy Living Hub</small>
 </footer>
+</body>
 </html>

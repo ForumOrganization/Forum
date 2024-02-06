@@ -1,6 +1,5 @@
 package com.example.forum.helpers;
 
-import com.example.forum.exceptions.AuthenticationFailureException;
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.User;
@@ -45,6 +44,28 @@ public class AuthenticationHelper {
         }
     }
 
+    public User tryGetCurrentUser(HttpSession session) {
+        String currentUsername = (String) session.getAttribute("currentUser");
+
+        if (currentUsername == null) {
+            throw new AuthorizationException(INVALID_AUTHENTICATION_ERROR);
+        }
+
+        return userService.getByUsername(currentUsername);
+    }
+
+    public User verifyAuthentication(String username, String password) {
+        try {
+            User user = userService.getByUsername(username);
+            if (!user.getPassword().equals(password)) {
+                throw new AuthorizationException(INVALID_AUTHENTICATION_ERROR);
+            }
+            return user;
+        } catch (EntityNotFoundException e) {
+            throw new AuthorizationException(INVALID_AUTHENTICATION_ERROR);
+        }
+    }
+
     private String getPassword(String userInfo) {
         int firstSpaceIndex = userInfo.indexOf(" ");
 
@@ -63,29 +84,5 @@ public class AuthenticationHelper {
         }
 
         return userInfo.substring(0, firstSpaceIndex);
-    }
-
-    public User verifyAuthentication(String username, String password) {
-        try {
-            User user = userService.getByUsername(username);
-
-            if (!user.getPassword().equals(password)) {
-                throw new AuthenticationFailureException(INVALID_AUTHENTICATION_ERROR);
-            }
-
-            return user;
-        } catch (EntityNotFoundException e) {
-            throw new AuthenticationFailureException(INVALID_AUTHENTICATION_ERROR);
-        }
-    }
-
-    public User tryGetUser(HttpSession session) {
-        String currentUser = (String) session.getAttribute("currentUser");
-
-        if (currentUser == null) {
-            throw new AuthenticationFailureException("No user logged in.");
-        }
-
-        return userService.getByUsername(currentUser);
     }
 }
