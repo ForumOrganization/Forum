@@ -1,4 +1,5 @@
 package com.example.forum.services;
+import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Tag;
 import com.example.forum.repositories.TagRepositoryImpl;
 import com.example.forum.services.TagServiceImpl;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 public class TagServiceImplTest {
@@ -64,6 +66,29 @@ public class TagServiceImplTest {
         Tag actualTag = tagService.getTagById(tagId);
 
         assertEquals(null, actualTag);
+    }
+
+    @Test
+    void getTagByName_when_Tag_does_not_exists() {
+        String tagName = "Test Tag";
+        Tag expectedTag = new Tag();
+
+        when(tagRepository.getTagByName(tagName)).thenReturn(expectedTag);
+
+        Tag actualTag = tagService.getTagByName(tagName);
+
+        assertEquals(expectedTag, actualTag);
+    }
+
+    @Test
+    void getTagByName_when_tag_does_not_exists() {
+        String tagName = "Nonexistent Tag";
+
+        when(tagRepository.getTagByName(tagName)).thenThrow(new EntityNotFoundException("Tag", "name", tagName));
+
+        assertThrows(EntityNotFoundException.class, () -> {
+            tagService.getTagByName(tagName);
+        });
     }
 
 }
