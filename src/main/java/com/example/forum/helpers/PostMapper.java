@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PostMapper {
+
     private final PostService postService;
 
     @Autowired
@@ -20,7 +21,6 @@ public class PostMapper {
         post.setId(id);
         Post repositoryPost = postService.getById(id);
         post.setCreatedBy(repositoryPost.getCreatedBy());
-
         return post;
     }
 
@@ -28,7 +28,6 @@ public class PostMapper {
         Post post = new Post();
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
-
         return post;
     }
 }

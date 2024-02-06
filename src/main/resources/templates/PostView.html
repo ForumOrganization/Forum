@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{ForumForm.html :: head(${post.title})}"></form>
+<body>
+<form th:replace="~{ForumForm.html :: header}"></form>
+<div class="body-content">
+    <h2 th:text="${post.title}">Post Title</h2>
+    <div th:style="text-align">
+        <p class="margin12" th:text="#{post.label.content}  + ': ' +       ${post.content}">Lorem ipsum dolor sit
+            amet</p>
+        <p class="margin12" th:text="#{post.label.createdBy} + ': ' +      ${post.createdBy.email}">user@mail.com</p>
+    </div>
+    <h3>
+        <a href="#" th:href="@{__${requestURI}__/update}">Update</a>
+        <a href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
+    </h3>
+    <h3>Comments:</h3>
+    <div th:if="${post.comments}">
+        <ul>
+            <li th:each="comment : ${post.comments}">
+                <p th:text="${comment.content}"></p>
+            </li>
+        </ul>
+    </div>
+    <div th:unless="${post.comments}">
+        <p>No comments yet.</p>
+    </div>
+</div>
+
+<form th:replace="~{BeerForm.html :: footer}"></form>
+</body>
+</html>

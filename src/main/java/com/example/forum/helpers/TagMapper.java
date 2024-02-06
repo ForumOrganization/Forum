@@ -1,8 +1,6 @@
 package com.example.forum.helpers;
 
-import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
-import com.example.forum.models.dtos.PostDto;
 import com.example.forum.models.dtos.TagDto;
 import com.example.forum.services.contracts.TagService;
 import org.springframework.stereotype.Component;

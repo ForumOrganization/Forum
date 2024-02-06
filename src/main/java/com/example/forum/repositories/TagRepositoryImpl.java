@@ -2,18 +2,15 @@ package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
-import com.example.forum.models.Reaction_comments;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
 import com.example.forum.utils.TagFilterOptions;
-import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -177,14 +174,11 @@ public class TagRepositoryImpl implements TagRepository {
                 session.beginTransaction();
                 session.persist(tag);
                 session.getTransaction().commit();
-
                 post.getTags().add(tag);
-
                 session.beginTransaction();
                 session.merge(post);
                 session.getTransaction().commit();
             } else {
-
                 Tag existingTag = foundTags.get(0);
                 post.getTags().add(existingTag);
 
@@ -231,7 +225,7 @@ public class TagRepositoryImpl implements TagRepository {
 
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, postId);
-//
+
             if (post != null) {
                 Tag tag = session.get(Tag.class, tagId);
 
@@ -240,12 +234,10 @@ public class TagRepositoryImpl implements TagRepository {
                     post.getTags().remove(tag);
                     session.merge(post);
                     session.getTransaction().commit();
-//
-
                 }
             }
-//
-    }}
+        }
+    }
 
     private String generateOrderBy(TagFilterOptions tagFilterOptions) {
         if (tagFilterOptions.getSortBy().isEmpty()) {

@@ -48,30 +48,35 @@ public class PostRepositoryImpl implements PostRepository {
             });
 
             StringBuilder queryString = new StringBuilder("from Post");
+
             if (!filters.isEmpty()) {
                 queryString
                         .append(" where ")
                         .append(String.join(" and ", filters));
             }
+
             queryString.append(generateOrderBy(postFilterOptions));
 
             Query<Post> query = session.createQuery(queryString.toString(), Post.class);
             query.setProperties(params);
-            List<Post> posts=query.list();
+
+            List<Post> posts = query.list();
+
             if (posts.isEmpty()) {
                 throw new EntityNotFoundException("Posts");
             }
+
             return posts;
         }
     }
-//TODO
+
     @Override
     public List<Post> getTopCommentedPosts() {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery(
                             "SELECT p FROM Post p " +
-                                    "LEFT JOIN FETCH p.comments", Post.class)
-                    .setMaxResults(10);
+                                    "ORDER BY size(p.comments) DESC " +
+                                    "LIMIT 10", Post.class);
 
             List<Post> result = query.list();
 
@@ -91,9 +96,8 @@ public class PostRepositoryImpl implements PostRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery(
                             "SELECT p FROM Post p " +
-                                    "LEFT JOIN FETCH p.comments " +
-                                    "ORDER BY p.creationTime " +
-                                    "DESC", Post.class)
+                                    "ORDER BY p.creationTime DESC " +
+                                    "LIMIT 10", Post.class)
                     .setMaxResults(10);
 
             List<Post> result = query.list();

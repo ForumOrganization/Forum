@@ -21,11 +21,13 @@ public class Comment {
     @JsonIgnore
     @Column(name = "is_deleted")
     private Boolean isDeleted = Boolean.FALSE;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id")
     // @JsonIgnoreProperties({"id", "firstName", "lastName", "email", "role", "status", "deleted"})
     private User user;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "post_id")

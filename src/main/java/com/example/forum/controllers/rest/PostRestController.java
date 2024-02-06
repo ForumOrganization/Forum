@@ -1,9 +1,8 @@
-package com.example.forum.controllers;
+package com.example.forum.controllers.rest;
 
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.exceptions.UnauthorizedOperationException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.PostMapper;
 import com.example.forum.models.Post;
@@ -36,7 +35,8 @@ public class PostRestController {
         this.authenticationHelper = authenticationHelper;
         this.postMapper = postMapper;
     }
-//TODO
+
+    //TODO
     @GetMapping
     public List<Post> getAll(@RequestHeader HttpHeaders headers,
                              @RequestParam(required = false) String title,
@@ -45,6 +45,7 @@ public class PostRestController {
                              @RequestParam(required = false) String sortBy,
                              @RequestParam(required = false) String sortOrder) {
         PostFilterOptions postFilterOptions = new PostFilterOptions(title, createdBy, creationTime, sortBy, sortOrder);
+
         try {
             this.authenticationHelper.tryGetUser(headers);
             return postService.getAll(postFilterOptions);
@@ -87,7 +88,7 @@ public class PostRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-//ToDo implement check for duplication
+
     @PostMapping
     public Post create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto) {
         try {
@@ -97,6 +98,8 @@ public class PostRestController {
             return post;
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (DuplicateEntityException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
         }
     }
 

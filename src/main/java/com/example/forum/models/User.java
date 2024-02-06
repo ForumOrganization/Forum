@@ -36,6 +36,9 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "profile_picture")
+    private String profilePicture;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role = Role.USER;
@@ -172,5 +175,13 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 }

@@ -10,6 +10,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class UserResponseDto {
+
     @JsonIgnore
     private int id;
     private String firstName;
@@ -24,7 +25,8 @@ public class UserResponseDto {
     }
 
     public UserResponseDto(int id, String firstName, String lastName,
-                           String email, Role role, String phoneNumber, Set<Post> posts, Set<Comment> comments) {
+                           String email, Role role, String phoneNumber,
+                           Set<Post> posts, Set<Comment> comments) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;

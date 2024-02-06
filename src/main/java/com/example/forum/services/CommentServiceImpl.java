@@ -1,8 +1,6 @@
 package com.example.forum.services;
 
 import com.example.forum.exceptions.AuthorizationException;
-import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.exceptions.UnauthorizedOperationException;
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;

@@ -1,4 +1,4 @@
-package com.example.forum.controllers;
+package com.example.forum.controllers.rest;
 
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
@@ -56,7 +56,8 @@ public class UserRestController {
         try {
             authenticationHelper.tryGetUser(headers);
             UserFilterOptions userFilterOptions =
-                    new UserFilterOptions(username, firstName, lastName, email, role, sortBy, sortOrder);
+                    new UserFilterOptions(
+                            username, firstName, lastName, email, role, sortBy, sortOrder);
 
             List<User> users = userService.getAll(userFilterOptions);
 

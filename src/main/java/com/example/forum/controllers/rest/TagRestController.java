@@ -1,4 +1,4 @@
-package com.example.forum.controllers;
+package com.example.forum.controllers.rest;
 
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
@@ -46,31 +46,31 @@ public class TagRestController {
             return tagService.getAllTags(tagFilterOptions);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }catch (AuthorizationException e) {
+        } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @GetMapping("/{tagId}")
-    public Tag getTagById(@RequestHeader HttpHeaders headers,@PathVariable int tagId) {
+    public Tag getTagById(@RequestHeader HttpHeaders headers, @PathVariable int tagId) {
         try {
             authenticationHelper.tryGetUser(headers);
             return tagService.getTagById(tagId);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }catch (AuthorizationException e) {
+        } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @GetMapping("/search")
-    public Tag getTagByName(@RequestHeader HttpHeaders headers,@RequestParam String name) {
+    public Tag getTagByName(@RequestHeader HttpHeaders headers, @RequestParam String name) {
         try {
             authenticationHelper.tryGetUser(headers);
             return tagService.getTagByName(name);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }catch (AuthorizationException e) {
+        } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }

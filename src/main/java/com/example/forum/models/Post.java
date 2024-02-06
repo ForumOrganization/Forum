@@ -1,7 +1,6 @@
 package com.example.forum.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -16,11 +15,13 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private int id;
+
     @Column(name = "title")
     private String title;
 
     @Column(name = "content")
     private String content;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "created_by")

@@ -21,9 +21,7 @@ import static com.example.forum.utils.Messages.*;
 @Service
 public class UserServiceImpl implements UserService {
 
-
     private final UserRepository userRepository;
-
 
     @Autowired
     public UserServiceImpl(UserRepository userRepository) {
@@ -81,9 +79,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User targetUser, User executingUser) {
         checkAccessPermissionsUser(targetUser.getId(), executingUser, MODIFY_USER_MESSAGE_ERROR);
+
         if (!targetUser.getUsername().equals(executingUser.getUsername())) {
             throw new EntityNotFoundException("User", "username", targetUser.getUsername());
         }
+
         if (!targetUser.getEmail().equals(executingUser.getEmail())) {
             if (userRepository.getByEmailFindUser(targetUser.getEmail()) != null) {
                 throw new DuplicateEntityException("User", "email", targetUser.getEmail());
@@ -97,17 +97,42 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(int deleteUser, User executingUser) {
         checkAccessPermissions(deleteUser, executingUser, DELETE_USER_MESSAGE_ERROR);
         User userToDelete = getById(deleteUser);
+
         if (userToDelete.isDeleted()) {
             throw new EntityAlreadyDeleteException("User", "id", String.valueOf(deleteUser));
         }
+
         userRepository.deleteUser(deleteUser);
+    }
+
+    @Override
+    public void saveProfilePictureUrl(String username, String profilePictureUrl) {
+        try {
+            User user = userRepository.getByUsername(username);
+            user.setProfilePicture(profilePictureUrl);
+            userRepository.updateUser(user);
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException("User", "username", username);
+        }
+    }
+
+    @Override
+    public String getProfilePictureUrl(String username) {
+        try {
+            User user = userRepository.getByUsername(username);
+            return user.getProfilePicture();
+        } catch (EntityNotFoundException e) {
+            throw new EntityNotFoundException("User", "username", username);
+        }
     }
 
     @Override
     public void updateToAdmin(User targetUser, User executingUser) {
         if (targetUser.getRole() == Role.ADMIN) {
-            throw new DuplicateEntityException("User", "id", String.valueOf(targetUser.getId()), " is already an admin.");
+            throw new DuplicateEntityException(
+                    "User", "id", String.valueOf(targetUser.getId()), " is already an admin.");
         }
+
         checkAccessPermissionsAdmin(executingUser, UPDATE_TO_ADMIN_ERROR_MESSAGE);
         targetUser.setRole(Role.ADMIN);
         userRepository.updateUser(targetUser);
@@ -116,8 +141,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void blockUser(User admin, User blockUser) {
         if (blockUser.getStatus() == Status.BLOCKED) {
-            throw new DuplicateEntityException("User", "id", String.valueOf(blockUser.getId()), "has already been blocked");
+            throw new DuplicateEntityException(
+                    "User", "id", String.valueOf(blockUser.getId()), "has already been blocked");
         }
+
         checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         blockUser.setStatus(Status.BLOCKED);
         userRepository.updateUser(blockUser);
@@ -126,8 +153,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void unBlockUser(User admin, User unBlockUser) {
         if (unBlockUser.getStatus() == Status.ACTIVE) {
-            throw new DuplicateEntityException("User", "id", String.valueOf(unBlockUser.getId()), "has already been activated");
+            throw new DuplicateEntityException(
+                    "User", "id", String.valueOf(unBlockUser.getId()), "has already been activated");
         }
+
         checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         unBlockUser.setStatus(Status.ACTIVE);
         userRepository.updateUser(unBlockUser);
@@ -144,9 +173,9 @@ public class UserServiceImpl implements UserService {
             if (userRepository.existsByPhoneNumber(userPhoneNumberToBeUpdate)) {
                 throw new DuplicateEntityException("Admin", "phone number", userPhoneNumberToBeUpdate.getPhoneNumber());
             }
+
             admin.setPhoneNumber(userPhoneNumberToBeUpdate.getPhoneNumber());
             userRepository.updateUser(admin);
-
         } else {
             throw new EntityNotFoundException("Admin", "phone number");
         }
@@ -157,13 +186,17 @@ public class UserServiceImpl implements UserService {
         User userToDelete = userRepository.getById(userId);
         checkAccessPermissionsAdmin(userToDelete, DELETE_PHONE_NUMBER_MESSAGE_ERROR);
         checkAccessPermissionsUser(userId, user, DELETE_PHONE_NUMBER_MESSAGE_ERROR);
+
         if (userToDelete.isDeleted()) {
             throw new EntityAlreadyDeleteException("User", "id", String.valueOf(userId));
         }
-        if(userToDelete.getPhoneNumber()==null){
-            throw new EntityAlreadyDeleteException("User's phone number", "id", String.valueOf(userId));
+
+        if (userToDelete.getPhoneNumber() == null) {
+            throw new EntityAlreadyDeleteException(
+                    "User's phone number", "id", String.valueOf(userId));
 
         }
+
         userToDelete.setPhoneNumber(null);
         userRepository.updateUser(userToDelete);
     }
