@@ -44,7 +44,7 @@ public class TagServiceImplTest {
         }
     }
     @Test
-    void getTagById_TagExists_ReturnsTag() {
+    void getTagById_test() {
         int tagId = 1;
         Tag expectedTag = new Tag();
 
@@ -56,7 +56,7 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void getTagById_TagDoesNotExist_ReturnsNull() {
+    void getTagById_when_Tag_does_not_exists() {
         int tagId = 1;
 
         when(tagRepository.getTagById(tagId)).thenReturn(null);
