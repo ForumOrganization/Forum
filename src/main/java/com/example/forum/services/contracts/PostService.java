@@ -10,9 +10,9 @@ public interface PostService {
 
     List<Post> getAll(PostFilterOptions postFilterOptions);
 
-    public List<Post> getTopCommentedPosts();
+    List<Post> getTopCommentedPosts();
 
-    public List<Post> getMostRecentPosts();
+    List<Post> getMostRecentPosts();
 
     Post getById(int id);
 

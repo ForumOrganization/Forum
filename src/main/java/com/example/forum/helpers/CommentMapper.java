@@ -28,14 +28,12 @@ public class CommentMapper {
         comment.setPost(post);
         User user = userService.getUserByComment(id);
         comment.setUser(user);
-
         return comment;
     }
 
     public Comment fromDto(CommentDto dto) {
         Comment comment = new Comment();
         comment.setContent(dto.getContent());
-
         return comment;
     }
 }

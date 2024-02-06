@@ -1,8 +1,7 @@
-package com.example.forum.controllers;
+package com.example.forum.controllers.rest;
 
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.exceptions.UnauthorizedOperationException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.CommentMapper;
 import com.example.forum.models.Comment;
@@ -67,7 +66,7 @@ public class CommentRestController {
         }
     }
 
-//TODO Validation on the length of the content.
+    //TODO Validation on the length of the content.
     @PostMapping("/post/{postId}")
     public Comment createComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @Valid @RequestBody CommentDto commentDto) {
         try {
@@ -81,6 +80,7 @@ public class CommentRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
+
     //TODO Validation on the length of the content.
     @PutMapping("/{id}")
     public Comment updateComment(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody CommentDto commentDto) {

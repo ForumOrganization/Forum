@@ -65,15 +65,18 @@ public class UserRepositoryImpl implements UserRepository {
             });
 
             StringBuilder queryString = new StringBuilder("from User");
+
             if (!filters.isEmpty()) {
                 queryString
                         .append(" where ")
                         .append(String.join(" and ", filters));
             }
+
             queryString.append(generateOrderBy(userFilterOptions));
 
             Query<User> query = session.createQuery(queryString.toString(), User.class);
             query.setProperties(params);
+
             return query.list();
         }
     }
@@ -177,7 +180,6 @@ public class UserRepositoryImpl implements UserRepository {
 
             return result.get(0);
         }
-
     }
 
     @Override
@@ -225,9 +227,11 @@ public class UserRepositoryImpl implements UserRepository {
                     comment.setDeleted(false);
                     session.merge(comment);
                 }
+
                 post.setDeleted(false);
                 session.merge(post);
             }
+
             targetUser.setDeleted(false);
             session.merge(targetUser);
             session.getTransaction().commit();
@@ -246,9 +250,11 @@ public class UserRepositoryImpl implements UserRepository {
                     comment.setDeleted(true);
                     session.merge(comment);
                 }
+
                 post.setDeleted(true);
                 session.merge(post);
             }
+
             userToDelete.setDeleted(true);
             session.merge(userToDelete);
             session.getTransaction().commit();

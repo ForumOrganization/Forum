@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{BeerForm.html :: head('Access Denied')}"></form>
+<body>
+<form th:replace="~{BeerForm.html :: header}"></form>
+<h2 class="error" th:text="${error}">Error placeholder</h2>
+</body>
+</html>

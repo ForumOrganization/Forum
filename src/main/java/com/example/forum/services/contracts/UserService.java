@@ -28,6 +28,10 @@ public interface UserService {
 
     void deleteUser(int deleteUserId, User executingUser);
 
+    void saveProfilePictureUrl(String username, String profilePictureUrl);
+
+    String getProfilePictureUrl(String username);
+
     void updateToAdmin(User userAdmin, User updateToAdmin);
 
     void blockUser(User admin, User blockUser);

@@ -63,7 +63,6 @@ public class ReactionRepositoryImpl implements ReactionRepository {
             }
 
             Map<Reaction_posts, Integer> reactionCountMap = new HashMap<>();
-
             Set<Reaction_posts> reactions = post.getReactions();
 
             for (Reaction_posts reaction : reactions) {

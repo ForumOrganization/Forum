@@ -3,8 +3,10 @@ package com.example.forum.helpers;
 
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PhoneNumberDto;
+import com.example.forum.models.dtos.RegisterDto;
 import com.example.forum.models.dtos.UserDto;
 import com.example.forum.models.dtos.UserResponseDto;
+import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,6 @@ public class UserMapper {
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
         user.setPassword(dto.getPassword());
-
         return user;
     }
 
@@ -37,7 +38,6 @@ public class UserMapper {
         updatedUser.setLastName(dto.getLastName());
         updatedUser.setEmail(dto.getEmail());
         updatedUser.setPassword(dto.getPassword());
-
         return updatedUser;
     }
 
@@ -51,21 +51,29 @@ public class UserMapper {
         userResponseDto.setPhoneNumber(user.getPhoneNumber());
         userResponseDto.setPosts(user.getPosts());
         userResponseDto.setComments(user.getComments());
-
         return userResponseDto;
     }
 
     public UserResponseDto toDtoRegisterAndUpdateUser(User user) {
         User userToUpdate = userService.getByUsername(user.getUsername());
         UserResponseDto userResponseDto = toDto(userToUpdate);
-
         return userResponseDto;
     }
 
     public User fromDtoUpdatePhoneNumber(int id, PhoneNumberDto dto) {
         User updatedUser = userService.getById(id);
         updatedUser.setPhoneNumber(dto.getPhoneNumber());
-
         return updatedUser;
+    }
+
+    public User fromDto(RegisterDto dto) {
+        User user = new User();
+        user.setUsername(dto.getUsername());
+        user.setPassword(dto.getPassword());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        user.setRole(Role.USER);
+        return user;
     }
 }

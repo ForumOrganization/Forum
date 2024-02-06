@@ -3,7 +3,6 @@ package com.example.forum.services;
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.exceptions.UnauthorizedOperationException;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.enums.Status;
@@ -13,10 +12,7 @@ import com.example.forum.utils.PostFilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.forum.utils.CheckPermission.checkAccessPermissions;
 import static com.example.forum.utils.CheckPermission.checkAccessPermissionsUser;
@@ -39,14 +35,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<Post> getTopCommentedPosts() {
-      return this.postRepository.getTopCommentedPosts();
+        return this.postRepository.getTopCommentedPosts();
 
     }
 
     @Override
     public List<Post> getMostRecentPosts() {
         return this.postRepository.getMostRecentPosts();
-
     }
 
     @Override
@@ -66,7 +61,24 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void create(Post post, User user) {
-       checkBlockOrDeleteUser(user);
+        checkBlockOrDeleteUser(user);
+
+        boolean duplicateExists = true;
+
+        try {
+            Post existingPost = this.postRepository.getById(post.getId());
+
+            if (existingPost.getId() == post.getId()) {
+                duplicateExists = false;
+            }
+
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("Post", "id", String.valueOf(post.getId()));
+        }
 
         post.setCreatedBy(user);
         this.postRepository.create(post);
@@ -104,6 +116,7 @@ public class PostServiceImpl implements PostService {
         checkAccessPermissions(post.getCreatedBy().getId(), user, MODIFY_POST_ERROR_MESSAGE);
         this.postRepository.delete(id);
     }
+
     private static void checkBlockOrDeleteUser(User user) {
         if (user.getStatus() == Status.BLOCKED || user.isDeleted()) {
             throw new AuthorizationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);

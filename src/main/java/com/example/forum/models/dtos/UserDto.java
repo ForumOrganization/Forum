@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class UserDto {
+
     @NotNull(message = "Username name can't be empty.")
     @NotBlank(message = "Username name can't be blank.")
     @Size(min = 4, max = 32, message = "Username should be between 4 and 32 symbols.")
@@ -74,6 +75,4 @@ public class UserDto {
     public void setPassword(String password) {
         this.password = password;
     }
-
-
 }

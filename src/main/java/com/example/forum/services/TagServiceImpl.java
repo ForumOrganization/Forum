@@ -7,7 +7,6 @@ import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
-import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.services.contracts.TagService;
 import com.example.forum.utils.TagFilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +23,11 @@ public class TagServiceImpl implements TagService {
 
     private final TagRepository tagRepository;
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
 
     @Autowired
-    public TagServiceImpl(TagRepository tagRepository, PostRepository postRepository, UserRepository userRepository) {
+    public TagServiceImpl(TagRepository tagRepository, PostRepository postRepository) {
         this.tagRepository = tagRepository;
         this.postRepository = postRepository;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -46,9 +43,11 @@ public class TagServiceImpl implements TagService {
     @Override
     public Tag getTagByName(String name) {
         boolean missingTag = false;
+
         Tag tag = new Tag();
+
         try {
-          tag = tagRepository.getTagByName(name);
+            tag = tagRepository.getTagByName(name);
         } catch (EntityNotFoundException e) {
             missingTag = true;
         }
@@ -56,7 +55,9 @@ public class TagServiceImpl implements TagService {
         if (missingTag) {
             throw new EntityNotFoundException("Tag", "name", name);
 
-    } return tag;
+        }
+
+        return tag;
     }
 
     @Override
@@ -121,6 +122,7 @@ public class TagServiceImpl implements TagService {
         } catch (EntityNotFoundException e) {
             duplicateExists = false;
         }
+
         if (duplicateExists) {
             throw new DuplicateEntityException("Tag", "name", tag.getName());
         }

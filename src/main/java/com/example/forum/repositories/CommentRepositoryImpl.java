@@ -36,6 +36,7 @@ public class CommentRepositoryImpl implements CommentRepository {
             if (post == null) {
                 throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
             }
+
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 

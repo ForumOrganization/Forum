@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{ForumForm.html :: head('Login')}"></form>
+<body>
+<form th:replace="~{ForumForm.html :: header}"></form>
+<div class="body-content">
+    <h2>Login Page</h2>
+    <form th:action="@{/auth/login}" th:object="${login}" method="post">
+        <label th:text="#{user.label.username}">Username:</label>
+        <br/>
+        <input type="text" th:field="*{username}"/>
+        <label class="error" th:errors="*{username}">Username error placeholder.</label>
+        <br/>
+
+        <label th:text="#{user.label.password}">Password:</label>
+        <br/>
+        <input type="text" th:field="*{password}"/>
+        <label class="error" th:errors="*{password}">Password error placeholder.</label>
+        <br/><br/>
+
+        <input type="submit" value="Login"/>
+    </form>
+</div>
+<form th:replace="~{ForumForm.html :: footer}"></form>
+</body>
+</html>

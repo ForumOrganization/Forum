@@ -9,5 +9,4 @@ public class DuplicateEntityException extends RuntimeException {
     public DuplicateEntityException(String type, String attribute, String value, String message) {
         super(String.format("%s with %s %s %s", type, attribute, value, message));
     }
-
 }
