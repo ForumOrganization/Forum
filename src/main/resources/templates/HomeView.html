@@ -26,7 +26,9 @@
             <ul>
                 <!--All user-->
                 <li><a href="#" th:href="@{/posts}" th:text="#{navigation.all-posts}">Browse all posts</a></li>
-                <li><a class="left" href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a></li>
+                <li><a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a></li>
+                <li><a href="#" th:if="${isAuthenticated && session.isAdmin}" th:href="@{/admin}">Admin Portal</a></li>
+                <li><a href="#" th:if="${isAuthenticated}" th:href="@{/user}">User Profile</a></li>
                 <!--Only guest-->
                 <li><a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a></li>
                 <li><a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a></li>

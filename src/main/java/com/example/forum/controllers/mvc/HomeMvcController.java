@@ -5,6 +5,7 @@ import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.models.User;
 import com.example.forum.models.enums.Role;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,10 +41,32 @@ public class HomeMvcController {
     public String showAdminPortal(HttpSession session, Model model) {
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
+
             if (user.getRole() == Role.ADMIN) {
                 return "AdminPortalView";
             }
-            return "AccessDeniedView";
+
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+    }
+
+    @GetMapping("/user/{id}")
+    public String showUserProfile(HttpSession session, Model model) {
+        try {
+            User user = authenticationHelper.tryGetCurrentUser(session);
+
+            if (user.getRole() == Role.USER) {
+                return "UserProfileView";
+
+            } else if (user.getRole() == Role.ADMIN) {
+                return "AdminPortalView";
+            }
+
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            return "ErrorView";
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }

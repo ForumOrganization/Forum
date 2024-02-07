@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserService {
 
-    List<User> getAll(UserFilterOptions userFilterOptions);
+    List<User> getAll();
 
     User getById(int id);
 

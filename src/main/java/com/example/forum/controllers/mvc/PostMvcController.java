@@ -8,6 +8,7 @@ import com.example.forum.helpers.PostMapper;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PostDto;
+import com.example.forum.models.dtos.PostFilterDto;
 import com.example.forum.services.contracts.PostService;
 import com.example.forum.utils.PostFilterOptions;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +22,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/posts")
@@ -49,11 +49,6 @@ public class PostMvcController {
         return request.getRequestURI();
     }
 
-    @ModelAttribute("posts")
-    public List<Post> populatePosts() {
-        return postService.getAll(new PostFilterOptions());
-    }
-
     @GetMapping
     public String showAllPosts(@ModelAttribute("filterOptions") PostFilterDto filterDto, Model model) {
         PostFilterOptions filterOptions = new PostFilterOptions(
@@ -62,7 +57,7 @@ public class PostMvcController {
                 filterDto.getCreationTime(),
                 filterDto.getSortBy(),
                 filterDto.getSortOrder());
-        List<Post> posts=postService.getAll(filterOptions);
+        List<Post> posts = postService.getAll(filterOptions);
         model.addAttribute("filterOptions", filterDto);
         model.addAttribute("posts", posts);
         return "PostsView";

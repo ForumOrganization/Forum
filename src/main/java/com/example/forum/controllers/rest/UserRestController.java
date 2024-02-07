@@ -59,7 +59,7 @@ public class UserRestController {
                     new UserFilterOptions(
                             username, firstName, lastName, email, role, sortBy, sortOrder);
 
-            List<User> users = userService.getAll(userFilterOptions);
+            List<User> users = userService.getAll();
 
             return users.stream()
                     .map(userMapper::toDto)

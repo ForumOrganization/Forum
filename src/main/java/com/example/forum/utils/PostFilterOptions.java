@@ -14,9 +14,6 @@ public class PostFilterOptions {
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
-    public PostFilterOptions() {
-
-    }
     public PostFilterOptions(
             String title,
             String createdBy,

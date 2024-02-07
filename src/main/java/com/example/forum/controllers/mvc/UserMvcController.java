@@ -10,7 +10,6 @@ import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
 import com.example.forum.services.contracts.UserService;
-import com.example.forum.utils.UserFilterOptions;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -21,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -49,14 +47,9 @@ public class UserMvcController {
         return request.getRequestURI();
     }
 
-    @ModelAttribute("users")
-    public List<User> populateUsers() {
-        return userService.getAll(new UserFilterOptions());
-    }
-
     @GetMapping
     public String showAllUsers(Model model) {
-        model.addAttribute("users", userService.getAll(new UserFilterOptions()));
+        model.addAttribute("users", userService.getAll());
         return "UsersView";
     }
 
@@ -223,7 +216,7 @@ public class UserMvcController {
     }
 
     @PostMapping("/{id}/update-to-admin")
-    public String updateToAdmin(@PathVariable int id, Model model,
+    public String updateToAdmin(@PathVariable int id, @Valid @ModelAttribute("user") Model model,
                                 BindingResult bindingResult, HttpSession session) {
         User user;
         try {
@@ -261,7 +254,7 @@ public class UserMvcController {
     }
 
     @PostMapping("/{id}/block")
-    public String blockUser(@PathVariable int id, Model model,
+    public String blockUser(@PathVariable int id, @Valid @ModelAttribute("user") Model model,
                             BindingResult bindingResult, HttpSession session) {
         User user;
         try {
@@ -299,7 +292,7 @@ public class UserMvcController {
     }
 
     @PostMapping("/{id}/unblock")
-    public String unblockUser(@PathVariable int id, Model model,
+    public String unblockUser(@PathVariable int id, @Valid @ModelAttribute("user") Model model,
                               BindingResult bindingResult, HttpSession session) {
         User user;
         try {

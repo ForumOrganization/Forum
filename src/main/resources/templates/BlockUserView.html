@@ -1,18 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Block User</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<h2>Block User</h2>
-<form action="/users/{id}/block" method="post">
-    <input type="hidden" name="_method" value="put"> <!-- Use hidden input to specify PUT method -->
-    <label>User ID:</label>
-    <input type="number" name="id" required/>
-    <br/><br/>
-    <button type="submit">Block User</button>
-</form>
+<div class="container">
+    <h2>Block User</h2>
+    <form th:action="@{'/users/' + ${userId} + '/block'}" method="post">
+        <p>Are you sure you want to block this user?</p>
+        <button type="submit">Block</button>
+    </form>
+</div>
 </body>
 </html>

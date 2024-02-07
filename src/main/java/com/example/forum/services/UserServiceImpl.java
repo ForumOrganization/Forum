@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll(UserFilterOptions userFilterOptions) {
-        return this.userRepository.getAll(userFilterOptions);
+    public List<User> getAll(/*UserFilterOptions userFilterOptions*/) {
+        return this.userRepository.getAll();
     }
 
     @Override
