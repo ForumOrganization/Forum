@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -41,7 +42,7 @@ public class PostRestController {
     public List<Post> getAll(@RequestHeader HttpHeaders headers,
                              @RequestParam(required = false) String title,
                              @RequestParam(required = false) String createdBy,
-                             @RequestParam(required = false) Date creationTime,
+                             @RequestParam(required = false) LocalDate creationTime,
                              @RequestParam(required = false) String sortBy,
                              @RequestParam(required = false) String sortOrder) {
         PostFilterOptions postFilterOptions = new PostFilterOptions(title, createdBy, creationTime, sortBy, sortOrder);

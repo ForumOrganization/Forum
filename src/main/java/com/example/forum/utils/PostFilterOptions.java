@@ -2,6 +2,7 @@ package com.example.forum.utils;
 
 import com.example.forum.models.User;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Optional;
 
@@ -9,7 +10,7 @@ public class PostFilterOptions {
 
     private Optional<String> title;
     private Optional<String> createdBy;
-    private Optional<Date> creationTime;
+    private Optional<LocalDate> creationTime;
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
@@ -19,7 +20,7 @@ public class PostFilterOptions {
     public PostFilterOptions(
             String title,
             String createdBy,
-            Date creationTime,
+            LocalDate creationTime,
             String sortBy,
             String sortOrder) {
         this.title = Optional.ofNullable(title);
@@ -45,11 +46,11 @@ public class PostFilterOptions {
         this.createdBy = createdBy;
     }
 
-    public Optional<Date> getCreationTime() {
+    public Optional<LocalDate> getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(Optional<Date> creationTime) {
+    public void setCreationTime(Optional<LocalDate> creationTime) {
         this.creationTime = creationTime;
     }
 

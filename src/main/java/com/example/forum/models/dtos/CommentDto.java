@@ -24,4 +24,5 @@ public class CommentDto {
     public void setContent(String content) {
         this.content = content;
     }
+
 }

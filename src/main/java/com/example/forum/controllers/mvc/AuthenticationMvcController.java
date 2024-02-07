@@ -7,6 +7,7 @@ import com.example.forum.helpers.UserMapper;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.LoginDto;
 import com.example.forum.models.dtos.RegisterDto;
+import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -35,6 +36,11 @@ public class AuthenticationMvcController {
         this.authenticationHelper = authenticationHelper;
         this.userMapper = userMapper;
     }
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated(HttpSession session) {
+        return session.getAttribute("currentUser") != null;
+    }
+
 
     @GetMapping("/login")
     public String showLoginPage(Model model) {
@@ -51,8 +57,10 @@ public class AuthenticationMvcController {
         }
 
         try {
-            authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
+            User user=authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             session.setAttribute("currentUser", login.getUsername());
+            session.setAttribute("isAdmin", user.getRole()== Role.ADMIN);
+
             return "redirect:/";
         } catch (AuthorizationException e) {
             bindingResult.rejectValue("username", "auth_error", e.getMessage());

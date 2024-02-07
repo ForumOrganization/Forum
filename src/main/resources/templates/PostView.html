@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{PostForm.html :: head(${beer.name})}"></form>
+<form th:replace="~{PostForm.html :: head(${post.title})}"></form>
 <body>
 <form th:replace="~{PostForm.html :: header}"></form>
 
@@ -9,7 +9,8 @@
     <div th:style="text-align">
         <p class="margin12" th:text="#{post.label.title}  + ': ' +       ${post.title}">Title</p>
         <p class="margin12" th:text="#{post.label.content} + ': ' +      ${post.content}">Content</p>
-        <p class="margin12" th:text="#{post.label.createdBy}  + ': ' + ${post.createdBy.email}">user@mail.com</p>
+        <p class="margin12" th:text="#{post.label.createBy}  + ': ' + ${post.createdBy.username}">Created By</p>
+        <p class="margin12" th:text="#{post.label.creation}  + ': ' + ${post.creationTime}">Creation Time</p>
     </div>
     <h3>
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/update}">Update</a>

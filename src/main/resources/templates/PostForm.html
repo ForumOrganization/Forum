@@ -25,19 +25,28 @@
     <form action="#" th:action="@{__${requestURI}__}" th:object="${post}" method="post">
         <label th:text="#{post.label.title}">Title</label>
         <br/>
-        <input type="text" th:field="*{post.title}"/>
-        <label class="error" th:errors="*{post.title}">Title error placeholder</label>
+        <input type="text" th:field="*{title}"/>
+        <label class="error" th:errors="*{title}">Title error placeholder</label>
         <br/><br/>
 
         <label th:text="#{post.label.content}">Content</label>
         <br/>
-        <input type="text" th:field="*{post.content}"/>
-        <label class="error" th:errors="*{post.content}">Content error placeholder</label>
+        <input type="text" th:field="*{content}"/>
+        <label class="error" th:errors="*{content}">Content error placeholder</label>
         <br/><br/>
 
-        <label th:text="#{post.label.createdBy} + ': ' +      ${post.createdBy.email}">user@mail.com</label>
+<!--        <label th:text="#{post.label.createdBy} + ': ' +      ${post.createdBy.email}">user@mail.com</label>-->
+<!--        <br/>-->
+        <label th:text="#{post.label.createBy} + ': ' + ${post.createdBy.email}">email</label>
         <br/>
-
+        <input type="text" th:field="*{createdBy.getEmail}"/>
+        <label class="error" th:errors="*{createdBy.getEmail}">Create By error placeholder</label>
+        <br/><br/>
+        <label th:text="#{post.label.creation}">Creation Time</label>
+        <br/>
+        <input type="datetime-local" th:field="*{creationTime}"/>
+        <label class="error" th:errors="*{creationTime}">Creation Time error placeholder</label>
+        <br/><br/>
         <h3>
             <a href="#" th:href="@{__${requestURI}__/update}">Update</a>
             <a href="#" th:href="@{__${requestURI}__/delete}">Delete</a>

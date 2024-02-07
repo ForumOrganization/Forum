@@ -1,10 +1,33 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{PostForm.html :: head('All Beers')}"></form>
+<form th:replace="~{HomeView.html :: head('All Posts')}"></form>
 <body>
-<form th:replace="~{PostForm.html :: header}"></form>
+<form th:replace="~{HomeView.html :: header}"></form>
 
 <div class="body-content">
+    <form action="#" th:action="@{/posts}" method="get" th:object="${filterOptions}">
+        <label th:text="#{posts.filter.label}">Filter Options</label>
+        <br/><br/>
+        <input type="text" placeholder="Title" th:field="*{title}"/>
+
+
+
+        </select>
+        <select th:field="*{sortBy}">
+            <option value="">Sort By</option>
+            <option value="title">Title</option>
+            <option value="date">Creation Time</option>
+            <option value="createdBy">CreatedBy</option>
+        </select>
+        <select th:field="*{sortOrder}">
+            <option value="">Sort Order</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+        <br/><br/>
+
+        <input type="submit" value="Search"/>
+    </form>
     <div th:if="${posts.isEmpty()}">
         <h2 th:text="#{posts.title.empty}">No Posts</h2>
     </div>
@@ -15,18 +38,21 @@
             <div class="header">
                 <div class="header-cell" th:text="#{post.label.title}">Title</div>
                 <div class="header-cell" th:text="#{post.label.content}">Content</div>
-                <div class="header-cell" th:text="#{post.label.createdBy}">Created By</div>
+                <div class="header-cell" th:text="#{post.label.createBy}">Created By</div>
+                <div class="header-cell" th:text="#{post.label.creation}">Creation Time</div>
             </div>
             <div class="row" th:each="post : ${posts}">
                 <div class="cell">
                     <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
                 </div>
                 <div class="cell" th:text="${post.content}">Content</div>
+                <div class="cell" th:text="${post.createdBy}">Create By</div>
+                <div class="cell" th:date="${post.creationTime}">Creation Time</div>
             </div>
         </div>
     </div>
 </div>
 
-<form th:replace="~{PostForm.html :: footer}"></form>
+<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

@@ -55,8 +55,16 @@ public class PostMvcController {
     }
 
     @GetMapping
-    public String showAllPosts(Model model) {
-        model.addAttribute("posts", postService.getAll(new PostFilterOptions()));
+    public String showAllPosts(@ModelAttribute("filterOptions") PostFilterDto filterDto, Model model) {
+        PostFilterOptions filterOptions = new PostFilterOptions(
+                filterDto.getTitle(),
+                filterDto.getCreatedBy(),
+                filterDto.getCreationTime(),
+                filterDto.getSortBy(),
+                filterDto.getSortOrder());
+        List<Post> posts=postService.getAll(filterOptions);
+        model.addAttribute("filterOptions", filterDto);
+        model.addAttribute("posts", posts);
         return "PostsView";
     }
 
