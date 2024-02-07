@@ -12,7 +12,8 @@
             <a class="left" href="#" th:href="@{/posts}" th:text="#{navigation.all-posts} + ' | '">Browse all posts</a>
             <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}"
                th:text="#{navigation.create-post} + ' | '">Create Post</a>
-            <a class="left" href="#" th:href="@{/about}" th:text="#{navigation.about} + ' | '">About</a>
+            <a href="#" th:href="@{/about}" th:text="#{navigation.about} + ' | '">About</a>
+            <a href="#" th:if="${isAuthenticated && session.isAdmin}" th:href="@{/admin}">Admin Portal</a>
             <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login | </a>
             <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a>
             <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
@@ -37,32 +38,32 @@
 
 <!--        <label th:text="#{post.label.createdBy} + ': ' +      ${post.createdBy.email}">user@mail.com</label>-->
 <!--        <br/>-->
-        <label th:text="#{post.label.createBy} + ': ' + ${post.createdBy.email}">email</label>
-        <br/>
-        <input type="text" th:field="*{createdBy.getEmail}"/>
-        <label class="error" th:errors="*{createdBy.getEmail}">Create By error placeholder</label>
-        <br/><br/>
-        <label th:text="#{post.label.creation}">Creation Time</label>
-        <br/>
-        <input type="datetime-local" th:field="*{creationTime}"/>
-        <label class="error" th:errors="*{creationTime}">Creation Time error placeholder</label>
-        <br/><br/>
+<!--        <label th:text="#{post.label.createBy}">CreatedBy</label>-->
+<!--        <br/>-->
+<!--        <input type="text" th:field="*{createdBy.username}"/>-->
+<!--        <label class="error" th:errors="*{createdBy.username}">Created By error placeholder</label>-->
+<!--        <br/><br/>-->
+<!--        <label th:text="#{post.label.creation}">Creation Time</label>-->
+<!--        <br/>-->
+<!--        <input type="text" th:field="*{creationTime}"/>-->
+<!--        <label class="error" th:errors="*{creationTime}">Creation Time error placeholder</label>-->
+<!--        <br/><br/>-->
         <h3>
             <a href="#" th:href="@{__${requestURI}__/update}">Update</a>
             <a href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
         </h3>
 
-        <h3>Comments:</h3>
-        <div th:if="${post.comments}">
-            <ul>
-                <li th:each="comment : ${post.comments}">
-                    <p th:text="${comment.content}"></p>
-                </li>
-            </ul>
-        </div>
-        <div th:unless="${post.comments}">
-            <p>No comments yet.</p>
-        </div>
+<!--        <h3>Comments:</h3>-->
+<!--        <div th:if="${post.comments}">-->
+<!--            <ul>-->
+<!--                <li th:each="comment : ${post.comments}">-->
+<!--                    <p th:text="${comment.content}"></p>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </div>-->
+<!--        <div th:unless="${post.comments}">-->
+<!--            <p>No comments yet.</p>-->
+<!--        </div>-->
         <br/><br/>
 
         <input type="submit" value="Save"/>

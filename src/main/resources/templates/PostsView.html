@@ -11,8 +11,6 @@
         <input type="text" placeholder="Title" th:field="*{title}"/>
 
 
-
-        </select>
         <select th:field="*{sortBy}">
             <option value="">Sort By</option>
             <option value="title">Title</option>
@@ -24,7 +22,7 @@
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
         </select>
-        <br/><br/>
+<!--        <br/><br/>-->
 
         <input type="submit" value="Search"/>
     </form>
@@ -46,8 +44,8 @@
                     <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
                 </div>
                 <div class="cell" th:text="${post.content}">Content</div>
-                <div class="cell" th:text="${post.createdBy}">Create By</div>
-                <div class="cell" th:date="${post.creationTime}">Creation Time</div>
+                <div class="cell" th:text="${post.createdBy.username}">Create By</div>
+                <div class="cell" th:text="${post.creationTime}">Creation Time</div>
             </div>
         </div>
     </div>

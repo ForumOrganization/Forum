@@ -3,6 +3,9 @@ package com.example.forum.models.dtos;
 import jakarta.validation.constraints.Size;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 public class PostDto {
 
@@ -13,6 +16,10 @@ public class PostDto {
     @NotNull(message = "Post content can't be empty")
     @Size(min = 32, max = 8192, message = "Content should be between 32 and 8192 symbols.")
     private String content;
+
+    private UserDto createdBy;
+    private LocalDate creationTime;
+    private Set<CommentDto> comments;
 
     public PostDto() {
 
@@ -32,5 +39,29 @@ public class PostDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public UserDto getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(UserDto createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public LocalDate getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(LocalDate creationTime) {
+        this.creationTime = creationTime;
+    }
+
+    public Set<CommentDto> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<CommentDto> comments) {
+        this.comments = comments;
     }
 }

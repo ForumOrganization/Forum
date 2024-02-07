@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -77,7 +78,7 @@ public class HomeMvcController {
     }
 
     @GetMapping("/user/{id}")
-    public String showUserProfile(HttpSession session, Model model) {
+    public String showUserProfile(@PathVariable int id, HttpSession session, Model model) {
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
 
