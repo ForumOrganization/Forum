@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<h1>All Users</h1>
+<div id="users-list">
+    <!-- Loop through users and display them -->
+    <div th:each="user : ${users}">
+        <p th:text="${user.username}"></p>
+        <!-- Display other user details as needed -->
+    </div>
+</div>
+<script src="../static/scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unblock User</title>
+</head>
+<body>
+<h2>Unblock User</h2>
+<form action="/users/{id}/unblock" method="post">
+    <input type="hidden" name="_method" value="put"> <!-- Use hidden input to specify PUT method -->
+    <label>User ID:</label>
+    <input type="number" name="id" required/>
+    <br/><br/>
+    <button type="submit">Unblock User</button>
+</form>
+</body>
+</html>

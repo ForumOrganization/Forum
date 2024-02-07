@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block User</title>
+</head>
+<body>
+<h2>Block User</h2>
+<form action="/users/{id}/block" method="post">
+    <input type="hidden" name="_method" value="put"> <!-- Use hidden input to specify PUT method -->
+    <label>User ID:</label>
+    <input type="number" name="id" required/>
+    <br/><br/>
+    <button type="submit">Block User</button>
+</form>
+</body>
+</html>

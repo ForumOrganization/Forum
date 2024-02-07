@@ -21,9 +21,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
-@RequestMapping("/beers")
+@RequestMapping("/posts")
 public class PostMvcController {
 
     private final PostService postService;
@@ -48,7 +49,7 @@ public class PostMvcController {
         return request.getRequestURI();
     }
 
-    @ModelAttribute("styles")
+    @ModelAttribute("posts")
     public List<Post> populatePosts() {
         return postService.getAll(new PostFilterOptions());
     }
@@ -85,7 +86,7 @@ public class PostMvcController {
     }
 
     @PostMapping("/new")
-    public String createPost(@Valid @ModelAttribute("post") PostDto beerDto,
+    public String createPost(@Valid @ModelAttribute("post") PostDto postDto,
                              BindingResult bindingResult,
                              Model model,
                              HttpSession session) {
@@ -101,7 +102,7 @@ public class PostMvcController {
         }
 
         try {
-            Post post = postMapper.fromDto(beerDto);
+            Post post = postMapper.fromDto(postDto);
             postService.create(post, user);
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {

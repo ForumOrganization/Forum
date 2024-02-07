@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <link rel="stylesheet" href="../static/styles.css">
+</head>
+<body>
+<h1>All Users</h1>
+<section id="detailsPage">
+    <div class="wrapper">
+        <div class="albumCover">
+            <img src="./images/Lorde.jpg">
+        </div>
+        <div class="albumInfo" th:each="user : ${users}">
+            <div class="albumText">
+                <p th:text="${user.username}"></p>
+            </div>
+            <button th:text="'Details for ' + ${user.username}" th:onclick="'#user-details-' + ${user.id}">Details</button>
+            <div class="actionBtn" th:id="'user-details-' + ${user.id}" th:style="'display: none'">
+                <h2>User Details</h2>
+                <p th:text="'Username: ' + ${user.username}"></p>
+                <!-- Add other user details as needed -->
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

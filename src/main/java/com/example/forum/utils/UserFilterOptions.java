@@ -15,6 +15,10 @@ public class UserFilterOptions {
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
+    public UserFilterOptions() {
+
+    }
+
     public UserFilterOptions(
             String username,
             String firstName,

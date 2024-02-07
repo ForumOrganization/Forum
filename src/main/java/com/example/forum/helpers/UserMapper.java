@@ -54,6 +54,14 @@ public class UserMapper {
         return userResponseDto;
     }
 
+    public UserDto userToDto(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setEmail(user.getEmail());
+        return userDto;
+    }
+
     public UserResponseDto toDtoRegisterAndUpdateUser(User user) {
         User userToUpdate = userService.getByUsername(user.getUsername());
         UserResponseDto userResponseDto = toDto(userToUpdate);
