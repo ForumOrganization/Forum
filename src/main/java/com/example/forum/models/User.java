@@ -148,6 +148,10 @@ public class User {
         this.status = status;
     }
 
+    public boolean isBlocked() {
+        return status == Status.BLOCKED;
+    }
+
     public Set<Post> getPosts() {
         return posts;
     }

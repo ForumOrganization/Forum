@@ -4,24 +4,24 @@
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
 <div class="body-content">
-  <h2 th:text="#{admin.welcome}">Welcome (design)!</h2>
-  <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
-  <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>
-  <p>Welcome my dear Admin!</p>
+    <h2 th:text="#{admin.welcome}">Welcome (design)!</h2>
+    <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
+    <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>
+    <p>Welcome my dear Admin!</p>
 
-  <!-- Display all users with block/unblock buttons -->
-  <div th:each="user : ${users}">
-    <div>
-      <p th:text="${user.username}"></p>
-      <!-- Button to block/unblock user -->
-      <form th:action="@{'/users/' + ${user.id} + '/block'}" method="post">
-        <button type="submit" th:if="${!user.blocked}">Block</button>
-        <button type="submit" th:if="${user.blocked}">Unblock</button>
-      </form>
+    <div th:each="user : ${users}">
+        <div>
+            <!-- Button to block/unblock user -->
+            <p th:text="${user.username}"></p>
+            <form th:action="@{'/users/' + ${user.id} + '/block'}" method="post">
+                <button type="submit" th:if="${!user.isBlocked}">Block</button>
+            </form>
+            <form th:action="@{'/users/' + ${user.id} + '/unblock'}" method="post">
+                <button type="submit" th:if="${user.isBlocked}">Unblock</button>
+            </form>
+        </div>
     </div>
-  </div>
 </div>
-
 <form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

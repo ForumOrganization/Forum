@@ -2,16 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unblock User</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<div class="container">
-    <h2>Unblock User</h2>
-    <form th:action="@{'/users/' + ${userId} + '/unblock'}" method="post">
-        <p>Are you sure you want to unblock this user?</p>
-        <button type="submit">Unblock</button>
-    </form>
-</div>
+<h1>Unblock User</h1>
+<form action="/users/{userId}/unblock" method="post">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId" name="userId" required><br><br>
+    <button type="submit">Unblock User</button>
+</form>
 </body>
 </html>

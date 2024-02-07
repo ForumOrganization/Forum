@@ -2,16 +2,16 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Block User</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<div class="container">
-    <h2>Block User</h2>
-    <form th:action="@{'/users/' + ${userId} + '/block'}" method="post">
-        <p>Are you sure you want to block this user?</p>
-        <button type="submit">Block</button>
-    </form>
-</div>
+<h1>Block User</h1>
+<form action="/users/{userId}/block" method="post">
+    <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId" name="userId" required><br><br>
+    <button type="submit">Block User</button>
+</form>
 </body>
 </html>

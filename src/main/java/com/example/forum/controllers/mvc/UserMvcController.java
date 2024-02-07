@@ -9,6 +9,7 @@ import com.example.forum.helpers.UserMapper;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -247,76 +248,75 @@ public class UserMvcController {
         }
     }
 
-    @GetMapping("/{id}/block")
-    public String blockUser(@PathVariable int id, Model model) {
-        model.addAttribute("userId", id);
-        return "BlockUserView";
-    }
+//    @GetMapping("/{id}/block")
+//    public String blockUser(@PathVariable int id, Model model) {
+//        model.addAttribute("userId", id);
+//        return "redirect:/admin";
+//    }
 
     @PostMapping("/{id}/block")
-    public String blockUser(@PathVariable int id, @Valid @ModelAttribute("user") Model model,
-                            BindingResult bindingResult, HttpSession session) {
-        User user;
+    public String blockUser(@PathVariable int id, HttpSession session, Model model) {
         try {
-            user = authenticationHelper.tryGetCurrentUser(session);
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
+            User currentUser = authenticationHelper.tryGetCurrentUser(session);
 
-        if (bindingResult.hasErrors()) {
-            return "BlockUserView";
-        }
+//            if (currentUser == null || currentUser.getRole() != Role.ADMIN) {
+//                throw new AuthorizationException("Only admin users can block/unblock users");
+//            }
 
-        try {
-            User userToBeBlock = userService.getById(id);
-            userService.blockUser(user, userToBeBlock);
-            return "redirect:/users";
+//            if (bindingResult.hasErrors()) {
+//                return "BlockUserView";
+//            }
+
+            User userToBeBlocked = userService.getById(id);
+            userService.blockUser(currentUser, userToBeBlocked);
+            return "redirect:/admin";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("user", "duplicate_admin", e.getMessage());
-            return "BlockUserView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
     }
 
-    @GetMapping("/{id}/unblock")
-    public String unblockUserForm(@PathVariable int id, Model model) {
-        model.addAttribute("userId", id);
-        return "UnblockUserView";
-    }
+//    @GetMapping("/{id}/unblock")
+//    public String unblockUserForm(@PathVariable int id, Model model) {
+//        model.addAttribute("userId", id);
+//        return "redirect:/admin";
+//    }
 
     @PostMapping("/{id}/unblock")
-    public String unblockUser(@PathVariable int id, @Valid @ModelAttribute("user") Model model,
-                              BindingResult bindingResult, HttpSession session) {
-        User user;
+    public String unBlockUser(@PathVariable int id, HttpSession session, Model model) {
         try {
-            user = authenticationHelper.tryGetCurrentUser(session);
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
+            User currentUser = authenticationHelper.tryGetCurrentUser(session);
 
-        if (bindingResult.hasErrors()) {
-            return "UnblockUserView";
-        }
-        try {
-            User userToBeUnblock = userService.getById(id);
-            userService.unBlockUser(user, userToBeUnblock);
-            return "redirect:/users";
+//            if (currentUser == null || currentUser.getRole() != Role.ADMIN) {
+//                throw new AuthorizationException("Only admin users can block/unblock users");
+//            }
+
+//            if (bindingResult.hasErrors()) {
+//                return "UnblockUserView";
+//            }
+
+            User userToBeUnblocked = userService.getById(id);
+            userService.unBlockUser(currentUser, userToBeUnblocked);
+            return "redirect:/admin";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("user", "duplicate_admin", e.getMessage());
-            return "UnblockUserView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }

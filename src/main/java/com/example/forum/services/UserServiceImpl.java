@@ -9,7 +9,6 @@ import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.services.contracts.UserService;
-import com.example.forum.utils.UserFilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
