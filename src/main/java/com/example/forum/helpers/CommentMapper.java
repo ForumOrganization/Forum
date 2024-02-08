@@ -34,6 +34,12 @@ public class CommentMapper {
     public Comment fromDto(CommentDto dto) {
         Comment comment = new Comment();
         comment.setContent(dto.getContent());
+        comment.setUser(dto.getUser());
         return comment;
+    }
+    public CommentDto toDto(Comment comment) {
+        CommentDto commentDto = new CommentDto();
+        commentDto.setContent(comment.getContent());
+        return commentDto;
     }
 }

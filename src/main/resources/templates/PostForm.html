@@ -1,25 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="head(title)">
-    <meta charset="UTF-8">
-    <title th:text="'Healthy Living Hub | '+ ${title}">Title</title>
-    <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
-</head>
-<header th:fragment="header">
-    <div>
-        <h3>
-            <a class="left" href="#" th:href="@{/}" th:text="#{navigation.home} + ' | '">Home</a>
-            <a class="left" href="#" th:href="@{/posts}" th:text="#{navigation.all-posts} + ' | '">Browse all posts</a>
-            <a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}"
-               th:text="#{navigation.create-post} + ' | '">Create Post</a>
-            <a href="#" th:href="@{/about}" th:text="#{navigation.about} + ' | '">About</a>
-            <a href="#" th:if="${isAuthenticated && session.isAdmin}" th:href="@{/admin}">Admin Portal</a>
-            <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login | </a>
-            <a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a>
-            <a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>
-        </h3>
-    </div>
-</header>
+<div th:replace="~{HomeView.html :: head(${post.title})}"></div>
+<body>
+<div th:replace="~{HomeView.html :: header}"></div>
 <div th:fragment="post-form(title)">
     <h2 th:text="${title}">Title</h2>
 
@@ -48,10 +31,10 @@
 <!--        <input type="text" th:field="*{creationTime}"/>-->
 <!--        <label class="error" th:errors="*{creationTime}">Creation Time error placeholder</label>-->
 <!--        <br/><br/>-->
-        <h3>
-            <a href="#" th:href="@{__${requestURI}__/update}">Update</a>
-            <a href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
-        </h3>
+<!--        <h3>-->
+<!--            <a href="#" th:href="@{__${requestURI}__/update}">Update</a>-->
+<!--            <a href="#" th:href="@{__${requestURI}__/delete}">Delete</a>-->
+<!--        </h3>-->
 
 <!--        <h3>Comments:</h3>-->
 <!--        <div th:if="${post.comments}">-->

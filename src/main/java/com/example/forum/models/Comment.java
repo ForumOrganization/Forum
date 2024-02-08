@@ -3,6 +3,7 @@ package com.example.forum.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
@@ -37,6 +38,10 @@ public class Comment {
     @JsonIgnore
     @OneToMany(mappedBy = "comment", fetch = FetchType.EAGER)
     private Set<Reaction_comments> reactions;
+
+    @Column(name = "creation_time")
+    private LocalDate creationTime = LocalDate.now();
+
 
     public Comment() {
 
@@ -89,5 +94,13 @@ public class Comment {
 
     public void setReactions(Set<Reaction_comments> reactions) {
         this.reactions = reactions;
+    }
+
+    public LocalDate getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(LocalDate creationTime) {
+        this.creationTime = creationTime;
     }
 }

@@ -31,8 +31,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions) {
-        return this.commentRepository.getAllCommentsByPostId(postId, commentFilterOptions);
+    public List<Comment> getAllCommentsByPostId(int postId) {
+        return this.commentRepository.getAllCommentsByPostId(postId);
     }
 
     @Override

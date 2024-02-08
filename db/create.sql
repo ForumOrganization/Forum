@@ -38,6 +38,7 @@ CREATE TABLE comments
     user_id    INT           NOT NULL,
     post_id    INT           NOT NULL,
     content    VARCHAR(8192) NOT NULL,
+    creation_time DATE,
     is_deleted BOOLEAN DEFAULT FALSE,
     CONSTRAINT comments_users_user_id_fk
         FOREIGN KEY (user_id) REFERENCES users (user_id),

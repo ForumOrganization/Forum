@@ -13,6 +13,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> getAllCommentsByPostId(int postId, CommentFilterOptions commentFilterOptions) {
+    public List<Comment> getAllCommentsByPostId(int postId ) {
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, postId);
 
@@ -37,56 +38,74 @@ public class CommentRepositoryImpl implements CommentRepository {
                 throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
             }
 
-            List<String> filters = new ArrayList<>();
-            Map<String, Object> params = new HashMap<>();
+            List<Comment> comments = session.createQuery("select c From Comment c WHERE c.post.id= :postId Order by c.creationTime ", Comment.class)
+                    .setParameter("postId", postId).list();
 
-            filters.add(" post.id = :postId ");
-            params.put("postId", postId);
-
-
-            commentFilterOptions.getContent().ifPresent(value -> {
-                filters.add("content like :content");
-                params.put("content", String.format("%%%s%%", value));
-            });
-
-            StringBuilder queryString = new StringBuilder("from Comment");
-
-            if (!filters.isEmpty()) {
-                queryString
-                        .append(" where ")
-                        .append(String.join(" and ", filters));
-            }
-
-            queryString.append(generateOrderBy(commentFilterOptions));
-
-            Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
-            query.setProperties(params);
-            List<Comment> list = query.list();
-
-            if (list.isEmpty()) {
-                throw new EntityNotFoundException("Comments");
-            }
-
-            return list;
+//            if (comments.isEmpty()) {
+//                throw new EntityNotFoundException("Comments");
+//
+//            }
+            return comments;
         }
+
+//            List<String> filters = new ArrayList<>();
+//            Map<String, Object> params = new HashMap<>();
+//
+//            filters.add(" post.id = :postId ");
+//            params.put("postId", postId);
+//
+//
+//            commentFilterOptions.getContent().ifPresent(value -> {
+//                filters.add("content like :content");
+//                params.put("content", String.format("%%%s%%", value));
+//            });
+//            commentFilterOptions.getCreationTime().ifPresent(value -> {
+//                filters.add("creation_time > :creationTime");
+//                params.put("creationTime", value);
+//            });
+//
+//            StringBuilder queryString = new StringBuilder("from Comment");
+//
+//            if (!filters.isEmpty()) {
+//                queryString
+//                        .append(" where ")
+//                        .append(String.join(" and ", filters));
+//            }
+//
+//            queryString.append(generateOrderBy(commentFilterOptions));
+//
+//            Query<Comment> query = session.createQuery(queryString.toString(), Comment.class);
+//            query.setProperties(params);
+//            List<Comment> list = query.list();
+//
+//            if (list.isEmpty()) {
+//                throw new EntityNotFoundException("Comments");
+//            }
+//
+//            return list;
+//        }
     }
 
     @Override
     public Comment getCommentById(int commentId) {
         try (Session session = sessionFactory.openSession()) {
-            Comment comment = session.get(Comment.class, commentId);
+            Query<Comment> query = session.createQuery("FROM Comment as c where c.id = :id", Comment.class);
+            query.setParameter("id", commentId);
+            List<Comment> comments = query.list();
 
-            if (comment == null) {
+
+            if (comments.isEmpty()) {
                 throw new EntityNotFoundException("Comment", "id", String.valueOf(commentId));
             }
 
-            return comment;
+            return comments.get(0);
         }
     }
 
     @Override
     public void createComment(Comment comment) {
         try (Session session = sessionFactory.openSession()) {
+            comment.setCreationTime(LocalDate.now());
             session.beginTransaction();
             session.persist(comment);
             session.getTransaction().commit();
@@ -96,6 +115,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     @Override
     public void updateComment(Comment comment) {
         try (Session session = sessionFactory.openSession()) {
+            comment.setCreationTime(LocalDate.now());
             session.beginTransaction();
             session.merge(comment);
             session.getTransaction().commit();
@@ -123,10 +143,13 @@ public class CommentRepositoryImpl implements CommentRepository {
             return "";
         }
 
-        String orderBy = "";
+        String orderBy = "order by creationTime";
         switch (commentFilterOptions.getSortBy().get()) {
             case "content":
                 orderBy = "content";
+                break;
+            case "creationTime":
+                orderBy = "creationTime";
                 break;
         }
 

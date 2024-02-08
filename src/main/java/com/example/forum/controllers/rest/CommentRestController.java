@@ -42,11 +42,11 @@ public class CommentRestController {
                                                 @RequestParam(required = false) Post post,
                                                 @RequestParam(required = false) String sortBy,
                                                 @RequestParam(required = false) String sortOrder) {
-        CommentFilterOptions commentFilterOptions = new CommentFilterOptions(post, content, sortBy, sortOrder);
+        //CommentFilterOptions commentFilterOptions = new CommentFilterOptions(post, content, sortBy, sortOrder);
 
         try {
             this.authenticationHelper.tryGetUser(headers);
-            return commentService.getAllCommentsByPostId(postId, commentFilterOptions);
+            return commentService.getAllCommentsByPostId(postId);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (AuthorizationException e) {

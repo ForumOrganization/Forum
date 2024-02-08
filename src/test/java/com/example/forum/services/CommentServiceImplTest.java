@@ -31,10 +31,10 @@ public class CommentServiceImplTest {
     public void get_Should_CallRepository() {
         CommentFilterOptions mockCommentFilterOptions = createMockCommentFilterOptions();
 
-        commentService.getAllCommentsByPostId(1, mockCommentFilterOptions);
+        commentService.getAllCommentsByPostId(1);
 
         Mockito.verify(mockRepository, Mockito.times(1))
-                .getAllCommentsByPostId(1, mockCommentFilterOptions);
+                .getAllCommentsByPostId(1);
     }
 
     @Test

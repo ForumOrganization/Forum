@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{PostForm.html :: head(${comment.content})}"></form>
+<form th:replace="~{HomeView.html :: head(${comment.content})}"></form>
 <body>
-<form th:replace="~{PostForm.html :: header}"></form>
+<form th:replace="~{HomeView.html :: header}"></form>
+
+
 
 <div class="body-content">
-    <h2>Comment</h2>
+    <h2 th:text="${comment.content()}">Comment Content</h2>
     <div th:style="text-align">
         <p class="margin12" th:text="#{comment.label.content}  + ': ' +       ${comment.content}">Content</p>
-        <p class="margin12" th:text="#{comment.label.createdBy} + ': ' +      ${comment.user.email}">user@mail.com</p>
+        <p class="margin12" th:text="#{comment.label.createdBy} + ': ' +      ${comment.user.username}">Created By</p>
     </div>
     <h3>
-        <a href="#" th:href="@{__${requestURI}__/update}">Update</a>
-        <a href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
+        <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/update}">Update</a>
+        <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
     </h3>
 </div>
-<form th:replace="~{PostForm.html :: footer}"></form>
+<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

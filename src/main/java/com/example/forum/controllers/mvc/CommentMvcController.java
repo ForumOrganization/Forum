@@ -4,10 +4,12 @@ import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
+import com.example.forum.helpers.CommentMapper;
 import com.example.forum.helpers.PostMapper;
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
+import com.example.forum.models.dtos.CommentDto;
 import com.example.forum.models.dtos.PostDto;
 import com.example.forum.models.dtos.PostFilterDto;
 import com.example.forum.services.contracts.CommentService;
@@ -24,24 +26,22 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @Controller
-@RequestMapping("/posts")
-public class PostMvcController {
+@RequestMapping("/comments")
 
-    private final PostService postService;
+public class CommentMvcController {
     private final CommentService commentService;
-    private final PostMapper postMapper;
+    private final PostService postService;
+    private final CommentMapper commentMapper;
     private final AuthenticationHelper authenticationHelper;
-
     @Autowired
-    public PostMvcController(PostService postService,CommentService commentService, PostMapper postMapper,
-                             AuthenticationHelper authenticationHelper) {
-        this.postService = postService;
-        this.commentService=commentService;
-        this.postMapper = postMapper;
+    public CommentMvcController(CommentService commentService,PostService postService, CommentMapper commentMapper, AuthenticationHelper authenticationHelper) {
+        this.commentService = commentService;
+        this.postService=postService;
+        this.commentMapper = commentMapper;
         this.authenticationHelper = authenticationHelper;
     }
+
 
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
@@ -54,30 +54,18 @@ public class PostMvcController {
     }
 
     @GetMapping
-    public String showAllPosts(@ModelAttribute("filterOptions") PostFilterDto filterDto, Model model) {
-        PostFilterOptions filterOptions = new PostFilterOptions(
-                filterDto.getTitle(),
-                filterDto.getCreatedBy(),
-                filterDto.getCreationTime(),
-                filterDto.getSortBy(),
-                filterDto.getSortOrder());
-        List<Post> posts = postService.getAll(filterOptions);
-        model.addAttribute("filterOptions", filterDto);
-        model.addAttribute("posts", posts);
-        return "PostsView";
+    public String showAllComments(@PathVariable int postId, Model model) {
+        List<Comment> comments = commentService.getAllCommentsByPostId(postId);
+        model.addAttribute("comments", comments);
+        return "CommentsView";
     }
 
     @GetMapping("/{id}")
-    public String showSinglePost(@PathVariable int id, Model model) {
+    public String showSingleComment(@PathVariable int id, Model model) {
         try {
-            Post post = postService.getById(id);
-            List<Comment> comments=commentService.getAllCommentsByPostId(id);
-            model.addAttribute("postId", id);
-            model.addAttribute("post", post);
-            if(!comments.isEmpty()) {
-                model.addAttribute("comments", comments);
-            }
-            return "PostView";
+            Comment comment = commentService.getCommentById(id);
+            model.addAttribute("comment", comment);
+            return "CommentView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -85,20 +73,22 @@ public class PostMvcController {
         }
     }
 
-    @GetMapping("/new")
-    public String showNewPostPage(Model model, HttpSession session) {
+    @GetMapping("/new/posts/{postId}")
+    public String showNewCommentPage(  @PathVariable ("postId") int postId,
+                                       Model model, HttpSession session) {
         try {
             authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
 
-        model.addAttribute("post", new PostDto());
-        return "PostCreateView";
+        model.addAttribute("comment", new CommentDto());
+        return "CommentCreateView";
     }
 
-    @PostMapping("/new")
-    public String createPost(@Valid @ModelAttribute("post") PostDto postDto,
+    @PostMapping("/new/posts/{postId}")
+    public String createComment(@Valid @ModelAttribute("comment") CommentDto commentDto,
+                                @PathVariable ("postId") int postId,
                              BindingResult bindingResult,
                              Model model,
                              HttpSession session) {
@@ -110,25 +100,22 @@ public class PostMvcController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "PostCreateView";
+            return "CommentCreateView";
         }
 
         try {
-            Post post = postMapper.fromDto(postDto);
-            postService.create(post, user);
-            return "redirect:/posts";
+            Comment comment = commentMapper.fromDto(commentDto);
+            commentService.createComment(comment,postId, user);
+            return "redirect:/posts/"+postId;
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("title", "duplicate_post", e.getMessage());
-            return "PostCreateView";
         }
     }
 
     @GetMapping("/{id}/update")
-    public String showEditPostPage(@PathVariable int id, Model model, HttpSession session) {
+    public String showEditCommentPage(@PathVariable int id, Model model, HttpSession session) {
         try {
             authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
@@ -136,11 +123,11 @@ public class PostMvcController {
         }
 
         try {
-            Post post = postService.getById(id);
-            PostDto postDto = postMapper.toDto(post);
-            model.addAttribute("postId", id);
-            model.addAttribute("post", postDto);
-            return "PostUpdateView";
+            Comment comment = commentService.getCommentById(id);
+            CommentDto commentDto = commentMapper.toDto(comment);
+            model.addAttribute("commentId", id);
+            model.addAttribute("comment", commentDto);
+            return "CommentUpdateView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -149,8 +136,8 @@ public class PostMvcController {
     }
 
     @PostMapping("/{id}/update")
-    public String updatePost(@PathVariable int id,
-                             @Valid @ModelAttribute("post") PostDto dto,
+    public String updateComment(@PathVariable int id,
+                             @Valid @ModelAttribute("comment") CommentDto dto,
                              BindingResult bindingResult,
                              Model model,
                              HttpSession session) {
@@ -162,20 +149,20 @@ public class PostMvcController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "PostUpdateView";
+            return "CommentUpdateView";
         }
 
         try {
-            Post post = postMapper.fromDto(id, dto);
-            postService.update(post, user);
-            return "redirect:/posts";
+            Comment comment = commentMapper.fromDto(id, dto);
+            Post post=postService.getByComment(id);
+            commentService.updateComment(comment, user);
+//            return "redirect:/comments";
+            return "redirect:/posts/"+post.getId();
+
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("title", "duplicate_post", e.getMessage());
-            return "PostUpdateView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -184,7 +171,7 @@ public class PostMvcController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deletePost(@PathVariable int id, Model model, HttpSession session) {
+    public String deleteComment(@PathVariable int id, Model model, HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
@@ -193,8 +180,9 @@ public class PostMvcController {
         }
 
         try {
-            postService.delete(id, user);
-            return "redirect:/posts";
+            Post post=postService.getByComment(id);
+            commentService.deleteComment(id, user);
+            return "redirect:/posts/"+post.getId();
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

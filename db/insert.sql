@@ -14,10 +14,10 @@ VALUES (1, 'First Post', 'This is the content of the first post.', NOW()),
        (3, 'Third Post', 'This for the third post goes here.', NOW()),
        (1, 'Fourth Post', 'Content for the fourth post goes here.', NOW());
 
-INSERT INTO comments (user_id, post_id, content)
-VALUES (2, 1, 'Nice post!'),
-       (3, 1, 'I disagree with some points.'),
-       (1, 2, 'Great content!');
+INSERT INTO comments (user_id, post_id, content, creation_time)
+VALUES (2, 1, 'Nice post!', NOW()),
+       (3, 1, 'I disagree with some points.', NOW()),
+       (1, 2, 'Great content!', NOW());
 
 INSERT INTO reactions_posts (type_reaction, user_id, post_id)
 VALUES ('LIKES', 1, 1),

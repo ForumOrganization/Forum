@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:replace="~{HomeView.html :: head(${comment.content})}"></div>
+<body>
+<div th:replace="~{HomeView.html :: header}"></div>
+
+<div th:fragment="comment-form(content)">
+    <h2 th:text="${content}">Content</h2>
+
+    <form action="#" th:action="@{__${requestURI}__}" th:object="${comment}" method="post">
+        <label th:text="#{comment.label.content}">Content</label>
+        <br/>
+        <input type="text" th:field="*{content}"/>
+        <label class="error" th:errors="*{content}">Content error placeholder</label>
+        <br/><br/>
+
+<!--        <label th:text="#{comment.label.createdBy}">Create By</label>-->
+<!--        <br/>-->
+<!--        <input type="text" th:field="*{user.username}"/>-->
+<!--        <label class="error" th:errors="*{user.username}">Create By error placeholder</label>-->
+<!--        <br/><br/>-->
+
+<!--        <h3>-->
+<!--            <a href="#" th:href="@{__${requestURI}__/update}">Update</a>-->
+<!--            <a href="#" th:href="@{__${requestURI}__/delete}">Delete</a>-->
+<!--        </h3>-->
+
+        <br/><br/>
+
+        <input type="submit" value="Save"/>
+    </form>
+</div>
+
+<footer th:fragment="footer">
+    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow())
+    + ' Healthy Living Hub'}">Healthy Living Hub</small>
+</footer>
