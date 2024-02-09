@@ -142,15 +142,15 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
-    public Post getByComment(int commentId) {
+    public Post getByComment(int id) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Post> query = session.createQuery("select post from Comment c where c.id = :commentId", Post.class);
-            query.setParameter("commentId", commentId);
+            Query<Post> query = session.createQuery("select post from Comment c where c.id = :id", Post.class);
+            query.setParameter("id", id);
 
             List<Post> result = query.list();
 
             if (result.size() == 0) {
-                throw new EntityNotFoundException("Comment", "id", String.valueOf(commentId));
+                throw new EntityNotFoundException("Comment", "id", String.valueOf(id));
             }
 
             return result.get(0);

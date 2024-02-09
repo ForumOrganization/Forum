@@ -8,7 +8,10 @@
     <h2 th:text="${content}">Content</h2>
 
     <form action="#" th:action="@{__${requestURI}__}" th:object="${comment}" method="post">
+
         <label th:text="#{comment.label.content}">Content</label>
+
+    <!--    <form action="#" th:action="@{/comments/{id}/update(id=${commentId})}" th:object="${comment}" method="post">        <label th:text="#{comment.label.content}">Content</label>-->
         <br/>
         <input type="text" th:field="*{content}"/>
         <label class="error" th:errors="*{content}">Content error placeholder</label>

@@ -15,7 +15,8 @@
     <h3>
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/update}">Update</a>
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
-        <a th:if="${isAuthenticated}" th:href="@{/comments/new/posts/{postId}(postId=${postId})}">Create Comment</a>    </h3>
+        <a th:if="${isAuthenticated}" th:href="@{/comments/new/posts/{postId}(postId=${postId})}">Create Comment</a>
+    </h3>
 </div>
 <h3>Comments:</h3>
 <div th:if="${comments}">
@@ -26,9 +27,9 @@
             <p th:text="'Creation Time: ' + ${comment.getCreationTime()}"></p>
 
 <h4>
+<!--    <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/update/posts/'+${postId}}">Update</a>-->
     <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/update'}">Update</a>
     <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/delete'}">Delete</a>
-<!--    <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/delete}">Delete</a>-->
 </h4>
         </li>
     </ul>

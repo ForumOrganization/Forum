@@ -114,8 +114,10 @@ public class CommentMvcController {
         }
     }
 
-    @GetMapping("/{id}/update")
-    public String showEditCommentPage(@PathVariable int id, Model model, HttpSession session) {
+    @GetMapping("/{commentId}/update")
+    public String showEditCommentPage(@PathVariable int commentId,
+//                                      @PathVariable ("postId") int postId,
+                                      Model model, HttpSession session) {
         try {
             authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
@@ -123,9 +125,9 @@ public class CommentMvcController {
         }
 
         try {
-            Comment comment = commentService.getCommentById(id);
+            Comment comment = commentService.getCommentById(commentId);
             CommentDto commentDto = commentMapper.toDto(comment);
-            model.addAttribute("commentId", id);
+            model.addAttribute("commentId", commentId);
             model.addAttribute("comment", commentDto);
             return "CommentUpdateView";
         } catch (EntityNotFoundException e) {
@@ -138,6 +140,7 @@ public class CommentMvcController {
     @PostMapping("/{id}/update")
     public String updateComment(@PathVariable int id,
                              @Valid @ModelAttribute("comment") CommentDto dto,
+//                                @PathVariable ("postId") int postId,
                              BindingResult bindingResult,
                              Model model,
                              HttpSession session) {

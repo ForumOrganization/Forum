@@ -55,9 +55,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public void updateComment(Comment comment, User user) {
         checkBlockOrDeleteUser(user);
-        Comment commentToUpdate = commentRepository.getCommentById(comment.getId());
+        //Comment commentToUpdate = commentRepository.getCommentById(comment.getId());
         checkAccessPermissionsUser(comment.getUser().getId(), user, MODIFY_USER_MESSAGE_ERROR);
-        this.commentRepository.updateComment(commentToUpdate);
+        this.commentRepository.updateComment(comment);
     }
 
     @Override

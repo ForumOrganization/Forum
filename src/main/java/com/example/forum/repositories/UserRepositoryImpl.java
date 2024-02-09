@@ -167,15 +167,15 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getUserByComment(int commentId) {
+    public User getUserByComment(int id) {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("select user from Comment c where c.id = :commentId", User.class);
-            query.setParameter("commentId", commentId);
+            Query<User> query = session.createQuery("select user from Comment c where c.id = :id", User.class);
+            query.setParameter("id", id);
 
             List<User> result = query.list();
 
             if (result.isEmpty()) {
-                throw new EntityNotFoundException("Comment", "id", String.valueOf(commentId));
+                throw new EntityNotFoundException("Comment", "id", String.valueOf(id));
             }
 
             return result.get(0);
