@@ -9,6 +9,8 @@
         <label th:text="#{posts.filter.label}">Filter Options</label>
         <br/><br/>
         <input type="text" placeholder="Title" th:field="*{title}"/>
+        <input type="text" placeholder="Create By" th:field="*{createdBy}"/>
+        <input type="date" placeholder="Creation Time" th:field="*{creationTime}"/>
 
 
         <select th:field="*{sortBy}">

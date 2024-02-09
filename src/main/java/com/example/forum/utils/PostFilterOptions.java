@@ -14,6 +14,10 @@ public class PostFilterOptions {
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
 
+    public PostFilterOptions() {
+        this(null,null,null,null,null);
+    }
+
     public PostFilterOptions(
             String title,
             String createdBy,
@@ -31,39 +35,19 @@ public class PostFilterOptions {
         return title;
     }
 
-    public void setTitle(Optional<String> title) {
-        this.title = title;
-    }
-
     public Optional<String> getCreatedBy() {
         return createdBy;
-    }
-
-    public void setCreatedBy(Optional<String> createdBy) {
-        this.createdBy = createdBy;
     }
 
     public Optional<LocalDate> getCreationTime() {
         return creationTime;
     }
 
-    public void setCreationTime(Optional<LocalDate> creationTime) {
-        this.creationTime = creationTime;
-    }
-
     public Optional<String> getSortBy() {
         return sortBy;
     }
 
-    public void setSortBy(Optional<String> sortBy) {
-        this.sortBy = sortBy;
-    }
-
     public Optional<String> getSortOrder() {
         return sortOrder;
-    }
-
-    public void setSortOrder(Optional<String> sortOrder) {
-        this.sortOrder = sortOrder;
     }
 }

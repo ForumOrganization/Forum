@@ -207,7 +207,6 @@ public class PostRepositoryImpl implements PostRepository {
         }
 
         String orderBy = "";
-
         switch (postFilterOptions.getSortBy().get()) {
             case "title":
                 orderBy = "title";
@@ -218,6 +217,8 @@ public class PostRepositoryImpl implements PostRepository {
             case "creationTime":
                 orderBy = "creationTime";
                 break;
+            default:
+                return "";
         }
 
         orderBy = String.format(" order by %s", orderBy);
