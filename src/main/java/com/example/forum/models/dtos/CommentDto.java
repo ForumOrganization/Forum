@@ -9,7 +9,6 @@ import java.time.LocalDate;
 public class CommentDto {
 
     @NotNull(message = "Comment content can't be empty")
-    @Size(min = 32, max = 8192, message = "The comment should be between 32 and 8192 symbols long.")
     private String content;
 
     private User user;
