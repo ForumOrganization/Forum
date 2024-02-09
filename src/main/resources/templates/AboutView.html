@@ -1,16 +1,52 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<form th:replace="~{PostForm.html :: head('About')}"></form>
+<!--<head th:fragment="head(title)">-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title th:text="'About us|'+ ${title}">Title</title>-->
+<!--    <link href="../static/css/about.css" th:href="@{/css/about.css}" rel="stylesheet"/>-->
+<!--&lt;!&ndash;</head>&ndash;&gt;-->
+<form th:replace="~{HomeView.html :: head('About us')}"></form>
+<link href="../static/css/about.css" th:href="@{/css/about.css}" rel="stylesheet"/>
 <body>
-<form th:replace="~{PostForm.html :: header}"></form>
+<form th:replace="~{HomeView.html :: header}"></form>
 
 <div class="body-content">
-    <h2>About the project</h2>
+    <h2>Welcome to Our Healthy Lifestyle Forum</h2>
     <p>
-        <b>Healthy Living Hub</b> is a social network for sharing experience about living healthy life.
+        At our Healthy Lifestyle Forum, we believe in empowering individuals to lead fulfilling and vibrant lives through a holistic approach to health and wellness. Whether you're just starting your journey towards a healthier lifestyle or you're a seasoned wellness enthusiast, our forum provides a supportive and informative space where you can connect with like-minded individuals, share experiences, and learn from experts in various fields.
+<!--        <b>Healthy Living Hub</b> is a social network for sharing experience about living healthy life.-->
     </p>
+    <p>
+    <b>Our Mission</b>
+    </p>
+    <p>
+    Our mission is simple yet profound: to inspire, educate, and support individuals on their quest for optimal health and well-being. We strive to foster a community where members feel encouraged to pursue their wellness goals, exchange ideas, and discover practical strategies for improving their physical, mental, and emotional health.
+    </p>
+    <p>
+    <b>What We Offer</b>
+    </p>
+    <p>
+        <b>• Knowledgeable Community: </b>Our forum is home to a diverse community of individuals who are passionate about health and wellness. Whether you're curious about nutrition, fitness, mindfulness, or any other aspect of holistic living, you'll find a wealth of knowledge and expertise among our members.
+    </p>
+    <p>
+        <b>• Expert Insights: </b>We regularly feature contributions from experts in various fields related to health and wellness. From nutritionists and personal trainers to psychologists and spiritual guides, our forum provides access to valuable insights and advice from professionals who are dedicated to helping you thrive.
+    </p>
+    <p>
+        <b>• Inspiration and Motivation: </b>Achieving and maintaining a healthy lifestyle isn't always easy, but it's certainly worth it. Our forum is a source of inspiration and motivation, where members share their success stories, setbacks, and everything in between. Whether you're looking for a pep talk or a gentle nudge in the right direction, you'll find plenty of support here.
+    </p>
+    <p>
+        <b>• Practical Tips and Resources: </b>In addition to fostering discussion and community interaction, our forum is a repository of practical tips, resources, and tools to help you live your healthiest life. From delicious and nutritious recipes to workout routines and mindfulness practices, we've got you covered.
+    </p>
+    <p>
+    <b>Join us today</b>
+    </p>
+    <p>
+        Whether you're looking to lose weight, reduce stress, improve your fitness level, or simply adopt healthier habits, our Healthy Lifestyle Forum is here to support you every step of the way. Join our community today and embark on a journey towards a happier, healthier you!
+    </p>
+
+
 </div>
 
-<form th:replace="~{PostForm.html :: footer}"></form>
+<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>
