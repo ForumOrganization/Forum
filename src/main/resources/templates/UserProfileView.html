@@ -12,8 +12,12 @@
         <p th:text="'Role: ' + ${currentUser.role}"></p>
     </div>
 
+<h3>
+    <a th:if="${isAuthenticated}"  th:href="@{'/users/'+${currentUser.id}+'/update'}">Update</a>
+</h3>
+</div>
+<div>
     <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>
-    <p>Welcome!</p>
 </div>
 
 <form th:replace="~{HomeView.html :: footer}"></form>

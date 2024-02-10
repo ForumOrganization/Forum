@@ -1,0 +1,88 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<div th:replace="~{HomeView.html :: head(${post.title})}"></div>-->
+<!--<body>-->
+<!--<div th:replace="~{HomeView.html :: header}"></div>-->
+<!--<div th:fragment="user-form(firstName)">-->
+<!--    <h2 th:text="${firstName}">First Name</h2>-->
+
+<!--    <form action="#" th:action="@{__${requestURI}__}" th:object="${user}" method="post">-->
+<!--        <label th:text="#{user.label.username}">User name</label>-->
+<!--        <br/>-->
+<!--        <input type="text" th:field="*{userName}"/>-->
+<!--        <label class="error" th:errors="*{userName}">Title error placeholder</label>-->
+<!--        <br/><br/>-->
+
+<!--        <label th:text="#{user.label.first-name}">First name</label>-->
+<!--        <br/>-->
+<!--        <input type="text" th:field="*{firstName}"/>-->
+<!--        <label class="error" th:errors="*{firstName}">Content error placeholder</label>-->
+<!--        <br/><br/>-->
+
+<!--        <label th:text="#{user.label.last-name}">Last name</label>-->
+<!--        <br/>-->
+<!--        <input type="text" th:field="*{lastName}"/>-->
+<!--        <label class="error" th:errors="*{lastName}">Content error placeholder</label>-->
+<!--        <br/><br/>-->
+
+<!--        <label th:text="#{user.label.email}">Last name</label>-->
+<!--        <br/>-->
+<!--        <input type="text" th:field="*{email}"/>-->
+<!--        <label class="error" th:errors="*{email}">Content error placeholder</label>-->
+<!--        <br/><br/>-->
+
+<!--        <label th:text="#{user.label.password}">Last name</label>-->
+<!--        <br/>-->
+<!--        <input type="text" th:field="*{password}"/>-->
+<!--        <label class="error" th:errors="*{password}">Content error placeholder</label>-->
+<!--        <br/><br/>-->
+
+<!--        <label th:text="#{user.label.password}">Last name</label>-->
+<!--        <br/>-->
+<!--        <input type="text" th:field="*{password}"/>-->
+<!--        <label class="error" th:errors="*{password}">Content error placeholder</label>-->
+<!--        <input type="submit" value="Save"/>-->
+<!--    </form>-->
+<!--</div>-->
+
+<!--<footer th:fragment="footer">-->
+<!--    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow())-->
+<!--    + ' Healthy Living Hub'}">Healthy Living Hub</small>-->
+<!--</footer>-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{HomeView.html :: head(${post.title})}"></head>
+<body>
+<div th:replace="~{HomeView.html :: header}"></div>
+
+<div th:fragment="user-form(firstName)">
+    <h2 th:text="${firstName}">First Name</h2>
+    <form th:action="@{__${requestURI}__}" th:object="${user}" method="post">
+        <label th:text="#{user.label.username}">User name</label><br/>
+        <input type="text" th:field="*{username}"/><br/>
+        <label class="error" th:errors="*{username}">Title error placeholder</label><br/><br/>
+
+        <label th:text="#{user.label.first-name}">First name</label><br/>
+        <input type="text" th:field="*{firstName}"/><br/>
+        <label class="error" th:errors="*{firstName}">Content error placeholder</label><br/><br/>
+
+        <label th:text="#{user.label.last-name}">Last name</label><br/>
+        <input type="text" th:field="*{lastName}"/><br/>
+        <label class="error" th:errors="*{lastName}">Content error placeholder</label><br/><br/>
+
+        <label th:text="#{user.label.email}">Email</label><br/>
+        <input type="text" th:field="*{email}"/><br/>
+        <label class="error" th:errors="*{email}">Content error placeholder</label><br/><br/>
+
+        <label th:text="#{user.label.password}">Password</label><br/>
+        <input type="text" th:field="*{password}"/><br/>
+        <label class="error" th:errors="*{password}">Content error placeholder</label><br/><br/>
+
+        <input type="submit" value="Save"/>
+    </form>
+</div>
+
+<footer th:replace="~{HomeView.html :: footer}"></footer>
+</body>
+</html>

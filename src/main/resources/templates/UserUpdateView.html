@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<form th:replace="~{HomeView.html :: head('Edit Post')}"></form>
+<body>
+<div class="body-content">
+    <div th:style="text-align">
+        <form th:replace="~{HomeView.html :: header}"></form>
+        <form th:replace="~{UserForm.html :: user-form(title)}"></form>
+        <form th:replace="~{HomeView.html :: footer}"></form>
+    </div>
+</div>
+</body>
+</html>

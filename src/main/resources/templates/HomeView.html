@@ -20,7 +20,7 @@
 <div id="box">
     <header th:fragment="header">
         <nav>
-            <img src="./images/logo2.png">
+<!--            <img src="./images/logo2.png">-->
             <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
 
             <ul>
@@ -45,7 +45,7 @@
             <h2 th:text="#{home.welcome}">Welcome (design)!</h2>
             <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
             <div class="back">
-                <img src="../static/images/logo2.png" th:src="@{/images/logo2.png}" alt="Healthy Living Hub logo"/>
+                <img src="../static/images/logo2.png" th:src="@{/images/logo4.jpg}" alt="Healthy Living Hub logo"/>
             </div>
             <p>Healthy Habits, Happy Hearts!</p>
         </div>
