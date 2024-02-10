@@ -48,7 +48,7 @@ CREATE TABLE comments
 CREATE TABLE reactions_posts
 (
     reaction_post_id   INT PRIMARY KEY AUTO_INCREMENT,
-    type_reaction ENUM ('LIKES', 'DISLIKES', 'LOVE'),
+    type_reaction ENUM ('LIKES', 'DISLIKES', 'LOVE','UNDEFINED'),
     user_id       INT NOT NULL,
     post_id       INT NOT NULL,
     CONSTRAINT reactions_posts_users_user_id_fk
@@ -60,7 +60,7 @@ CREATE TABLE reactions_posts
 CREATE TABLE reactions_comments
 (
     reaction_comment_id   INT PRIMARY KEY AUTO_INCREMENT,
-    type_reaction ENUM ('LIKES', 'DISLIKES', 'LOVE'),
+    type_reaction ENUM ('LIKES', 'DISLIKES', 'LOVE','UNDEFINED'),
     user_id       INT NOT NULL,
     comment_id    INT NOT NULL,
     CONSTRAINT reactions_comments_users_user_id_fk

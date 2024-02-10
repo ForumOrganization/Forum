@@ -87,7 +87,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public void update(Post post, User user) {
         checkBlockOrDeleteUser(user);
-        checkAccessPermissionsUser(post.getCreatedBy().getId(), user, MODIFY_USER_MESSAGE_ERROR);
+        checkAccessPermissionsUser(post.getCreatedBy().getId(), user, UPDATE_USER_MESSAGE_ERROR);
 
         boolean duplicateExists = true;
 

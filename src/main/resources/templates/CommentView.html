@@ -7,7 +7,7 @@
 
 
 <div class="body-content">
-    <h2 th:text="${comment.content()}">Comment Content</h2>
+    <h2 th:text="${comment.getContent()}">Comment Content</h2>
     <div th:style="text-align">
         <p class="margin12" th:text="#{comment.label.content}  + ': ' +       ${comment.content}">Content</p>
         <p class="margin12" th:text="#{comment.label.createdBy} + ': ' +      ${comment.user.username}">Created By</p>

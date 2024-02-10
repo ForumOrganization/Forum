@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:replace="~{HomeView.html :: head(${post.title})}"></div>
+<script src="https://kit.fontawesome.com/30f218fe1f.js" crossorigin="anonymous"></script>
+
+
 <body>
 <div th:replace="~{HomeView.html :: header}"></div>
 
@@ -26,11 +29,52 @@
             <p th:text="'Created By: ' + ${comment.user.username}"></p>
             <p th:text="'Creation Time: ' + ${comment.getCreationTime()}"></p>
 
-<h4>
-<!--    <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/update/posts/'+${postId}}">Update</a>-->
-    <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/update'}">Update</a>
-    <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/delete'}">Delete</a>
-</h4>
+<!--<h4>-->
+<!--&lt;!&ndash;    <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/update/posts/'+${postId}}">Update</a>&ndash;&gt;-->
+<!--    <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/update'}">Update</a>-->
+<!--    <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/delete'}">Delete</a>-->
+
+<!--    <a th:if="${isAuthenticated}" th:href="@{'/comments/'+${comment.id}+'/Like'}">-->
+<!--        <i class="fa-regular fa-thumbs-up"></i>-->
+<!--    </a>-->
+<!--    <a th:if="${isAuthenticated}" th:href="@{'/comments/'+${comment.id}+'/DisLike'}">-->
+<!--        <i class="fa-regular fa-thumbs-down"></i>-->
+<!--    </a>-->
+<!--</h4>-->
+            <h4>
+                <!-- Update and Delete links -->
+                <a th:if="${isAuthenticated}" th:href="@{'/comments/'+${comment.id}+'/update'}">Update</a>
+                <a th:if="${isAuthenticated}" th:href="@{'/comments/'+${comment.id}+'/delete'}">Delete</a>
+
+                <!-- Like button with count -->
+                <span id="likeButton">
+        <a th:href="@{'/comments/'+${comment.id}+'/Like'}">
+            <i class="fa-regular fa-thumbs-up"></i>
+            <span id="likeCount">Loading...</span> <!-- Display like count here -->
+        </a>
+    </span>
+
+                <!-- Dislike button with count -->
+                <span id="dislikeButton">
+        <a th:href="@{'/comments/'+${comment.id}+'/DisLike'}">
+            <i class="fa-regular fa-thumbs-down"></i>
+            <span id="dislikeCount">Loading...</span> <!-- Display dislike count here -->
+        </a>
+    </span>
+            </h4>
+
+            <script>
+                // Fetch and display reaction counts
+                $.get('/comments/${comment.id}/reaction-count', function(data) {
+                    $('#likeCount').text(data.likeCount);
+                    $('#dislikeCount').text(data.dislikeCount);
+                })
+                    .fail(function() {
+                        $('#likeCount').text('Error fetching data');
+                        $('#dislikeCount').text('Error fetching data');
+                    });
+            </script>
+
         </li>
     </ul>
 </div>
