@@ -5,7 +5,13 @@
 <form th:replace="~{HomeView.html :: header}"></form>
 <div class="body-content">
     <h2 th:text="#{user.welcome}">Welcome (design)!</h2>
-    <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
+
+    <div th:if="${isAuthenticated}">
+        <h2 th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}"></h2>
+        <p th:text="'Email: ' + ${currentUser.email}"></p>
+        <p th:text="'Role: ' + ${currentUser.role}"></p>
+    </div>
+
     <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>
     <p>Welcome!</p>
 </div>

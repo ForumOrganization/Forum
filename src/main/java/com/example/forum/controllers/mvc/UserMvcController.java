@@ -248,25 +248,10 @@ public class UserMvcController {
         }
     }
 
-//    @GetMapping("/{id}/block")
-//    public String blockUser(@PathVariable int id, Model model) {
-//        model.addAttribute("userId", id);
-//        return "redirect:/admin";
-//    }
-
     @PostMapping("/{id}/block")
     public String blockUser(@PathVariable int id, HttpSession session, Model model) {
         try {
             User currentUser = authenticationHelper.tryGetCurrentUser(session);
-
-//            if (currentUser == null || currentUser.getRole() != Role.ADMIN) {
-//                throw new AuthorizationException("Only admin users can block/unblock users");
-//            }
-
-//            if (bindingResult.hasErrors()) {
-//                return "BlockUserView";
-//            }
-
             User userToBeBlocked = userService.getById(id);
             userService.blockUser(currentUser, userToBeBlocked);
             return "redirect:/admin";
@@ -285,25 +270,10 @@ public class UserMvcController {
         }
     }
 
-//    @GetMapping("/{id}/unblock")
-//    public String unblockUserForm(@PathVariable int id, Model model) {
-//        model.addAttribute("userId", id);
-//        return "redirect:/admin";
-//    }
-
     @PostMapping("/{id}/unblock")
     public String unBlockUser(@PathVariable int id, HttpSession session, Model model) {
         try {
             User currentUser = authenticationHelper.tryGetCurrentUser(session);
-
-//            if (currentUser == null || currentUser.getRole() != Role.ADMIN) {
-//                throw new AuthorizationException("Only admin users can block/unblock users");
-//            }
-
-//            if (bindingResult.hasErrors()) {
-//                return "UnblockUserView";
-//            }
-
             User userToBeUnblocked = userService.getById(id);
             userService.unBlockUser(currentUser, userToBeUnblocked);
             return "redirect:/admin";

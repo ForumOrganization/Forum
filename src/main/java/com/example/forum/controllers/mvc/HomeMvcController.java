@@ -1,6 +1,7 @@
 package com.example.forum.controllers.mvc;
 
 import com.example.forum.exceptions.AuthorizationException;
+import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.models.User;
 import com.example.forum.models.enums.Role;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -43,22 +43,6 @@ public class HomeMvcController {
         return "AboutView";
     }
 
-//    @GetMapping("/admin")
-//    public String showAdminPortal(HttpSession session, Model model) {
-//        try {
-//            User user = authenticationHelper.tryGetCurrentUser(session);
-//
-//            if (user.getRole() == Role.ADMIN) {
-//                return "AdminPortalView";
-//            }
-//
-//            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-//            return "ErrorView";
-//        } catch (AuthorizationException e) {
-//            return "redirect:/auth/login";
-//        }
-//    }
-
     @GetMapping("/admin")
     public String showAdminPortal(HttpSession session, Model model) {
         try {
@@ -66,33 +50,36 @@ public class HomeMvcController {
 
             if (user.getRole() == Role.ADMIN) {
                 List<User> users = userService.getAll();
-                model.addAttribute("users", users);
-                return "AdminPortalView";
+                model.addAttribute("currentUser", users);
             }
 
-            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+//                model.addAttribute("isAuthenticated", true);
+
+            return "AdminPortalView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
     }
 
-    @GetMapping("/user/{id}")
-    public String showUserProfile(@PathVariable int id, HttpSession session, Model model) {
+    @GetMapping("/user")
+    public String showUserProfile(HttpSession session, Model model) {
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
-
-            if (user.getRole() == Role.USER) {
-                return "UserProfileView";
-
-            } else if (user.getRole() == Role.ADMIN) {
-                return "AdminPortalView";
-            }
-
-            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("currentUser", user);
+            model.addAttribute("isAuthenticated", true);
+            return "UserProfileView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 }
