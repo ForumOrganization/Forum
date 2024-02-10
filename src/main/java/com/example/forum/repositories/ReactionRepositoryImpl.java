@@ -1,10 +1,8 @@
 package com.example.forum.repositories;
 
 import com.example.forum.exceptions.EntityNotFoundException;
-import com.example.forum.models.Comment;
-import com.example.forum.models.Post;
-import com.example.forum.models.Reaction_comments;
-import com.example.forum.models.Reaction_posts;
+import com.example.forum.models.*;
+import com.example.forum.models.enums.Reaction;
 import com.example.forum.repositories.contracts.ReactionRepository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -129,13 +127,19 @@ public class ReactionRepositoryImpl implements ReactionRepository {
             if (comment == null) {
                 throw new EntityNotFoundException("Comment", "commentId", String.valueOf(commentId));
             }
-
             Reaction_comments existingReaction =
                     findReactionByCommentIdAndUserId(commentId, reaction.getUser().getId());
 
             if (existingReaction != null) {
-                existingReaction.setReaction(reaction.getReaction());
+                if(existingReaction.getReaction().equals(reaction.getReaction())){
+                    existingReaction.setReaction(Reaction.UNDEFINED);
+                }else{
+                    existingReaction.setReaction(reaction.getReaction());
+                }
+                session.beginTransaction();
                 session.merge(existingReaction);
+                session.getTransaction().commit();
+
 
             } else {
                 reaction.setComment(comment);
@@ -146,7 +150,7 @@ public class ReactionRepositoryImpl implements ReactionRepository {
         }
     }
 
-    private Reaction_comments findReactionByCommentIdAndUserId(int commentId, int userId) {
+    public Reaction_comments findReactionByCommentIdAndUserId(int commentId, int userId) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
                             "from Reaction_comments where comment.id = :commentId and user.id = :userId",
@@ -157,7 +161,7 @@ public class ReactionRepositoryImpl implements ReactionRepository {
         }
     }
 
-    private Reaction_posts findReactionByPostIdAndUserId(int postId, int userId) {
+    public Reaction_posts findReactionByPostIdAndUserId(int postId, int userId) {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery(
                             "from Reaction_posts where post.id = :postId and user.id = :userId",
@@ -167,4 +171,5 @@ public class ReactionRepositoryImpl implements ReactionRepository {
                     .uniqueResult();
         }
     }
+
 }

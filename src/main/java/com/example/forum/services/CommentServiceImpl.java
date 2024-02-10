@@ -4,6 +4,7 @@ import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
+import com.example.forum.models.enums.Reaction;
 import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.CommentRepository;
 import com.example.forum.repositories.contracts.PostRepository;
@@ -56,7 +57,7 @@ public class CommentServiceImpl implements CommentService {
     public void updateComment(Comment comment, User user) {
         checkBlockOrDeleteUser(user);
         //Comment commentToUpdate = commentRepository.getCommentById(comment.getId());
-        checkAccessPermissionsUser(comment.getUser().getId(), user, MODIFY_USER_MESSAGE_ERROR);
+        checkAccessPermissionsUser(comment.getUser().getId(), user, UPDATE_USER_MESSAGE_ERROR);
         this.commentRepository.updateComment(comment);
     }
 

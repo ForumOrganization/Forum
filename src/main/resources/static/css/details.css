@@ -101,3 +101,14 @@
 .actionBtn > a:hover {
     background-position: right;
 }
+
+.fa-thumbs-up{
+    content: "\f164";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+.fa-thumbs-down{
+    content: "\f165";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
