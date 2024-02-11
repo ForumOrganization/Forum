@@ -9,6 +9,12 @@
             <input type="file" name="file" accept="image/*">
             <input type="submit" value="Upload">
         </form>
+<!--        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">-->
+<!--            <form>-->
+<!--                <label for="phoneNumber">Phone Number:</label>-->
+<!--                <input type="text" id="phoneNumber" name="phoneNumber">-->
+<!--            </form>-->
+<!--        </div>-->
         <form th:replace="~{UserForm.html :: user-form(Update)}"></form>
         <form th:replace="~{HomeView.html :: footer}"></form>
     </div>
