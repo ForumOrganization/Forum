@@ -9,7 +9,6 @@ import com.example.forum.helpers.UserMapper;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
-import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -20,7 +19,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Set;
 
 @Controller
@@ -317,5 +323,31 @@ public class UserMvcController {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
+    }
+
+    @PostMapping("/{id}/upload-profile-picture")
+    public String uploadProfilePicture(@PathVariable int id, @RequestParam("file") MultipartFile file,
+                                       HttpSession session, Model model) {
+        try {
+            String fileName = "/mages/" + file.getOriginalFilename();
+            String uploadDir = "static/images/";
+
+            String relativeUrl = "/images/" + fileName;
+            userService.saveProfilePictureUrl(
+                    authenticationHelper.tryGetCurrentUser(session).getUsername(), relativeUrl);
+            Path uploadPath = Paths.get(uploadDir);
+            Files.createDirectories(uploadPath);
+
+            try (InputStream inputStream = file.getInputStream()) {
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            return "AccessDeniedView";
+        }
+
+        return "redirect:/users/username/" + authenticationHelper
+                .tryGetCurrentUser(session)
+                .getUsername();
     }
 }

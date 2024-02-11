@@ -5,7 +5,11 @@
 <div class="body-content">
     <div th:style="text-align">
         <form th:replace="~{HomeView.html :: header}"></form>
-        <form th:replace="~{UserForm.html :: user-form(title)}"></form>
+        <form method="post" action="/{id}/upload-profile-picture" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*">
+            <input type="submit" value="Upload">
+        </form>
+        <form th:replace="~{UserForm.html :: user-form(Update)}"></form>
         <form th:replace="~{HomeView.html :: footer}"></form>
     </div>
 </div>

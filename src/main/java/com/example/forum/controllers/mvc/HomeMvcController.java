@@ -50,11 +50,10 @@ public class HomeMvcController {
 
             if (user.getRole() == Role.ADMIN) {
                 List<User> users = userService.getAll();
-                model.addAttribute("currentUser", users);
+                model.addAttribute("users", users);
             }
 
-//                model.addAttribute("isAuthenticated", true);
-
+            model.addAttribute("isAuthenticated", true);
             return "AdminPortalView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
