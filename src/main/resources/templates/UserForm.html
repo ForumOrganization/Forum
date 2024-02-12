@@ -59,9 +59,9 @@
 <div th:fragment="user-form(firstName)">
     <h2 th:text="${firstName}">First Name</h2>
     <form th:action="@{__${requestURI}__}" th:object="${user}" method="post">
-        <label th:text="#{user.label.username}">User name</label><br/>
-        <input type="text" th:field="*{username}"/><br/>
-        <label class="error" th:errors="*{username}">Title error placeholder</label><br/><br/>
+<!--        <label th:text="#{user.label.username}">User name</label><br/>-->
+<!--        <input type="text" th:field="*{username}"/><br/>-->
+<!--        <label class="error" th:errors="*{username}">Title error placeholder</label><br/><br/>-->
 
         <label th:text="#{user.label.first-name}">First name</label><br/>
         <input type="text" th:field="*{firstName}"/><br/>

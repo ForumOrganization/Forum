@@ -2,10 +2,7 @@ package com.example.forum.helpers;
 
 
 import com.example.forum.models.User;
-import com.example.forum.models.dtos.PhoneNumberDto;
-import com.example.forum.models.dtos.RegisterDto;
-import com.example.forum.models.dtos.UserDto;
-import com.example.forum.models.dtos.UserResponseDto;
+import com.example.forum.models.dtos.*;
 import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,4 +81,14 @@ public class UserMapper {
         user.setRole(Role.USER);
         return user;
     }
+        public User fromDtoUpdate2(int id, UserDto2 dto) {
+            User updatedUser = userService.getById(id);
+            updatedUser.setId(id);
+            updatedUser.setUsername(userService.getById(id).getUsername());
+            updatedUser.setFirstName(dto.getFirstName());
+            updatedUser.setLastName(dto.getLastName());
+            updatedUser.setEmail(dto.getEmail());
+            updatedUser.setPassword(dto.getPassword());
+            return updatedUser;
+        }
 }

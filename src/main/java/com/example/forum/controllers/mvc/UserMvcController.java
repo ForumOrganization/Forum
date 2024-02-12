@@ -9,6 +9,7 @@ import com.example.forum.helpers.UserMapper;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.dtos.UserDto2;
 import com.example.forum.services.contracts.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -162,7 +163,7 @@ public class UserMvcController {
 
     @PostMapping("/{id}/update")
     public String updateUser(@PathVariable int id,
-                             @Valid @ModelAttribute("user") UserDto dto,
+                             @Valid @ModelAttribute("user") UserDto2 dto,
                              BindingResult bindingResult,
                              Model model,
                              HttpSession session) {
@@ -172,13 +173,12 @@ public class UserMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-
         if (bindingResult.hasErrors()) {
             return "UserUpdateView";
         }
 
         try {
-            User userToUpdate = userMapper.fromDtoUpdate(id, dto);
+            User userToUpdate = userMapper.fromDtoUpdate2(id, dto);
             userService.updateUser(userToUpdate, user);
             return "redirect:/user";
         } catch (EntityNotFoundException e) {
