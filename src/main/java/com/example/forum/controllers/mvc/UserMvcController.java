@@ -196,7 +196,7 @@ public class UserMvcController {
     }
 
     @GetMapping("/{id}/delete")
-    public String deletePost(@PathVariable int id, Model model, HttpSession session) {
+    public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
@@ -205,8 +205,9 @@ public class UserMvcController {
         }
 
         try {
+            user = authenticationHelper.tryGetCurrentUser(session);
             userService.deleteUser(id, user);
-            return "redirect:/users";
+            return "HomeView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());

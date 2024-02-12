@@ -255,8 +255,9 @@ public class UserRepositoryImpl implements UserRepository {
                 session.merge(post);
             }
 
-            userToDelete.setDeleted(true);
-            session.merge(userToDelete);
+//            userToDelete.setDeleted(true);
+//            session.merge(userToDelete);
+            session.remove(userToDelete);
             session.getTransaction().commit();
         }
     }

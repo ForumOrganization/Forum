@@ -14,6 +14,7 @@
 
 <h3>
     <a th:if="${isAuthenticated}"  th:href="@{'/users/'+${currentUser.id}+'/update'}">Update</a>
+    <a th:if="${isAuthenticated}"  th:href="@{'/users/'+${currentUser.id}+'/delete'}">Delete</a>
 </h3>
 </div>
 <div>
