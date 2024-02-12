@@ -207,7 +207,10 @@ public class UserMvcController {
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
             userService.deleteUser(id, user);
-            return "HomeView";
+//            session.invalidate();
+            session.isNew();
+            session.invalidate();
+            return "redirect:/auth/login";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
