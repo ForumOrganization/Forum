@@ -4,8 +4,8 @@ import jakarta.validation.constraints.Pattern;
 
 public class PhoneNumberDto {
 
-    @Pattern(regexp = "^\\+[0-9-()\\s]{9,}+$",
-            message = "Invalid phone number format")
+//    @Pattern(regexp = "^\\+[0-9-()\\s]{9,}+$",
+//            message = "Invalid phone number format")
     private String phoneNumber;
 
     public PhoneNumberDto() {

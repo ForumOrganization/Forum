@@ -53,6 +53,7 @@ public class HomeMvcController {
                 model.addAttribute("users", users);
             }
 
+            model.addAttribute("user", user);
             model.addAttribute("isAuthenticated", true);
             return "AdminPortalView";
         } catch (EntityNotFoundException e) {

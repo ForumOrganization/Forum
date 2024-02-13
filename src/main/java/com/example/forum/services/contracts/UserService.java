@@ -32,7 +32,7 @@ public interface UserService {
 
     String getProfilePictureUrl(String username);
 
-    void updateToAdmin(User userAdmin, User updateToAdmin);
+    void updateToAdmin(User updateToAdmin, User userAdmin);
 
     void blockUser(User admin, User blockUser);
 

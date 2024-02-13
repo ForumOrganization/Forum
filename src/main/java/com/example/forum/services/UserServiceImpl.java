@@ -166,7 +166,12 @@ public class UserServiceImpl implements UserService {
         checkAccessPermissionsAdmin(admin, UPDATE_PHONE_NUMBER_ERROR_MESSAGE);
         checkAccessPermissionsUser(admin.getId(), userPhoneNumberToBeUpdate, UPDATE_PHONE_NUMBER_ERROR_MESSAGE);
 
-        if (userPhoneNumberToBeUpdate.getPhoneNumber() != null
+        if (admin.getPhoneNumber() != null
+                && userPhoneNumberToBeUpdate.getPhoneNumber().isEmpty()) {
+            admin.setPhoneNumber(userPhoneNumberToBeUpdate.getPhoneNumber());
+            userRepository.updateUser(admin);
+
+        } else if (userPhoneNumberToBeUpdate.getPhoneNumber() != null
                 && !userPhoneNumberToBeUpdate.getPhoneNumber().isEmpty()) {
 
             if (userRepository.existsByPhoneNumber(userPhoneNumberToBeUpdate)) {
@@ -175,6 +180,7 @@ public class UserServiceImpl implements UserService {
 
             admin.setPhoneNumber(userPhoneNumberToBeUpdate.getPhoneNumber());
             userRepository.updateUser(admin);
+
         } else {
             throw new EntityNotFoundException("Admin", "phone number");
         }

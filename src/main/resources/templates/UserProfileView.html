@@ -12,13 +12,28 @@
         <p th:text="'Role: ' + ${currentUser.role}"></p>
     </div>
 
-<h3>
-    <a th:if="${isAuthenticated}"  th:href="@{'/users/'+${currentUser.id}+'/update'}">Update</a>
-    <a th:if="${isAuthenticated}"  th:href="@{'/users/'+${currentUser.id}+'/delete'}">Delete</a>
-</h3>
+    <h3>
+        <a th:if="${isAuthenticated}"  th:href="@{'/users/'+${currentUser.id}+'/update'}">Update</a>
+        <a th:if="${isAuthenticated}"  th:href="@{'/users/'+${currentUser.id}+'/delete'}">Delete</a>
+    </h3>
 </div>
 <div>
     <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>
+</div>
+<div th:each="user : ${users}" class="col mb-5">
+    <div class="card h-100" data-bs-toggle="modal" th:attr="data-bs-target='#userModal' + ${user.id}">
+        <!-- User image-->
+        <img class="card-img-top" src="../static/images/users/default.jpg"
+             th:src="${user.getProfilePicture != null ? user.getProfilePicture : '/images/users/default.jpg'}"
+             alt="User Profile Picture"/>
+        <!-- User details-->
+        <div class="card-body p-4">
+            <div class="text-center">
+                <a href="#" th:href="@{/users/__${user.id}__}">
+                    <h5 class="fw-bolder" th:text="${user.username}">User Username</h5></a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <form th:replace="~{HomeView.html :: footer}"></form>

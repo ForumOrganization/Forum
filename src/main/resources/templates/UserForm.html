@@ -59,26 +59,32 @@
 <div th:fragment="user-form(firstName)">
     <h2 th:text="${firstName}">First Name</h2>
     <form th:action="@{__${requestURI}__}" th:object="${user}" method="post">
-<!--        <label th:text="#{user.label.username}">User name</label><br/>-->
-<!--        <input type="text" th:field="*{username}"/><br/>-->
-<!--        <label class="error" th:errors="*{username}">Title error placeholder</label><br/><br/>-->
+        <!--        <label th:text="#{user.label.username}">User name</label><br/>-->
+        <!--        <input type="text" th:field="*{username}"/><br/>-->
+        <!--        <label class="error" th:errors="*{username}">Title error placeholder</label><br/><br/>-->
 
         <label th:text="#{user.label.first-name}">First name</label><br/>
         <input type="text" th:field="*{firstName}"/><br/>
-        <label class="error" th:errors="*{firstName}">Content error placeholder</label><br/><br/>
+        <label class="error" th:errors="*{firstName}">First name error placeholder</label><br/><br/>
 
         <label th:text="#{user.label.last-name}">Last name</label><br/>
         <input type="text" th:field="*{lastName}"/><br/>
-        <label class="error" th:errors="*{lastName}">Content error placeholder</label><br/><br/>
+        <label class="error" th:errors="*{lastName}">Last name error placeholder</label><br/><br/>
 
         <label th:text="#{user.label.email}">Email</label><br/>
         <input type="text" th:field="*{email}"/><br/>
-        <label class="error" th:errors="*{email}">Content error placeholder</label><br/><br/>
+        <label class="error" th:errors="*{email}">Email error placeholder</label><br/><br/>
 
         <label th:text="#{user.label.password}">Password</label><br/>
         <input type="text" th:field="*{password}"/><br/>
-        <label class="error" th:errors="*{password}">Content error placeholder</label><br/><br/>
+        <label class="error" th:errors="*{password}">Password error placeholder</label><br/><br/>
 
+        <div th:if="${session.isAdmin}">
+
+                <label th:text="#{user.label.phoneNumber}">Phone Number</label><br/>
+                <input type="text" th:field="*{phoneNumber}"/><br/>
+                <label class="error" th:errors="*{phoneNumber}">Phone number error placeholder</label><br/><br/>
+        </div>
         <input type="submit" value="Save"/>
     </form>
 </div>

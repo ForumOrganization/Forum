@@ -13,5 +13,26 @@
     <br/><br/>
     <button type="submit">Update to Admin</button>
 </form>
+
+<!--<h1>Update User to Admin</h1>-->
+<!--<form action="#" th:action="@{/users/{id}/update-to-admin(id=${user.id})}" th:object="${user}" method="post">-->
+<!--    <div class="form-group">-->
+<!--        <label for="username">Username:</label>-->
+<!--        <input type="text" id="username" th:field="*{username}" class="form-control" readonly>-->
+<!--        <span class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--        <label for="email">Email:</label>-->
+<!--        <input type="email" id="email" th:field="*{email}" class="form-control">-->
+<!--        <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>-->
+<!--    </div>-->
+<!--    <div class="form-group">-->
+<!--        <button type="submit" class="btn btn-primary">Update to Admin</button>-->
+<!--    </div>-->
+<!--</form>-->
+<!--<div th:if="${statusCode}">-->
+<!--    <p>Status Code: <span th:text="${statusCode}"></span></p>-->
+<!--    <p>Error: <span th:text="${error}"></span></p>-->
+<!--</div>-->
 </body>
 </html>

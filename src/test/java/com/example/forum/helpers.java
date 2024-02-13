@@ -53,6 +53,7 @@ public class helpers {
         return new CommentFilterOptions(
                 createMockPost(),
                 "content",
+                LocalDate.now(),
                 "sort",
                 "order");
     }

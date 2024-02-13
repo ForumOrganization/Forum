@@ -19,7 +19,7 @@ public class UserMapper {
 
     public User fromDtoRegister(UserDto dto) {
         User user = new User();
-        user.setUsername(dto.getUsername());
+//        user.setUsername(dto.getUsername());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
@@ -30,7 +30,8 @@ public class UserMapper {
     public User fromDtoUpdate(int id, UserDto dto) {
         User updatedUser = userService.getById(id);
         updatedUser.setId(id);
-        updatedUser.setUsername(dto.getUsername());
+//        updatedUser.setUsername(dto.getUsername());
+        updatedUser.setUsername(userService.getById(id).getUsername());
         updatedUser.setFirstName(dto.getFirstName());
         updatedUser.setLastName(dto.getLastName());
         updatedUser.setEmail(dto.getEmail());
@@ -81,14 +82,4 @@ public class UserMapper {
         user.setRole(Role.USER);
         return user;
     }
-        public User fromDtoUpdate2(int id, UserDto2 dto) {
-            User updatedUser = userService.getById(id);
-            updatedUser.setId(id);
-            updatedUser.setUsername(userService.getById(id).getUsername());
-            updatedUser.setFirstName(dto.getFirstName());
-            updatedUser.setLastName(dto.getLastName());
-            updatedUser.setEmail(dto.getEmail());
-            updatedUser.setPassword(dto.getPassword());
-            return updatedUser;
-        }
 }

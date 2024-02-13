@@ -5,17 +5,18 @@
 <div class="body-content">
     <div th:style="text-align">
         <form th:replace="~{HomeView.html :: header}"></form>
-        <form method="post" action="/{id}/upload-profile-picture" enctype="multipart/form-data">
-            <input type="file" name="file" accept="image/*">
-            <input type="submit" value="Upload">
-        </form>
-<!--        <div th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">-->
-<!--            <form>-->
-<!--                <label for="phoneNumber">Phone Number:</label>-->
-<!--                <input type="text" id="phoneNumber" name="phoneNumber">-->
-<!--            </form>-->
-<!--        </div>-->
+        <!--        <form method="post" action="/users/upload-profile-picture" enctype="multipart/form-data">-->
+        <!--            <input type="file" name="file" accept="image/*">-->
+        <!--            <input type="submit" value="Upload">-->
+        <!--        </form>-->
         <form th:replace="~{UserForm.html :: user-form(Update)}"></form>
+<!--        <form th:action="@{'/users/' + ${userId} + '/phone-number'}">-->
+<!--            <label th:if="${session.isAdmin}" th:text="#{user.label.phoneNumber}">Phone Number</label>-->
+<!--            <input type="text" th:field="*{user.phoneNumber}"/><br/>-->
+<!--            <label class="error" th:errors="*{user.phoneNumber}">Phone number error placeholder</label><br/><br/>-->
+
+<!--            <input type="submit" value="Save"/>-->
+<!--        </form>-->
         <form th:replace="~{HomeView.html :: footer}"></form>
     </div>
 </div>

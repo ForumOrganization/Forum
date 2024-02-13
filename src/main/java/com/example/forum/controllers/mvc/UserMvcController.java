@@ -8,15 +8,14 @@ import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.UserMapper;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
+import com.example.forum.models.dtos.PhoneNumberDto;
 import com.example.forum.models.dtos.UserDto;
-import com.example.forum.models.dtos.UserDto2;
+import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -107,7 +106,7 @@ public class UserMvcController {
         }
 
         model.addAttribute("user", new UserDto());
-        return "UserCreateView";
+        return "RegisterView";
     }
 
     @PostMapping("/new")
@@ -123,7 +122,7 @@ public class UserMvcController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "UserCreateView";
+            return "RegisterView";
         }
 
         try {
@@ -163,7 +162,8 @@ public class UserMvcController {
 
     @PostMapping("/{id}/update")
     public String updateUser(@PathVariable int id,
-                             @Valid @ModelAttribute("user") UserDto2 dto,
+                             @Valid @ModelAttribute("user") UserDto dto,
+                             @Valid PhoneNumberDto phoneNumberDto,
                              BindingResult bindingResult,
                              Model model,
                              HttpSession session) {
@@ -178,18 +178,34 @@ public class UserMvcController {
         }
 
         try {
-            User userToUpdate = userMapper.fromDtoUpdate2(id, dto);
-            userService.updateUser(userToUpdate, user);
+            User userToUpdate = userMapper.fromDtoUpdate(id, dto);
+
+            if (userToUpdate.getRole() == Role.ADMIN && phoneNumberDto != null) {
+                User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto);
+                userService.addPhoneNumberToAdmin(user, userPhoneNumberToBeUpdate);
+            }
+
+            userService.updateUser(user, userToUpdate);
             return "redirect:/user";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("username", "duplicate_user", e.getMessage());
-            return "UserUpdateView";
-        } catch (AuthorizationException e) {
+        }
+//        catch (DuplicateEntityException e) {
+//            bindingResult.rejectValue("username", "duplicate_user", e.getMessage());
+//            return "UserUpdateView";
+//        }
+        catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityAlreadyDeleteException e) {
+            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
@@ -229,30 +245,31 @@ public class UserMvcController {
     }
 
     @PostMapping("/{id}/update-to-admin")
-    public String updateToAdmin(@PathVariable int id, @Valid @ModelAttribute("user") Model model,
-                                BindingResult bindingResult, HttpSession session) {
+    public String updateToAdmin(@PathVariable int id,
+                                @Valid User userToUpdate, BindingResult bindingResult,
+                                Model model,
+                                HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-
         if (bindingResult.hasErrors()) {
-            return "UpdateToAdminView";
+            return "AdminPortalView";
         }
 
         try {
-            User userToBeUpdate = userService.getById(id);
-            userService.updateToAdmin(user, userToBeUpdate);
-            return "redirect:/users";
+            userToUpdate = userService.getByEmail(userToUpdate.getEmail());
+            userService.updateToAdmin(userToUpdate, user);
+            return "redirect:/admin";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("user", "duplicate_admin", e.getMessage());
-            return "UpdateToAdminView";
+            bindingResult.rejectValue("username", "duplicate_user", e.getMessage());
+            return "AdminPortalView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -295,6 +312,59 @@ public class UserMvcController {
             return "ErrorView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+    @GetMapping("/{id}/phone-number")
+    public String updateUserPhoneNumberForm(@PathVariable int id, Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+
+        model.addAttribute("user", user);
+        return "UserUpdateView";
+    }
+
+    @PostMapping("/{id}/phone-number")
+    public String updateUserPhoneNumber(@PathVariable int id,
+                                        @Valid PhoneNumberDto phoneNumberDto,
+                                        BindingResult bindingResult,
+                                        Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "UserUpdateView";
+        }
+
+        try {
+            User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto);
+            userService.addPhoneNumberToAdmin(user, userPhoneNumberToBeUpdate);
+            model.addAttribute("user", user);
+            return "UserUpdateView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityAlreadyDeleteException e) {
+            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (DuplicateEntityException e) {
