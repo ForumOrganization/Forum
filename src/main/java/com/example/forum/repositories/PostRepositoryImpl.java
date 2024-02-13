@@ -6,6 +6,7 @@ import com.example.forum.models.Post;
 import com.example.forum.models.Reaction_comments;
 import com.example.forum.models.Reaction_posts;
 import com.example.forum.repositories.contracts.PostRepository;
+import com.example.forum.repositories.contracts.ReactionRepository;
 import com.example.forum.utils.PostFilterOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -20,10 +21,12 @@ import java.util.*;
 public class PostRepositoryImpl implements PostRepository {
 
     private final SessionFactory sessionFactory;
+    private final ReactionRepository reactionRepository;
 
     @Autowired
-    public PostRepositoryImpl(SessionFactory sessionFactory) {
+    public PostRepositoryImpl(SessionFactory sessionFactory, ReactionRepository reactionRepository) {
         this.sessionFactory = sessionFactory;
+        this.reactionRepository = reactionRepository;
     }
 
     @Override
@@ -205,6 +208,19 @@ public class PostRepositoryImpl implements PostRepository {
             session.remove(postToDelete);
             session.getTransaction().commit();
         }
+    }
+
+    public Post reactToPost(Post currentPost) {
+        try (Session session = sessionFactory.openSession()) {
+//            Reaction_posts existingReaction = reactionRepository
+//                    .findReactionByPostIdAndUserId(currentPost.getId(), reaction.getUser().getId());
+
+            session.beginTransaction();
+            session.merge(currentPost);
+            session.getTransaction().commit();
+        }
+        return currentPost;
+
     }
 
     private String generateOrderBy(PostFilterOptions postFilterOptions) {

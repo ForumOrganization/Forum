@@ -7,11 +7,14 @@ import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.PostMapper;
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
+import com.example.forum.models.Reaction_posts;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PostDto;
 import com.example.forum.models.dtos.PostFilterDto;
+import com.example.forum.models.enums.Reaction;
 import com.example.forum.services.contracts.CommentService;
 import com.example.forum.services.contracts.PostService;
+import com.example.forum.services.contracts.ReactionService;
 import com.example.forum.utils.PostFilterOptions;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -31,14 +34,16 @@ public class PostMvcController {
 
     private final PostService postService;
     private final CommentService commentService;
+    private final ReactionService reactionService;
     private final PostMapper postMapper;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public PostMvcController(PostService postService,CommentService commentService, PostMapper postMapper,
+    public PostMvcController(PostService postService, CommentService commentService, ReactionService reactionService, PostMapper postMapper,
                              AuthenticationHelper authenticationHelper) {
         this.postService = postService;
         this.commentService=commentService;
+        this.reactionService = reactionService;
         this.postMapper = postMapper;
         this.authenticationHelper = authenticationHelper;
     }
@@ -68,10 +73,21 @@ public class PostMvcController {
     }
 
     @GetMapping("/{id}")
-    public String showSinglePost(@PathVariable int id, Model model) {
+    public String showSinglePost(@PathVariable int id, Model model,HttpSession session) {
+        try {
+            authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+
         try {
             Post post = postService.getById(id);
             List<Comment> comments=commentService.getAllCommentsByPostId(id);
+            long likeCount=postService.countReactionLikes(post);
+            long dislikeCount=postService.countReactionDislikes(post);
+
+            model.addAttribute("likeCount",likeCount);
+            model.addAttribute("dislikeCount",dislikeCount);
             model.addAttribute("postId", id);
             model.addAttribute("post", post);
             if(!comments.isEmpty()) {
@@ -216,5 +232,47 @@ public class PostMvcController {
         List<Post> mostCommentedPosts = postService.getTopCommentedPosts();
         model.addAttribute("posts", mostCommentedPosts);
         return "MostCommentedPostsView";
+    }
+    @GetMapping("/{postId}/like")
+    public String likeComment (@PathVariable int postId, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+        Reaction_posts reaction=reactionService.findReactionByPostIdAndUserId(postId,user.getId());
+        if(reaction!=null&& reaction.getReaction().equals(Reaction.LIKES)){
+            reactionService.deleteReactionPost(reaction.getId(),user);
+            return "redirect:/posts/"+postId;
+
+        }
+        Reaction_posts reactionPost = new Reaction_posts();
+        reactionPost.setReaction(Reaction.LIKES);
+        reactionPost.setUser(user);
+        postService.reactToPost(postId,reactionPost);
+        return "redirect:/posts/"+postId;
+
+    }
+    @GetMapping("/{postId}/dislike")
+    public String dislikeComment (@PathVariable int postId, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+        Reaction_posts reaction=reactionService.findReactionByPostIdAndUserId(postId,user.getId());
+        if(reaction!=null&& reaction.getReaction().equals(Reaction.DISLIKES)){
+            reactionService.deleteReactionPost(reaction.getId(),user);
+            return "redirect:/posts/"+postId;
+
+        }
+        Reaction_posts reactionPost = new Reaction_posts();
+        reactionPost.setReaction(Reaction.DISLIKES);
+        reactionPost.setUser(user);
+        postService.reactToPost(postId,reactionPost);
+        return "redirect:/posts/"+postId;
+
     }
 }

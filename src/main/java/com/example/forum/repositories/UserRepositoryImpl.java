@@ -300,7 +300,7 @@ public class UserRepositoryImpl implements UserRepository {
             Query<Long> query = session.createQuery("SELECT COUNT(u) FROM User u", Long.class);
             Long userCount = query.uniqueResult();
 
-            return userCount != null && userCount == 0;
+            return userCount == 0;
         }
     }
 

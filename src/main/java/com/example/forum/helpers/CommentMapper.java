@@ -2,8 +2,10 @@ package com.example.forum.helpers;
 
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
+import com.example.forum.models.Reaction_comments;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.CommentDto;
+import com.example.forum.models.enums.Reaction;
 import com.example.forum.services.contracts.PostService;
 import com.example.forum.services.contracts.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,4 +44,6 @@ public class CommentMapper {
         commentDto.setContent(comment.getContent());
         return commentDto;
     }
+
+
 }

@@ -5,7 +5,6 @@
 <form th:replace="~{HomeView.html :: header}"></form>
 
 <div class="body-content">
-
     <div th:unless="${posts.isEmpty()}">
         <h2 th:text="#{posts.title}">Most recent posts</h2>
 

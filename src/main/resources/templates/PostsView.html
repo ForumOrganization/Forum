@@ -3,8 +3,16 @@
 <form th:replace="~{HomeView.html :: head('All Posts')}"></form>
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
+    <div>
+        <p>
+        <a th:href="@{'/posts/most-recent-posts'}">Most recent posts</a>
+        </p>
+        <p>
+        <a th:href="@{'/posts/most-commented-posts'}">Most commented posts</a>
+        </p>
+    </div>
+<div class="body-content" th:if="${isAuthenticated}">
 
-<div class="body-content">
     <form action="#" th:action="@{/posts}" method="get" th:object="${filterOptions}">
         <label th:text="#{posts.filter.label}">Filter Options</label>
         <br/><br/>
@@ -31,14 +39,8 @@
     <div th:if="${posts.isEmpty()}">
         <h2 th:text="#{posts.title.empty}">No Posts</h2>
     </div>
-    <div>
-        <p>
-        <a th:href="@{'/posts/most-recent-posts'}">Most recent posts</a>
-        </p>
-        <p>
-        <a th:href="@{'/posts/most-commented-posts'}">Most commented posts</a>
-        </p>
-    </div>
+
+
     <div th:unless="${posts.isEmpty()}">
         <h2 th:text="#{posts.title}">All Posts</h2>
 

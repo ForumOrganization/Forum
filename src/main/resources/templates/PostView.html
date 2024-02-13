@@ -3,7 +3,7 @@
 <div th:replace="~{HomeView.html :: head(${post.title})}"></div>
 <script src="https://kit.fontawesome.com/30f218fe1f.js" crossorigin="anonymous"></script>
 
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <body>
 <div th:replace="~{HomeView.html :: header}"></div>
 
@@ -19,61 +19,48 @@
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/update}">Update</a>
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
         <a th:if="${isAuthenticated}" th:href="@{/comments/new/posts/{postId}(postId=${postId})}">Create Comment</a>
+        <a th:if="${isAuthenticated}" th:href="@{/comments/new/posts/{postId}(postId=${postId})}">Create Comment</a>
+        <a th:if="${isAuthenticated}" th:href="@{__${requestURI}__/like}">
+            <i class="fa-regular fa-thumbs-up"></i>
+            <span th:text="${likeCount}">likes</span>
+
+        </a>
+        <a th:if="${isAuthenticated}" th:href="@{__${requestURI}__/dislike}">
+            <i class="fa-regular fa-thumbs-down"></i>
+            <span th:text="${dislikeCount}">dislikes</span>
+        </a>
     </h3>
 </div>
 <h3>Comments:</h3>
 <div th:if="${comments}">
     <ul>
-        <li th:each="comment : ${comments}">
+        <li th:each="comment : ${comments}" data-comment-id="${comment.id}">
             <p th:text="${comment.content}"></p>
             <p th:text="'Created By: ' + ${comment.user.username}"></p>
             <p th:text="'Creation Time: ' + ${comment.getCreationTime()}"></p>
 
-<!--<h4>-->
-<!--&lt;!&ndash;    <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/update/posts/'+${postId}}">Update</a>&ndash;&gt;-->
-<!--    <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/update'}">Update</a>-->
-<!--    <a th:if="${isAuthenticated}"  th:href="@{'/comments/'+${comment.id}+'/delete'}">Delete</a>-->
 
-<!--    <a th:if="${isAuthenticated}" th:href="@{'/comments/'+${comment.id}+'/Like'}">-->
-<!--        <i class="fa-regular fa-thumbs-up"></i>-->
-<!--    </a>-->
-<!--    <a th:if="${isAuthenticated}" th:href="@{'/comments/'+${comment.id}+'/DisLike'}">-->
-<!--        <i class="fa-regular fa-thumbs-down"></i>-->
-<!--    </a>-->
-<!--</h4>-->
             <h4>
                 <!-- Update and Delete links -->
                 <a th:if="${isAuthenticated}" th:href="@{'/comments/'+${comment.id}+'/update'}">Update</a>
                 <a th:if="${isAuthenticated}" th:href="@{'/comments/'+${comment.id}+'/delete'}">Delete</a>
 
-                <!-- Like button with count -->
-                <span id="likeButton">
-        <a th:href="@{'/comments/'+${comment.id}+'/Like'}">
-            <i class="fa-regular fa-thumbs-up"></i>
-            <span id="likeCount">Loading...</span> <!-- Display like count here -->
-        </a>
-    </span>
 
-                <!-- Dislike button with count -->
-                <span id="dislikeButton">
-        <a th:href="@{'/comments/'+${comment.id}+'/DisLike'}">
-            <i class="fa-regular fa-thumbs-down"></i>
-            <span id="dislikeCount">Loading...</span> <!-- Display dislike count here -->
-        </a>
-    </span>
+
+                <span class="likeButton">
+<a th:if="${isAuthenticated}" href="#" class="likeLink" th:onclick="'likeComment(\'' + ${comment.id} + '\'); return false;'">
+    <i class="fa-regular fa-thumbs-up"></i>
+    <span class="likeCount" th:id="'likeCount-' + ${comment.id}">0</span>
+</a>
+</span>
+                <span class="dislikeButton">
+<a th:if="${isAuthenticated}" href="#" class="dislikeLink" th:onclick="'dislikeComment(\'' + ${comment.id} + '\'); return false;'">
+    <i class="fa-regular fa-thumbs-down"></i>
+    <span class="dislikeCount" th:id="'dislikeCount-' + ${comment.id}">0</span>
+</a>
+</span>
             </h4>
 
-            <script>
-                // Fetch and display reaction counts
-                $.get('/comments/${comment.id}/reaction-count', function(data) {
-                    $('#likeCount').text(data.likeCount);
-                    $('#dislikeCount').text(data.dislikeCount);
-                })
-                    .fail(function() {
-                        $('#likeCount').text('Error fetching data');
-                        $('#dislikeCount').text('Error fetching data');
-                    });
-            </script>
 
         </li>
     </ul>
@@ -81,7 +68,7 @@
 <div th:if="${post.comments.isEmpty()}">
     <h2 th:text="#{comments.title.empty}">No comments yet.</h2>
 </div>
-<br/><br/>
+
 
 <form th:replace="~{HomeView.html :: footer}"></form>
 </body>

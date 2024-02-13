@@ -10,6 +10,7 @@ import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.utils.UserFilterOptions;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

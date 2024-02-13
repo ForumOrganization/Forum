@@ -106,7 +106,7 @@ public class UserMvcController {
         }
 
         model.addAttribute("user", new UserDto());
-        return "RegisterView";
+        return "UserCreateView";
     }
 
     @PostMapping("/new")
@@ -316,86 +316,6 @@ public class UserMvcController {
             return "ErrorView";
         } catch (DuplicateEntityException e) {
             model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        }
-    }
-
-    @GetMapping("/{id}/phone-number")
-    public String updateUserPhoneNumberForm(@PathVariable int id, Model model, HttpSession session) {
-        User user;
-        try {
-            user = authenticationHelper.tryGetCurrentUser(session);
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
-
-        model.addAttribute("user", user);
-        return "UserUpdateView";
-    }
-
-    @PostMapping("/{id}/phone-number")
-    public String updateUserPhoneNumber(@PathVariable int id,
-                                        @Valid PhoneNumberDto phoneNumberDto,
-                                        BindingResult bindingResult,
-                                        Model model, HttpSession session) {
-        User user;
-        try {
-            user = authenticationHelper.tryGetCurrentUser(session);
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "UserUpdateView";
-        }
-
-        try {
-            User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto);
-            userService.addPhoneNumberToAdmin(user, userPhoneNumberToBeUpdate);
-            model.addAttribute("user", user);
-            return "UserUpdateView";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        } catch (AuthorizationException e) {
-            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        } catch (EntityAlreadyDeleteException e) {
-            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        } catch (DuplicateEntityException e) {
-            model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        }
-    }
-
-    @GetMapping("/{id}/delete-phone-number")
-    public String deletePhoneNumber(@PathVariable int id, Model model, HttpSession session) {
-        User user;
-        try {
-            user = authenticationHelper.tryGetCurrentUser(session);
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
-
-        try {
-            userService.deletePhoneNumber(id, user);
-            return "redirect:/users";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        } catch (AuthorizationException e) {
-            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        } catch (EntityAlreadyDeleteException e) {
-            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }

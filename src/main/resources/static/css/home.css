@@ -100,16 +100,16 @@ img {
     width: 600px;
 }
 
-body {
-    background-image: url('../images/logo.png');
-    background-size: cover;
-}
+/*body {*/
+/*    background-image: url('../images/logo.png');*/
+/*    background-size: cover;*/
+/*}*/
 
-body {
-    background-image: url('../images/back.jpg');
-    background-size: cover;
-    background-image: fixed;
-}
+/*body {*/
+/*    !*background-image: url('../images/back.jpg');*!*/
+/*    background-size: cover;*/
+/*    !*background-image: fixed;*!*/
+/*}*/
 
 nav,
 footer {

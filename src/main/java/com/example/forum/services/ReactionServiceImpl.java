@@ -1,9 +1,6 @@
 package com.example.forum.services;
 
-import com.example.forum.models.Comment;
-import com.example.forum.models.Reaction_comments;
-import com.example.forum.models.Reaction_posts;
-import com.example.forum.models.User;
+import com.example.forum.models.*;
 import com.example.forum.models.enums.Reaction;
 import com.example.forum.repositories.contracts.ReactionRepository;
 import com.example.forum.services.contracts.ReactionService;
@@ -12,6 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
+import static com.example.forum.utils.CheckPermission.checkAccessPermissions;
+import static com.example.forum.utils.Messages.MODIFY_POST_ERROR_MESSAGE;
 
 @Service
 public class ReactionServiceImpl implements ReactionService {
@@ -33,15 +33,15 @@ public class ReactionServiceImpl implements ReactionService {
         return reactionRepository.getAllReactionsByCommentId(commentId);
     }
 
-    @Override
-    public Map<Reaction_posts, Integer> countReactionsPost(int postId) {
-        return reactionRepository.countReactionsPost(postId);
-    }
-
-    @Override
-    public Map<Reaction_comments, Integer> countReactionsComment(int commentId) {
-        return reactionRepository.countReactionsComment(commentId);
-    }
+//    @Override
+//    public Map<Reaction_posts, Integer> countReactionsPost(int postId) {
+//        return reactionRepository.countReactionsPost(postId);
+//    }
+//
+//    @Override
+//    public Map<String, Integer> countReactionsComment(int commentId) {
+//        return reactionRepository.countReactionsComment(commentId);
+//    }
 
     @Override
     public void updateReactionPost(Reaction_posts reaction, int postId) {
@@ -51,6 +51,10 @@ public class ReactionServiceImpl implements ReactionService {
     @Override
     public void updateReactionComment(Reaction_comments reaction, int commentId) {
         reactionRepository.updateReactionComment(reaction, commentId);
+    }
+    @Override
+    public void deleteReactionPost(int reactionId, User user) {
+        reactionRepository.deleteReactionPost(reactionId, user);
     }
 //    @Override
 //    public void likeComment(Comment comment, User user) {
@@ -77,4 +81,10 @@ public class ReactionServiceImpl implements ReactionService {
 //        reaction.setReaction(Reaction.DISLIKES);
 //        updateReactionComment(reaction,comment.getId());
 //    }
+ public Reaction_comments findReactionByCommentIdAndUserId(int commentId, int userId){
+        return reactionRepository.findReactionByCommentIdAndUserId(commentId,userId);
+ }
+    public Reaction_posts findReactionByPostIdAndUserId(int postId, int userId){
+        return reactionRepository.findReactionByPostIdAndUserId(postId,userId);
+    }
 }

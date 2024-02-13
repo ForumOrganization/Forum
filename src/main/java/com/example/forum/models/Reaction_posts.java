@@ -17,7 +17,7 @@ public class Reaction_posts {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type_reaction")
-    private Reaction reaction = Reaction.UNDEFINED;
+    private Reaction reaction;
 
     @OneToOne
     @JoinColumn(name = "user_id")

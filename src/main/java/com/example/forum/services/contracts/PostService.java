@@ -1,6 +1,7 @@
 package com.example.forum.services.contracts;
 
 import com.example.forum.models.Post;
+import com.example.forum.models.Reaction_posts;
 import com.example.forum.models.User;
 import com.example.forum.utils.PostFilterOptions;
 
@@ -25,4 +26,9 @@ public interface PostService {
     void update(Post post, User user);
 
     void delete(int id, User user);
+
+    Post reactToPost(int postId, Reaction_posts reactionPostToAdd);
+    long countReactionLikes(Post post);
+    long countReactionDislikes(Post post);
+
 }
