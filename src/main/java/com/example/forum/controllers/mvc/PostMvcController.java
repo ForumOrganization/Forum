@@ -205,4 +205,10 @@ public class PostMvcController {
             return "ErrorView";
         }
     }
+    @GetMapping("/most-recent-posts")
+    public String showMostRecentPosts(Model model) {
+        List<Post> mostRecentPosts = postService.getMostRecentPosts();
+        model.addAttribute("posts", mostRecentPosts);
+        return "TopRecentPostsView";
+    }
 }

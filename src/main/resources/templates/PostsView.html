@@ -31,6 +31,9 @@
     <div th:if="${posts.isEmpty()}">
         <h2 th:text="#{posts.title.empty}">No Posts</h2>
     </div>
+    <div>
+        <a th:href="@{'/posts/most-recent-posts'}">Most recent posts</a>
+    </div>
     <div th:unless="${posts.isEmpty()}">
         <h2 th:text="#{posts.title}">All Posts</h2>
 

@@ -75,8 +75,10 @@ public class PostRepositoryImpl implements PostRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery(
                             "SELECT p FROM Post p " +
-                                    "ORDER BY size(p.comments) DESC " +
-                                    "LIMIT 10", Post.class);
+                                    "ORDER BY size(p.comments) DESC "
+                                    +
+                                    "LIMIT 10"
+                    , Post.class);
 
             List<Post> result = query.list();
 
@@ -96,8 +98,12 @@ public class PostRepositoryImpl implements PostRepository {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery(
                             "SELECT p FROM Post p " +
-                                    "ORDER BY p.creationTime DESC " +
-                                    "LIMIT 10", Post.class)
+                                    "ORDER BY p.id DESC ",
+//                                    + "LIMIT 10",
+                            Post.class)
+//                    "SELECT p FROM Post p " +
+//                            "ORDER BY p.creationTime DESC ",
+//                    Post.class)
                     .setMaxResults(10);
 
             List<Post> result = query.list();
