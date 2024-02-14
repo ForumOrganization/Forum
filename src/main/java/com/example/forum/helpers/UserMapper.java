@@ -66,8 +66,8 @@ public class UserMapper {
         return userResponseDto;
     }
 
-    public User fromDtoUpdatePhoneNumber(int id, PhoneNumberDto dto) {
-        User updatedUser = userService.getById(id);
+    public User fromDtoUpdatePhoneNumber(int id, PhoneNumberDto dto, UserDto userDto) {
+        User updatedUser = fromDtoUpdate(id, userDto);
         updatedUser.setPhoneNumber(dto.getPhoneNumber());
         return updatedUser;
     }

@@ -180,23 +180,19 @@ public class UserMvcController {
         try {
             User userToUpdate = userMapper.fromDtoUpdate(id, dto);
 
-            if (userToUpdate.getRole() == Role.ADMIN && phoneNumberDto != null) {
-                User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto);
+            if (userToUpdate.getRole() != Role.ADMIN) {
+                userService.updateUser(user, userToUpdate);
+            } else {
+                User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto, dto);
                 userService.addPhoneNumberToAdmin(user, userPhoneNumberToBeUpdate);
             }
 
-            userService.updateUser(user, userToUpdate);
             return "redirect:/user";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }
-//        catch (DuplicateEntityException e) {
-//            bindingResult.rejectValue("username", "duplicate_user", e.getMessage());
-//            return "UserUpdateView";
-//        }
-        catch (AuthorizationException e) {
+        } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
@@ -205,7 +201,7 @@ public class UserMvcController {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (DuplicateEntityException e) {
-            model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }

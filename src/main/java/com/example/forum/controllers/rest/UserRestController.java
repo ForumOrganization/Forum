@@ -246,10 +246,10 @@ public class UserRestController {
     @PutMapping("/{id}/phone-number")
     public UserResponseDto updateUserPhoneNumber(@RequestHeader HttpHeaders headers,
                                                  @PathVariable int id,
-                                                 @Valid @RequestBody PhoneNumberDto phoneNumberDto) {
+                                                 @Valid @RequestBody PhoneNumberDto phoneNumberDto, UserDto dto) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
-            User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto);
+            User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto, dto);
             userService.addPhoneNumberToAdmin(user, userPhoneNumberToBeUpdate);
             return userMapper.toDto(userPhoneNumberToBeUpdate);
         } catch (EntityNotFoundException e) {
