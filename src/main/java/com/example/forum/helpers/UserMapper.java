@@ -39,6 +39,18 @@ public class UserMapper {
         return updatedUser;
     }
 
+    public User fromDtoUpdate3(int id, UserDto3 dto) {
+        User updatedUser = userService.getById(id);
+        updatedUser.setId(id);
+//        updatedUser.setUsername(dto.getUsername());
+        updatedUser.setUsername(userService.getById(id).getUsername());
+        updatedUser.setFirstName(dto.getFirstName());
+        updatedUser.setLastName(dto.getLastName());
+        updatedUser.setEmail(dto.getEmail());
+        updatedUser.setPassword(dto.getPassword());
+        return updatedUser;
+    }
+
     public UserResponseDto toDto(User user) {
         UserResponseDto userResponseDto = new UserResponseDto();
         userResponseDto.setId(user.getId());
@@ -59,6 +71,14 @@ public class UserMapper {
         userDto.setEmail(user.getEmail());
         return userDto;
     }
+    public UserDto3 userToDto3(User user) {
+        UserDto3 userDto = new UserDto3();
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setEmail(user.getEmail());
+        return userDto;
+    }
+
 
     public UserResponseDto toDtoRegisterAndUpdateUser(User user) {
         User userToUpdate = userService.getByUsername(user.getUsername());
@@ -68,6 +88,12 @@ public class UserMapper {
 
     public User fromDtoUpdatePhoneNumber(int id, PhoneNumberDto dto, UserDto userDto) {
         User updatedUser = fromDtoUpdate(id, userDto);
+        updatedUser.setPhoneNumber(dto.getPhoneNumber());
+        return updatedUser;
+    }
+
+    public User fromDtoUpdatePhoneNumber3(int id, PhoneNumberDto dto, UserDto3 userDto) {
+        User updatedUser = fromDtoUpdate3(id, userDto);
         updatedUser.setPhoneNumber(dto.getPhoneNumber());
         return updatedUser;
     }

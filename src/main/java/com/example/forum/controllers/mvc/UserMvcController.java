@@ -10,6 +10,7 @@ import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PhoneNumberDto;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.dtos.UserDto3;
 import com.example.forum.models.dtos.UserFilterDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
@@ -173,7 +174,7 @@ public class UserMvcController {
 
         try {
             User user = userService.getById(id);
-            UserDto userDto = userMapper.userToDto(user);
+            UserDto3 userDto = userMapper.userToDto3(user);
             model.addAttribute("userId", id);
             model.addAttribute("user", userDto);
             return "UserUpdateView";
@@ -186,7 +187,7 @@ public class UserMvcController {
 
     @PostMapping("/{id}/update")
     public String updateUser(@PathVariable int id,
-                             @Valid @ModelAttribute("user") UserDto dto,
+                             @Valid @ModelAttribute("user") UserDto3 dto,
                              @Valid PhoneNumberDto phoneNumberDto,
                              BindingResult bindingResult,
                              Model model,
@@ -202,12 +203,12 @@ public class UserMvcController {
         }
 
         try {
-            User userToUpdate = userMapper.fromDtoUpdate(id, dto);
+            User userToUpdate = userMapper.fromDtoUpdate3(id, dto);
 
             if (userToUpdate.getRole() != Role.ADMIN) {
                 userService.updateUser(user, userToUpdate);
             } else {
-                User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto, dto);
+                User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber3(id, phoneNumberDto, dto);
                 userService.addPhoneNumberToAdmin(user, userPhoneNumberToBeUpdate);
             }
 
