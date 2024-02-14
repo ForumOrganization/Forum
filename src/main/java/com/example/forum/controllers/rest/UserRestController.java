@@ -11,6 +11,7 @@ import com.example.forum.models.User;
 import com.example.forum.models.dtos.PhoneNumberDto;
 import com.example.forum.models.dtos.UserDto;
 import com.example.forum.models.dtos.UserResponseDto;
+import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 import com.example.forum.services.contracts.UserService;
 import com.example.forum.utils.UserFilterOptions;
@@ -50,16 +51,17 @@ public class UserRestController {
                                         @RequestParam(required = false) String firstName,
                                         @RequestParam(required = false) String lastName,
                                         @RequestParam(required = false) String email,
-                                        @RequestParam(required = false) Status role,
+                                        @RequestParam(required = false) Role role,
+                                        @RequestParam(required = false) Status status,
                                         @RequestParam(required = false) String sortBy,
                                         @RequestParam(required = false) String sortOrder) {
         try {
             authenticationHelper.tryGetUser(headers);
             UserFilterOptions userFilterOptions =
                     new UserFilterOptions(
-                            username, firstName, lastName, email, role, sortBy, sortOrder);
+                            username, firstName, lastName, email,role,status, sortBy, sortOrder);
 
-            List<User> users = userService.getAll();
+            List<User> users = userService.getAll(userFilterOptions);
 
             return users.stream()
                     .map(userMapper::toDto)

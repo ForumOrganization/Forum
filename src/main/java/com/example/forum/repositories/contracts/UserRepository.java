@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserRepository {
 
-    List<User> getAll();
+    List<User> getAll(UserFilterOptions userFilterOptions);
 
     User getById(int id);
 

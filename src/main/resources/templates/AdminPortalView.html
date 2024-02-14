@@ -3,11 +3,12 @@
 <form th:replace="~{HomeView.html :: head('Admin Portal')}"></form>
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
-<div class="body-content">
-    <h2 th:text="#{admin.welcome}">Welcome (design)!</h2>
+<!--<div class="body-content">-->
+<!--    <h2 th:if="${isAuthenticated && session.isAdmin}" th:text="#{admin.welcome}">Welcome (design)!</h2>-->
 <!--    <h2 th:text="${user}" th:if="${isAuthenticated}"></h2>-->
-    <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>
+<!--    <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>-->
 <!--    <p>Welcome my dear Admin!</p>-->
+    <form th:replace="~{UsersView.html :: usersView-form(Users)}"></form>
 
     <form action="#" th:action="@{/users/{id}/update-to-admin(id=${user.id})}" th:object="${user}" method="post">
         <!--        <div class="form-group">-->
@@ -41,7 +42,7 @@
             </form>
         </div>
     </div>
-</div>
+
 <form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

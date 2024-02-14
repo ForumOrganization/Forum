@@ -63,6 +63,7 @@ public class helpers {
                 createMockUser().getFirstName(),
                 createMockUser().getLastName(),
                 createMockUser().getEmail(),
+                Role.USER,
                 Status.ACTIVE,
                 "sort",
                 "order");

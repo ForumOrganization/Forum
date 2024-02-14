@@ -9,6 +9,7 @@ import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.services.contracts.UserService;
+import com.example.forum.utils.UserFilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll(/*UserFilterOptions userFilterOptions*/) {
-        return this.userRepository.getAll();
+    public List<User> getAll(UserFilterOptions userFilterOptions) {
+        return this.userRepository.getAll(userFilterOptions);
     }
 
     @Override
@@ -134,6 +135,20 @@ public class UserServiceImpl implements UserService {
 
         checkAccessPermissionsAdmin(executingUser, UPDATE_TO_ADMIN_ERROR_MESSAGE);
         targetUser.setRole(Role.ADMIN);
+        userRepository.updateUser(targetUser);
+    }
+    @Override
+    public void updateToUser(User targetUser, User executingUser) {
+        if (targetUser.getRole() == Role.USER) {
+            throw new DuplicateEntityException(
+                    "User", "id", String.valueOf(targetUser.getId()), " is already an user.");
+        }
+
+        checkAccessPermissionsAdmin(executingUser, UPDATE_TO_ADMIN_ERROR_MESSAGE);
+        if(targetUser.getId()==1){
+            throw new DuplicateEntityException( "User", "id", String.valueOf(targetUser.getId()), " can not make an user.");
+        }
+        targetUser.setRole(Role.USER);
         userRepository.updateUser(targetUser);
     }
 

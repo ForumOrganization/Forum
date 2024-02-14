@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserService {
 
-    List<User> getAll();
+    List<User> getAll(UserFilterOptions userFilterOptions);
 
     User getById(int id);
 
@@ -33,6 +33,7 @@ public interface UserService {
     String getProfilePictureUrl(String username);
 
     void updateToAdmin(User updateToAdmin, User userAdmin);
+    void updateToUser(User targetUser, User executingUser);
 
     void blockUser(User admin, User blockUser);
 

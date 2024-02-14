@@ -10,8 +10,11 @@ import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PhoneNumberDto;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.dtos.UserFilterDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
+import com.example.forum.utils.PostFilterOptions;
+import com.example.forum.utils.UserFilterOptions;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -29,6 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -57,16 +61,36 @@ public class UserMvcController {
     }
 
     @GetMapping
-    public String showAllUsers(Model model) {
-        model.addAttribute("users", userService.getAll());
-        return "UsersView";
+    public String showAllUsers(@ModelAttribute("userFilterOptions") UserFilterDto filterDto, Model model) {
+        UserFilterOptions userFilterOptions = new UserFilterOptions(
+                filterDto.getUsername(),
+                filterDto.getFirstName(),
+                filterDto.getLastName(),
+                filterDto.getEmail(),
+                filterDto.getRole(),
+                filterDto.getStatus(),
+                filterDto.getSortBy(),
+                filterDto.getSortOrder());
+        List<User> users = userService.getAll(userFilterOptions);
+        model.addAttribute("filterOptions", filterDto);
+        model.addAttribute("users", users);
+                userService.getAll(userFilterOptions);
+        return "AdminPortalView";
     }
 
     @GetMapping("/{id}")
-    public String showSingleUser(@PathVariable int id, Model model) {
+    public String showSingleUser(@PathVariable int id, Model model,HttpSession session) {
+
+            try {
+               authenticationHelper.tryGetCurrentUser(session);
+            } catch (AuthorizationException e) {
+                return "redirect:/auth/login";
+            }
+
         try {
             User user = userService.getById(id);
             model.addAttribute("user", user);
+            model.addAttribute("isAuthenticated", true);
             return "UserView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -238,15 +262,14 @@ public class UserMvcController {
         }
     }
 
-    @GetMapping("/{id}/update-to-admin")
-    public String updateToAdminForm(@PathVariable int id, Model model) {
-        model.addAttribute("userId", id);
-        return "UpdateToAdminView";
-    }
+//    @GetMapping("/{id}/update-to-admin")
+//    public String updateToAdminForm(@PathVariable int id, Model model) {
+//        model.addAttribute("userId", id);
+//        return "UpdateToAdminView";
+//    }
 
     @PostMapping("/{id}/update-to-admin")
     public String updateToAdmin(@PathVariable int id,
-                                @Valid User userToUpdate, BindingResult bindingResult,
                                 Model model,
                                 HttpSession session) {
         User user;
@@ -255,21 +278,48 @@ public class UserMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-        if (bindingResult.hasErrors()) {
-            return "AdminPortalView";
-        }
 
         try {
-            userToUpdate = userService.getByEmail(userToUpdate.getEmail());
+            User userToUpdate = userService.getById(id);
             userService.updateToAdmin(userToUpdate, user);
             return "redirect:/admin";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("username", "duplicate_user", e.getMessage());
-            return "AdminPortalView";
+        }  catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+    @PostMapping("/{id}/update-to-user")
+    public String updateToUser(@PathVariable int id,
+                                Model model,
+                                HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            User userToUpdate = userService.getById(id);
+            userService.updateToUser(userToUpdate, user);
+            return "redirect:/admin";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }  catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -293,7 +343,7 @@ public class UserMvcController {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (DuplicateEntityException e) {
-            model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }

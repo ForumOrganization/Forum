@@ -1,20 +1,99 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users</title>
-    <link rel="stylesheet" href="../static/styles.css">
-</head>
+<form th:replace="~{HomeView.html :: head(' All Users')}"></form>
 <body>
-<h1>All Users</h1>
-<div id="users-list">
-    <!-- Loop through users and display them -->
-    <div th:each="user : ${users}">
-        <p th:text="${user.username}"></p>
-        <!-- Display other user details as needed -->
+<form th:replace="~{HomeView.html :: header}"></form>
+
+<!--<h1>All Users</h1>-->
+<!--<div id="users-list">-->
+<!--    &lt;!&ndash; Loop through users and display them &ndash;&gt;-->
+<!--    <div th:each="user : ${users}">-->
+<!--        <p th:text="${user.username}"></p>-->
+<!--        &lt;!&ndash; Display other user details as needed &ndash;&gt;-->
+<!--    </div>-->
+<!--</div>-->
+<!--<script src="../static/scripts.js"></script>-->
+<div th:fragment="usersView-form(Users)">
+<div class="body-content" th:if="${isAuthenticated && session.isAdmin}">
+
+    <form action="#" th:action="@{/users}" method="get" th:object="${userFilterOptions}">
+        <label th:text="#{user.filter.label}">Filter Options</label>
+        <br/><br/>
+        <input type="text" placeholder="Username" th:field="*{username}"/>
+        <input type="text" placeholder="Name" th:field="*{firstName}"/>
+        <input type="text" placeholder="Last Name" th:field="*{lastName}"/>
+        <input type="text" placeholder="Email" th:field="*{email}"/>
+        <input type="text" placeholder="Role" th:field="*{role}"/>
+        <input type="text" placeholder="Status" th:field="*{status}"/>
+
+
+        <select th:field="*{sortBy}">
+            <option value="">Sort By</option>
+            <option value="username">Username</option>
+            <option value="firstName">First Name</option>
+            <option value="lastName">Last Name</option>
+            <option value="email">Email </option>
+            <option value="role">Role </option>
+            <option value="status">Status </option>
+        </select>
+        <select th:field="*{sortOrder}">
+            <option value="">Sort Order</option>
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+        <!--        <br/><br/>-->
+
+        <input type="submit" value="Search"/>
+    </form>
+    <div th:if="${users.isEmpty()}">
+        <h2 th:text="#{users.title.empty}">No Users</h2>
+    </div>
+
+
+    <div th:unless="${users.isEmpty()}">
+        <h2 th:text="#{users.title}">All Users</h2>
+
+        <div class="table">
+            <div class="header">
+                <div class="header-cell" th:text="#{user.label.username}">Username</div>
+                <div class="header-cell" th:text="#{user.label.first-name}">First Name</div>
+                <div class="header-cell" th:text="#{user.label.last-name}">Last Name</div>
+                <div class="header-cell" th:text="#{user.label.email}">Email</div>
+                <div class="header-cell" th:text="#{user.label.role}">Role</div>
+                <div class="header-cell" th:text="#{user.label.status}">Status</div>
+            </div>
+            <div class="row" th:each="user : ${users}">
+                <div class="cell">
+                    <a href="#" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.username}">User</a>
+                </div>
+                <div class="cell" th:text="${user.firstName}">First Name</div>
+                <div class="cell" th:text="${user.lastName}">Last Name</div>
+                <div class="cell" th:text="${user.email}">Email</div>
+                <div class="cell" th:text="${user.role}">Role</div>
+                <div class="cell" th:text="${user.status}">Status</div>
+                <div class="cell">
+                    <form th:action="@{'/users/' + ${user.id} + '/block'}" method="post">
+                        <button type="submit" th:if="${!user.isBlocked}">Block</button>
+                    </form>
+                    <form th:action="@{'/users/' + ${user.id} + '/unblock'}" method="post">
+                        <button type="submit" th:if="${user.isBlocked}">Unblock</button>
+                    </form>
+                </div>
+                <div class="cell">
+                    <form th:action="@{'/users/' + ${user.id} + '/update-to-admin'}" method="post">
+                        <button type="submit"  >Update to Admin</button>
+                    </form>
+                    <form th:action="@{'/users/' + ${user.id} + '/update-to-user'}" method="post">
+                        <button type="submit" >Update to User</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </div>
-<script src="../static/scripts.js"></script>
+
+
+<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

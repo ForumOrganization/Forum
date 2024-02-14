@@ -2,25 +2,33 @@ package com.example.forum.utils;
 
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
+import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 
 import java.util.Optional;
+import java.util.Spliterator;
 
 public class UserFilterOptions {
     private Optional<String> username;
     private Optional<String> firstName;
     private Optional<String> lastName;
     private Optional<String> email;
-    private Optional<Status> role;
+    private Optional<Role> role;
+    private Optional<Status> status;
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
+
+    public UserFilterOptions() {
+        this(null, null, null, null, null, null, null, null);
+    }
 
     public UserFilterOptions(
             String username,
             String firstName,
             String lastName,
             String email,
-            Status role,
+            Role role,
+            Status status,
             String sortBy,
             String sortOrder) {
         this.username = Optional.ofNullable(username);
@@ -28,6 +36,7 @@ public class UserFilterOptions {
         this.lastName = Optional.ofNullable(lastName);
         this.email = Optional.ofNullable(email);
         this.role = Optional.ofNullable(role);
+        this.status = Optional.ofNullable(status);
         this.sortBy = Optional.ofNullable(sortBy);
         this.sortOrder = Optional.ofNullable(sortOrder);
     }
@@ -48,8 +57,12 @@ public class UserFilterOptions {
         return email;
     }
 
-    public Optional<Status> getRole() {
+    public Optional<Role> getRole() {
         return role;
+    }
+
+    public Optional<Status> getStatus() {
+        return status;
     }
 
     public Optional<String> getSortBy() {

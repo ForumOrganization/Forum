@@ -4,8 +4,10 @@ import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.models.User;
+import com.example.forum.models.dtos.UserFilterDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
+import com.example.forum.utils.UserFilterOptions;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -44,16 +46,28 @@ public class HomeMvcController {
     }
 
     @GetMapping("/admin")
-    public String showAdminPortal(HttpSession session, Model model) {
+    public String showAdminPortal(@ModelAttribute("userFilterOptions") UserFilterDto filterDto,
+                                  HttpSession session, Model model) {
+        UserFilterOptions userFilterOptions = new UserFilterOptions(
+                filterDto.getUsername(),
+                filterDto.getFirstName(),
+                filterDto.getLastName(),
+                filterDto.getEmail(),
+                filterDto.getRole(),
+                filterDto.getStatus(),
+                filterDto.getSortBy(),
+                filterDto.getSortOrder());
+
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
 
             if (user.getRole() == Role.ADMIN) {
-                List<User> users = userService.getAll();
+                List<User> users = userService.getAll(userFilterOptions);
                 model.addAttribute("users", users);
             }
 
             model.addAttribute("user", user);
+            model.addAttribute("filterOptions", filterDto);
             model.addAttribute("isAuthenticated", true);
             return "AdminPortalView";
         } catch (EntityNotFoundException e) {

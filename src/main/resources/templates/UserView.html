@@ -3,11 +3,22 @@
 <form th:replace="~{HomeView.html :: head('User')}"></form>
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
-<div th:if="${user.getRole().ADMIN}">
-    <form>
-        <label for="phoneNumber">Phone Number:</label>
-        <input type="text" id="phoneNumber" name="phoneNumber">
-    </form>
+<div class="body-content"> th:if="${user.getRole().ADMIN}">
+<!--    <form>-->
+<!--        <label for="phoneNumber">Phone Number:</label>-->
+<!--        <input type="text" id="phoneNumber" name="phoneNumber">-->
+<!--    </form>-->
+
+        <h2 th:text="${user.getUsername()}">Username</h2>
+        <div th:style="text-align">
+            <p class="margin12" th:text="#{user.label.first-name}  + ': ' +       ${user.firstName}">First Name</p>
+            <p class="margin12" th:text="#{user.label.last-name}  + ': ' +       ${user.lastName}">Last Name</p>
+            <p class="margin12" th:text="#{user.label.email}  + ': ' +       ${user.email}">Email</p>
+            <p class="margin12" th:text="#{user.label.role}  + ': ' +       ${user.role}">Role</p>
+            <p class="margin12" th:text="#{user.label.status}  + ': ' +       ${user.status}">Status</p>
+            <p th:if="${user.getRole().ADMIN}" class="margin12" th:text="#{user.label.phoneNumber}  + ': ' +       ${user.phoneNumber}">Phone number</p>
+
+        </div>
 </div>
 </body>
 </html>

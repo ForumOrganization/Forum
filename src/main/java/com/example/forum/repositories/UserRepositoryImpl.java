@@ -12,7 +12,10 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -25,59 +28,61 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll(/*UserFilterOptions userFilterOptions*/) {
+    public List<User> getAll(UserFilterOptions userFilterOptions) {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("FROM User", User.class);
-            return query.list();
 
-//            List<String> filters = new ArrayList<>();
-//            Map<String, Object> params = new HashMap<>();
-//
-//
-//            userFilterOptions.getUsername().ifPresent(value -> {
-//                filters.add("username like :username");
-//                params.put("username", String.format("%%%s%%", value));
-//            });
-//
-//            userFilterOptions.getFirstName().ifPresent(value -> {
-//                filters.add(" firstName like :firstName ");
-//                params.put("firstName", String.format("%%%s%%", value));
-//            });
-//
-//            userFilterOptions.getFirstName().ifPresent(value -> {
-//                filters.add(" firstName like :firstName ");
-//                params.put("firstName", String.format("%%%s%%", value));
-//            });
-//
-//            userFilterOptions.getLastName().ifPresent(value -> {
-//                filters.add(" lastName like :lastName ");
-//                params.put("lastName", String.format("%%%s%%", value));
-//            });
-//
-//            userFilterOptions.getEmail().ifPresent(value -> {
-//                filters.add(" email like :email ");
-//                params.put("email", String.format("%%%s%%", value));
-//            });
-//
-//            userFilterOptions.getRole().ifPresent(value -> {
-//                filters.add(" role = :role ");
-//                params.put("role", value);
-//            });
-//
-//            StringBuilder queryString = new StringBuilder("from User");
-//
-//            if (!filters.isEmpty()) {
-//                queryString
-//                        .append(" where ")
-//                        .append(String.join(" and ", filters));
-//            }
-//
-//            queryString.append(generateOrderBy(userFilterOptions));
-//
-//            Query<User> query = session.createQuery(queryString.toString(), User.class);
-//            query.setProperties(params);
-//
-//            return query.list();
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+
+            userFilterOptions.getUsername().ifPresent(value -> {
+                filters.add("username like :username");
+                params.put("username", String.format("%%%s%%", value));
+            });
+
+            userFilterOptions.getFirstName().ifPresent(value -> {
+                filters.add(" firstName like :firstName ");
+                params.put("firstName", String.format("%%%s%%", value));
+            });
+
+            userFilterOptions.getFirstName().ifPresent(value -> {
+                filters.add(" firstName like :firstName ");
+                params.put("firstName", String.format("%%%s%%", value));
+            });
+
+            userFilterOptions.getLastName().ifPresent(value -> {
+                filters.add(" lastName like :lastName ");
+                params.put("lastName", String.format("%%%s%%", value));
+            });
+
+            userFilterOptions.getEmail().ifPresent(value -> {
+                filters.add(" email like :email ");
+                params.put("email", String.format("%%%s%%", value));
+            });
+
+            userFilterOptions.getRole().ifPresent(value -> {
+                filters.add(" role = :role ");
+                params.put("role", value);
+            });
+            userFilterOptions.getRole().ifPresent(value -> {
+                filters.add(" status = :status ");
+                params.put("status", value);
+            });
+
+            StringBuilder queryString = new StringBuilder("from User");
+
+            if (!filters.isEmpty()) {
+                queryString
+                        .append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+
+            queryString.append(generateOrderBy(userFilterOptions));
+
+            Query<User> query = session.createQuery(queryString.toString(), User.class);
+            query.setProperties(params);
+
+            return query.list();
         }
     }
 
@@ -284,6 +289,11 @@ public class UserRepositoryImpl implements UserRepository {
             case "role":
                 orderBy = "role";
                 break;
+            case "status":
+                orderBy = "status";
+                break;
+            default:
+                return "";
         }
 
         orderBy = String.format(" order by %s", orderBy);
