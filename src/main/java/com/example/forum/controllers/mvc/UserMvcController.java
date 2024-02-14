@@ -174,7 +174,7 @@ public class UserMvcController {
 
         try {
             User user = userService.getById(id);
-            UserDto3 userDto = userMapper.userToDto3(user);
+            UserDto userDto = userMapper.userToDto(user);
             model.addAttribute("userId", id);
             model.addAttribute("user", userDto);
             return "UserUpdateView";
@@ -187,7 +187,7 @@ public class UserMvcController {
 
     @PostMapping("/{id}/update")
     public String updateUser(@PathVariable int id,
-                             @Valid @ModelAttribute("user") UserDto3 dto,
+                             @Valid @ModelAttribute("user") UserDto dto,
                              @Valid PhoneNumberDto phoneNumberDto,
                              BindingResult bindingResult,
                              Model model,
@@ -203,12 +203,12 @@ public class UserMvcController {
         }
 
         try {
-            User userToUpdate = userMapper.fromDtoUpdate3(id, dto);
+            User userToUpdate = userMapper.fromDtoUpdate(id, dto);
 
             if (userToUpdate.getRole() != Role.ADMIN) {
                 userService.updateUser(user, userToUpdate);
             } else {
-                User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber3(id, phoneNumberDto, dto);
+                User userPhoneNumberToBeUpdate = userMapper.fromDtoUpdatePhoneNumber(id, phoneNumberDto, dto);
                 userService.addPhoneNumberToAdmin(user, userPhoneNumberToBeUpdate);
             }
 
