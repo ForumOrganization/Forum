@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(User targetUser, User executingUser) {
+    public void updateUser(User executingUser, User targetUser) {
         checkAccessPermissionsUser(targetUser.getId(), executingUser, MODIFY_USER_MESSAGE_ERROR);
 
         if (!targetUser.getUsername().equals(executingUser.getUsername())) {
@@ -183,8 +183,7 @@ public class UserServiceImpl implements UserService {
 
         if (admin.getPhoneNumber() != null
                 && userPhoneNumberToBeUpdate.getPhoneNumber().isEmpty()) {
-            admin.setPhoneNumber(userPhoneNumberToBeUpdate.getPhoneNumber());
-            userRepository.updateUser(admin);
+            updateUser(admin, userPhoneNumberToBeUpdate);
 
         } else if (userPhoneNumberToBeUpdate.getPhoneNumber() != null
                 && !userPhoneNumberToBeUpdate.getPhoneNumber().isEmpty()) {
@@ -193,9 +192,7 @@ public class UserServiceImpl implements UserService {
                 throw new DuplicateEntityException("Admin", "phone number", userPhoneNumberToBeUpdate.getPhoneNumber());
             }
 
-            admin.setPhoneNumber(userPhoneNumberToBeUpdate.getPhoneNumber());
-            userRepository.updateUser(admin);
-
+            updateUser(admin, userPhoneNumberToBeUpdate);
         } else {
             throw new EntityNotFoundException("Admin", "phone number");
         }

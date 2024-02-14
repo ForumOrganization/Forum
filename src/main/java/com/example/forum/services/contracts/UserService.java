@@ -24,7 +24,7 @@ public interface UserService {
 
     void registerUser(User user);
 
-    void updateUser(User targetUser, User executingUser);
+    void updateUser(User executingUser, User targetUser);
 
     void deleteUser(int deleteUserId, User executingUser);
 
