@@ -40,7 +40,6 @@ public class TagServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-//        TagService tagService = Mockito.mock(TagService.class);
         postRepository = mock(PostRepository.class);
         tagService = new TagServiceImpl(tagRepository, postRepository);
     }
@@ -136,7 +135,7 @@ public class TagServiceImplTest {
     void test_CreateTagInPost() {
         int postId = 1;
         int authorId = 1;
-        User user = new User(); // Simulate authorized user
+        User user = new User();
         Post post = new Post();
         post.setCreatedBy(user);
         Tag tag = new Tag();
