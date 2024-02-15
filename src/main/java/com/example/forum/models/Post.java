@@ -1,5 +1,6 @@
 package com.example.forum.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -30,7 +31,7 @@ public class Post {
     @JsonIgnore
     @Column(name = "is_deleted")
     private Boolean isDeleted = Boolean.FALSE;
-
+@JsonFormat(pattern = "MM/dd/YYYY")
     @Column(name = "creation_time")
     private LocalDate creationTime = LocalDate.now();
 

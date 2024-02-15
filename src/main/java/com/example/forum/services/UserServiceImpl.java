@@ -1,5 +1,6 @@
 package com.example.forum.services;
 
+import com.example.forum.exceptions.DeletionRestrictedException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityAlreadyDeleteException;
 import com.example.forum.exceptions.EntityNotFoundException;
@@ -137,6 +138,7 @@ public class UserServiceImpl implements UserService {
         targetUser.setRole(Role.ADMIN);
         userRepository.updateUser(targetUser);
     }
+
     @Override
     public void updateToUser(User targetUser, User executingUser) {
         if (targetUser.getRole() == Role.USER) {
@@ -145,8 +147,8 @@ public class UserServiceImpl implements UserService {
         }
 
         checkAccessPermissionsAdmin(executingUser, UPDATE_TO_ADMIN_ERROR_MESSAGE);
-        if(targetUser.getId()==1){
-            throw new DuplicateEntityException( "User", "id", String.valueOf(targetUser.getId()), " can not make an user.");
+        if (targetUser.getId() == 1) {
+            throw new DeletionRestrictedException(MASTER_ADMIN_MESSAGE_ERROR);
         }
         targetUser.setRole(Role.USER);
         userRepository.updateUser(targetUser);
@@ -158,7 +160,9 @@ public class UserServiceImpl implements UserService {
             throw new DuplicateEntityException(
                     "User", "id", String.valueOf(blockUser.getId()), "has already been blocked");
         }
-
+        if (blockUser.getId() == 1) {
+            throw new DeletionRestrictedException(MASTER_ADMIN_MESSAGE_ERROR_BLOCK);
+        }
         checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         blockUser.setStatus(Status.BLOCKED);
         userRepository.updateUser(blockUser);
@@ -232,7 +236,8 @@ public class UserServiceImpl implements UserService {
         return existingUser.getUsername().equals(user.getUsername())
                 && existingUser.getFirstName().equals(user.getFirstName())
                 && existingUser.getLastName().equals(user.getLastName())
-                && existingUser.getEmail().equals(user.getEmail());
+                && existingUser.getEmail().equals(user.getEmail())
+                && existingUser.getPassword().equals(user.getPassword());
     }
 
     private void setAdminRoleIfDataBaseEmpty(User user) {

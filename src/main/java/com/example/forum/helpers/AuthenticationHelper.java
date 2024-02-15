@@ -3,6 +3,7 @@ package com.example.forum.helpers;
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.User;
+import com.example.forum.models.enums.Status;
 import com.example.forum.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;

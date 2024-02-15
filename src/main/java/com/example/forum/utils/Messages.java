@@ -5,7 +5,8 @@ public class Messages {
     public static final String UNAUTHORIZED_USER_ERROR_MESSAGE = "You are not authorized to browse user information.";
 
     public static final String SEARCH_ADMIN_MESSAGE_ERROR = "Only admins are able to search by %s";
-    public static final String ADMIN_MESSAGE_ERROR = "Only admins can access and filter all users data.";
+    public static final String MASTER_ADMIN_MESSAGE_ERROR = "Master admin user can not be downgrade to user.";
+    public static final String MASTER_ADMIN_MESSAGE_ERROR_BLOCK = "Master admin user can not be blocked.";
     public static final String DELETE_TAG_MESSAGE_ERROR = "Only admin or creator can delete a tag.";
     public static final String DELETE_USER_MESSAGE_ERROR = "Only admins and the user themself can delete this user.";
     public static final String MODIFY_USER_MESSAGE_ERROR = "Only user creator is able to update their profile information.";

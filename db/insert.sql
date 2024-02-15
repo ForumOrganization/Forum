@@ -206,7 +206,6 @@ Potential Impact on Blood Pressure and Heart Health: While moderate coffee consu
 
 INSERT INTO reactions_posts (type_reaction, user_id, post_id)
 VALUES ('LIKES', 1, 1),
-       ('LIKES', 1, 1),
        ('LIKES', 4, 4),
        ('LIKES', 7, 5),
        ('LOVE', 3, 2),

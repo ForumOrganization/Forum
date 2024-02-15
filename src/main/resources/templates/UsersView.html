@@ -86,12 +86,12 @@
                 </div>
                 <div class="cell">
                     <form th:action="@{'/users/' + ${user.id} + '/update-to-admin'}" method="post">
-<!--                        <button type="submit" th:if="${!user.getRole().equals('ADMIN')}" >Update to Admin</button>-->
-                        <button type="submit" th:if="${user.getRole() != T(com.example.forum.models.enums.Role).ADMIN}" >Update to Admin</button>
+                        <button type="submit"  >Update to Admin</button>
+<!--                        <button type="submit" th:if="${user.getRole() != T(com.example.forum.models.enums.Role).ADMIN}" >Update to Admin</button>-->
                     </form>
                     <form th:action="@{'/users/' + ${user.id} + '/update-to-user'}" method="post">
-<!--                        <button type="submit" th:if="${user.getRole().equals('ADMIN')}" >Update to User</button>-->
-                        <button type="submit" th:if="${user.getRole() == T(com.example.forum.models.enums.Role).ADMIN}" >Update to User</button>
+                        <button type="submit"  >Update to User</button>
+<!--                        <button type="submit" th:if="${user.getRole() == T(com.example.forum.models.enums.Role).ADMIN}" >Update to User</button>-->
                     </form>
                 </div>
                 <div class="cell">

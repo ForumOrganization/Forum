@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Repository
@@ -46,7 +47,9 @@ public class PostRepositoryImpl implements PostRepository {
             });
 
             postFilterOptions.getCreationTime().ifPresent(value -> {
-                filters.add("creation_time > :creationTime");
+//                LocalDate parsedDate=LocalDate.parse(value.toString(),DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+//                String formattedDate=parsedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                filters.add("creationTime > :creationTime");
                 params.put("creationTime", value);
             });
 

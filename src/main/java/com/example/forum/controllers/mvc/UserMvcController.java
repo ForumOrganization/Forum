@@ -1,9 +1,6 @@
 package com.example.forum.controllers.mvc;
 
-import com.example.forum.exceptions.AuthorizationException;
-import com.example.forum.exceptions.DuplicateEntityException;
-import com.example.forum.exceptions.EntityAlreadyDeleteException;
-import com.example.forum.exceptions.EntityNotFoundException;
+import com.example.forum.exceptions.*;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.UserMapper;
 import com.example.forum.models.Post;
@@ -357,6 +354,10 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        }catch (DeletionRestrictedException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 
@@ -377,6 +378,10 @@ public class UserMvcController {
             return "ErrorView";
         } catch (DuplicateEntityException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }catch (DeletionRestrictedException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }

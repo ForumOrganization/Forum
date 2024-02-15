@@ -10,6 +10,7 @@ import com.example.forum.models.User;
 import com.example.forum.models.dtos.LoginDto;
 import com.example.forum.models.dtos.RegisterDto;
 import com.example.forum.models.enums.Role;
+import com.example.forum.models.enums.Status;
 import com.example.forum.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -53,21 +54,30 @@ public class AuthenticationMvcController {
 
     @PostMapping("/login")
     public String handleLogin(@Valid @ModelAttribute("login") LoginDto login,
+                              Model model,
                               BindingResult bindingResult,
                               HttpSession session) {
         if (bindingResult.hasErrors()) {
             return "LoginView";
         }
 
+
         try {
             User user=authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             session.setAttribute("currentUser", login.getUsername());
             session.setAttribute("isAdmin", user.getRole()== Role.ADMIN);
+            if(user.isDeleted()) {
+                throw  new EntityAlreadyDeleteException("id",String.valueOf(user.getId()));}
 
             return "redirect:/";
         } catch (AuthorizationException e) {
             bindingResult.rejectValue("username", "auth_error", e.getMessage());
             return "LoginView";
+        }
+        catch (EntityAlreadyDeleteException e) {
+            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 
@@ -99,10 +109,12 @@ public class AuthenticationMvcController {
             User user = userMapper.fromDto(register);
             userService.registerUser(user);
             return "redirect:/auth/login";
-//        } catch (EntityNotFoundException e) {
+        }
+//        catch (EntityNotFoundException e) {
 //            bindingResult.rejectValue("username", "username_error", e.getMessage());
 //            return "RegisterView";
-        }catch (EntityNotFoundException e) {
+//        }
+        catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";

@@ -18,9 +18,12 @@
         <br/><br/>
         <input type="text" placeholder="Title" th:field="*{title}"/>
         <input type="text" placeholder="Create By" th:field="*{createdBy}"/>
-        <input type="date" placeholder="Creation Time" th:field="*{creationTime}"/>
+        <input type="text" placeholder="Creation Time" th:field="*{creationTime}"/>
+<!--        <th:block th:with="formattedDate=${filterOptions.creationTime != null ? #dates.format(filterOptions.creationTime, 'yyyy-MM-dd') : null}"></th:block>-->
 
-
+<!--        &lt;!&ndash; Use the formattedDate variable as the value of the input field &ndash;&gt;-->
+<!--        <input type="date" placeholder="Creation Time" th:field="*{creationTime}" th:value="${formattedDate}">-->
+<!--        -->
         <select th:field="*{sortBy}">
             <option value="">Sort By</option>
             <option value="title">Title</option>
