@@ -66,7 +66,9 @@ public class AuthenticationMvcController {
             User user=authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             session.setAttribute("currentUser", login.getUsername());
             session.setAttribute("isAdmin", user.getRole()== Role.ADMIN);
+
             if(user.isDeleted()) {
+                session.setAttribute("isDelete", user.isDeleted());
                 throw  new EntityAlreadyDeleteException("id",String.valueOf(user.getId()));}
 
             return "redirect:/";

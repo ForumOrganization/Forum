@@ -67,11 +67,6 @@ public class PostMvcController {
                 filterDto.getCreationTime(),
                 filterDto.getSortBy(),
                 filterDto.getSortOrder());
-        try {
-            authenticationHelper.tryGetCurrentUser(session);
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
 
         List<Post> posts = postService.getAll(filterOptions);
         model.addAttribute("filterOptions", filterDto);

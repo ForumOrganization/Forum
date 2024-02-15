@@ -67,7 +67,7 @@ public class HomeMvcController {
             }
 
             model.addAttribute("user", user);
-            model.addAttribute("filterOptions", filterDto);
+            model.addAttribute("filterOptions",filterDto);
             model.addAttribute("isAuthenticated", true);
             return "AdminPortalView";
         } catch (EntityNotFoundException e) {

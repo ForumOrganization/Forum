@@ -7,7 +7,10 @@
 <div class="body-content">
     <h2 class="label-error" th:text="${statusCode}">HTTP Status Code</h2>
     <h3 class="error" th:text="${error}">Error placeholder</h3>
+        <span th:if="${session.isDelete}">If you already have profile click <a href="/auth/register">here</a></span>
+
 </div>
+
 
 <form th:replace="~{HomeView.html :: footer}"></form>
 </body>
