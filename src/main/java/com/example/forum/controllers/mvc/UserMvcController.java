@@ -3,15 +3,12 @@ package com.example.forum.controllers.mvc;
 import com.example.forum.exceptions.*;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.UserMapper;
-import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PhoneNumberDto;
 import com.example.forum.models.dtos.UserDto;
-import com.example.forum.models.dtos.UserDto3;
 import com.example.forum.models.dtos.UserFilterDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;
-import com.example.forum.utils.PostFilterOptions;
 import com.example.forum.utils.UserFilterOptions;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -31,7 +28,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/users")
@@ -60,7 +56,7 @@ public class UserMvcController {
 
     @GetMapping
     public String showAllUsers(@ModelAttribute("userFilterOptions") UserFilterDto filterDto,
-                               Model model,HttpSession session) {
+                               Model model, HttpSession session) {
         UserFilterOptions userFilterOptions = new UserFilterOptions(
                 filterDto.getUsername(),
                 filterDto.getFirstName(),
@@ -78,18 +74,18 @@ public class UserMvcController {
         List<User> users = userService.getAll(userFilterOptions);
         model.addAttribute("filterOptions", filterDto);
         model.addAttribute("users", users);
-                userService.getAll(userFilterOptions);
+        userService.getAll(userFilterOptions);
         return "AdminPortalView";
     }
 
     @GetMapping("/{id}")
-    public String showSingleUser(@PathVariable int id, Model model,HttpSession session) {
+    public String showSingleUser(@PathVariable int id, Model model, HttpSession session) {
 
-            try {
-               authenticationHelper.tryGetCurrentUser(session);
-            } catch (AuthorizationException e) {
-                return "redirect:/auth/login";
-            }
+        try {
+            authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
 
         try {
             User user = userService.getById(id);
@@ -103,27 +99,27 @@ public class UserMvcController {
         }
     }
 
-    @GetMapping("/{userId}/posts")
-    public String showAllUserPosts(@PathVariable int userId, Model model, HttpSession session) {
-        try {
-            User user;
-            try {
-                user = authenticationHelper.tryGetCurrentUser(session);
-            } catch (AuthorizationException e) {
-                return "redirect:/auth/login";
-            }
-
-            User targetUser = userService.getById(userId);
-            Set<Post> posts = targetUser.getPosts();
-            model.addAttribute("posts", posts);
-
-            return "redirect:/posts";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        }
-    }
+//    @GetMapping("/{userId}/posts")
+//    public String showAllUserPosts(@PathVariable int userId, Model model, HttpSession session) {
+//
+//            try {
+//               authenticationHelper.tryGetCurrentUser(session);
+//            } catch (AuthorizationException e) {
+//                return "redirect:/auth/login";
+//            }
+//
+//            try{
+//            User targetUser = userService.getById(userId);
+//            Set<Post> posts = targetUser.getPosts();
+//            model.addAttribute("posts", posts);
+//
+//            return "redirect:/posts";
+//        } catch (EntityNotFoundException e) {
+//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        }
+//    }
 
 //    @GetMapping("/new")
 //    public String showNewUserPage(Model model, HttpSession session) {
@@ -224,20 +220,13 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (AuthorizationException e) {
-            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        } catch (EntityAlreadyDeleteException e) {
-            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
         } catch (DuplicateEntityException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
     }
+
     @GetMapping("/{id}/delete")
     public String showDeleteUserPage(@PathVariable int id, Model model, HttpSession session) {
         User user;
@@ -249,7 +238,7 @@ public class UserMvcController {
 
         try {
             userService.deleteUser(id, user);
-            return "redirect:/auth/login";
+            return "UserDeleteView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -317,7 +306,7 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }  catch (DuplicateEntityException e) {
+        } catch (DuplicateEntityException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
@@ -327,10 +316,11 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
+
     @PostMapping("/{id}/update-to-user")
     public String updateToUser(@PathVariable int id,
-                                Model model,
-                                HttpSession session) {
+                               Model model,
+                               HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
@@ -346,7 +336,7 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }  catch (DuplicateEntityException e) {
+        } catch (DuplicateEntityException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
@@ -354,7 +344,7 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }catch (DeletionRestrictedException e) {
+        } catch (DeletionRestrictedException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
@@ -380,7 +370,7 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }catch (DeletionRestrictedException e) {
+        } catch (DeletionRestrictedException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";

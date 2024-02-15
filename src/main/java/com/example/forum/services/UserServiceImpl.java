@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void registerUser(User user) {
         setAdminRoleIfDataBaseEmpty(user);
-        User existingUser = userRepository.getByUsernameFindUser(user.getUsername());
+        User existingUser = userRepository.getByUsername(user.getUsername());
         if (existingUser != null && isSameUser(existingUser, user)
                 && existingUser.isDeleted()) {
             userRepository.reactivated(existingUser);
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (!targetUser.getEmail().equals(executingUser.getEmail())) {
-            if (userRepository.getByEmailFindUser(targetUser.getEmail()) != null) {
+            if (userRepository.getByEmail(targetUser.getEmail()) != null) {
                 throw new DuplicateEntityException("User", "email", targetUser.getEmail());
             }
         }
@@ -108,23 +108,25 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveProfilePictureUrl(String username, String profilePictureUrl) {
-        try {
-            User user = userRepository.getByUsername(username);
-            user.setProfilePicture(profilePictureUrl);
-            userRepository.updateUser(user);
-        } catch (EntityNotFoundException e) {
+        User user = userRepository.getByUsername(username);
+        if (user == null) {
             throw new EntityNotFoundException("User", "username", username);
         }
+        user.setProfilePicture(profilePictureUrl);
+        userRepository.updateUser(user);
+
     }
 
     @Override
     public String getProfilePictureUrl(String username) {
-        try {
-            User user = userRepository.getByUsername(username);
-            return user.getProfilePicture();
-        } catch (EntityNotFoundException e) {
+
+        User user = userRepository.getByUsername(username);
+        if (user == null) {
             throw new EntityNotFoundException("User", "username", username);
         }
+        return user.getProfilePicture();
+
+
     }
 
     @Override
@@ -223,11 +225,11 @@ public class UserServiceImpl implements UserService {
     }
 
     private void checkDuplicateEntity(User user) {
-        if (userRepository.getByUsernameFindUser(user.getUsername()) != null) {
+        if (userRepository.getByUsername(user.getUsername()) != null) {
             throw new DuplicateEntityException("User", "username", user.getUsername());
         }
 
-        if (userRepository.getByEmailFindUser(user.getEmail()) != null) {
+        if (userRepository.getByEmail(user.getEmail()) != null) {
             throw new DuplicateEntityException("User", "email", user.getEmail());
         }
     }

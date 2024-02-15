@@ -4,7 +4,6 @@ import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
-import com.example.forum.repositories.contracts.CommentRepository;
 import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.utils.UserFilterOptions;
 import org.hibernate.Session;
@@ -108,44 +107,12 @@ public class UserRepositoryImpl implements UserRepository {
 
             List<User> result = query.list();
 
-            if (result.isEmpty()) {
-                throw new EntityNotFoundException("User", "username", username);
-            }
-
-            return result.get(0);
-        }
-    }
-
-    @Override
-    public User getByUsernameFindUser(String username) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("from User where username = :username", User.class);
-            query.setParameter("username", username);
-
-            List<User> result = query.list();
-
             return result.isEmpty() ? null : result.get(0);
         }
     }
 
     @Override
     public User getByEmail(String email) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("from User where email = :email", User.class);
-            query.setParameter("email", email);
-
-            List<User> result = query.list();
-
-            if (result.isEmpty()) {
-                throw new EntityNotFoundException("User", "email", email);
-            }
-
-            return result.get(0);
-        }
-    }
-
-    @Override
-    public User getByEmailFindUser(String email) {
         try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("from User where email = :email", User.class);
             query.setParameter("email", email);
@@ -229,7 +196,7 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
 
             for (Post post : targetUser.getPosts()) {
-                for(Comment comment:post.getComments()){
+                for (Comment comment : post.getComments()) {
                     comment.setDeleted(false);
                     session.merge(comment);
 
@@ -237,10 +204,10 @@ public class UserRepositoryImpl implements UserRepository {
                 post.setDeleted(false);
                 session.merge(post);
             }
-                for (Comment comment : targetUser.getComments()) {
-                    comment.setDeleted(false);
-                    session.merge(comment);
-                }
+            for (Comment comment : targetUser.getComments()) {
+                comment.setDeleted(false);
+                session.merge(comment);
+            }
 
             targetUser.setDeleted(false);
             session.merge(targetUser);
@@ -256,7 +223,7 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
 
             for (Post post : userToDelete.getPosts()) {
-                for(Comment comment:post.getComments()){
+                for (Comment comment : post.getComments()) {
                     comment.setDeleted(true);
                     session.merge(comment);
 
@@ -264,14 +231,12 @@ public class UserRepositoryImpl implements UserRepository {
                 post.setDeleted(true);
                 session.merge(post);
             }
-                for (Comment comment : userToDelete.getComments()) {
-                        comment.setDeleted(true);
-                        session.merge(comment);
+            for (Comment comment : userToDelete.getComments()) {
+                comment.setDeleted(true);
+                session.merge(comment);
 
 
-                }
-
-
+            }
 
 
             userToDelete.setDeleted(true);

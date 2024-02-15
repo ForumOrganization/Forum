@@ -4,10 +4,7 @@
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
 <div class="body-content">
-<!--    <form>-->
-<!--        <label for="phoneNumber">Phone Number:</label>-->
-<!--        <input type="text" id="phoneNumber" name="phoneNumber">-->
-<!--    </form>-->
+
 
         <h2 th:text="${user.getUsername()}">Username</h2>
         <div th:style="text-align">
@@ -16,9 +13,8 @@
             <p class="margin12" th:text="#{user.label.email}  + ': ' +       ${user.email}">Email</p>
             <p class="margin12" th:text="#{user.label.role}  + ': ' +       ${user.role}">Role</p>
             <p class="margin12" th:text="#{user.label.status}  + ': ' +       ${user.status}">Status</p>
-
+            <p class="margin12" th:text="#{user.label.isDelete}  + ': ' +       ${user.isDeleted()}">IsDeleted</p>
             <p  th:if="${user.getRole() == T(com.example.forum.models.enums.Role).ADMIN}" class="margin12" th:text="#{user.label.phoneNumber}  + ': ' +       ${user.phoneNumber}">Phone number</p>
-<!--            th:if="${user.getRole().equals('ADMIN')}"-->
         </div>
 </div>
 </body>

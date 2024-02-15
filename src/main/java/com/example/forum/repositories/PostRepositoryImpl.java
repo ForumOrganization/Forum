@@ -6,7 +6,6 @@ import com.example.forum.models.Post;
 import com.example.forum.models.Reaction_comments;
 import com.example.forum.models.Reaction_posts;
 import com.example.forum.repositories.contracts.PostRepository;
-import com.example.forum.repositories.contracts.ReactionRepository;
 import com.example.forum.utils.PostFilterOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,19 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Repository
 public class PostRepositoryImpl implements PostRepository {
 
     private final SessionFactory sessionFactory;
-    private final ReactionRepository reactionRepository;
 
     @Autowired
-    public PostRepositoryImpl(SessionFactory sessionFactory, ReactionRepository reactionRepository) {
+    public PostRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-        this.reactionRepository = reactionRepository;
     }
 
     @Override
@@ -80,15 +76,15 @@ public class PostRepositoryImpl implements PostRepository {
     public List<Post> getTopCommentedPosts() {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery(
-                            "SELECT p FROM Post p " +
-                                    "ORDER BY size(p.comments) DESC "
-                                    +
-                                    "LIMIT 10"
+                    "SELECT p FROM Post p " +
+                            "ORDER BY size(p.comments) DESC "
+                            +
+                            "LIMIT 10"
                     , Post.class);
 
             List<Post> result = query.list();
 
-            if (result.size() == 0) {
+            if (result.isEmpty()) {
                 throw new EntityNotFoundException("Posts", "top comments");
             }
 
@@ -114,7 +110,7 @@ public class PostRepositoryImpl implements PostRepository {
 
             List<Post> result = query.list();
 
-            if (result.size() == 0) {
+            if (result.isEmpty()) {
                 throw new EntityNotFoundException("Posts", "recent time");
             }
 
@@ -145,7 +141,7 @@ public class PostRepositoryImpl implements PostRepository {
 
             List<Post> result = query.list();
 
-            if (result.size() == 0) {
+            if (result.isEmpty()) {
                 throw new EntityNotFoundException("Post", "title", title);
             }
 
@@ -161,7 +157,7 @@ public class PostRepositoryImpl implements PostRepository {
 
             List<Post> result = query.list();
 
-            if (result.size() == 0) {
+            if (result.isEmpty()) {
                 throw new EntityNotFoundException("Comment", "id", String.valueOf(id));
             }
 

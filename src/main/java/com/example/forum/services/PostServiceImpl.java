@@ -25,13 +25,13 @@ import static com.example.forum.utils.Messages.*;
 @Service
 public class PostServiceImpl implements PostService {
 
-    private PostRepository postRepository;
-    private ReactionRepository reactionRepository;
+    private final PostRepository postRepository;
+    private final ReactionRepository reactionRepository;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository,ReactionRepository reactionRepository) {
+    public PostServiceImpl(PostRepository postRepository, ReactionRepository reactionRepository) {
         this.postRepository = postRepository;
-        this.reactionRepository=reactionRepository;
+        this.reactionRepository = reactionRepository;
     }
 
     @Override
@@ -122,28 +122,32 @@ public class PostServiceImpl implements PostService {
         checkAccessPermissions(post.getCreatedBy().getId(), user, MODIFY_POST_ERROR_MESSAGE);
         this.postRepository.delete(id);
     }
-    public Post reactToPost(int postId, Reaction_posts reactionPostToAdd){
-        Post currentPost=getById(postId);
-        User user=reactionPostToAdd.getUser();
-        Optional<Reaction_posts> reaction=currentPost.getReactions().stream().filter(reactionPosts -> reactionPosts.getUser().equals(user)).findFirst();
-        if(reaction.isPresent()){
-           reaction.get().setReaction(reactionPostToAdd.getReaction());
-            reactionRepository.updateReactionPost(reactionPostToAdd,currentPost.getId());
 
-        }else{
+    public Post reactToPost(int postId, Reaction_posts reactionPostToAdd) {
+        Post currentPost = getById(postId);
+        User user = reactionPostToAdd.getUser();
+        Optional<Reaction_posts> reaction = currentPost.getReactions().stream().filter(reactionPosts -> reactionPosts.getUser().equals(user)).findFirst();
+        if (reaction.isPresent()) {
+            reaction.get().setReaction(reactionPostToAdd.getReaction());
+            reactionRepository.updateReactionPost(reactionPostToAdd, currentPost.getId());
+
+        } else {
             reactionPostToAdd.setPost(currentPost);
-            reactionRepository.updateReactionPost(reactionPostToAdd,currentPost.getId());
+            reactionRepository.updateReactionPost(reactionPostToAdd, currentPost.getId());
         }
-       return postRepository.reactToPost(currentPost);
+        return postRepository.reactToPost(currentPost);
 
     }
-    public long countReactionLikes(Post post){
-       return post.getReactions().stream()
+
+    public long countReactionLikes(Post post) {
+        return post.getReactions().stream()
                 .filter(r -> r.getReaction().equals(Reaction.LIKES))
                 .count();
 
 
-    } public long countReactionDislikes(Post post){
+    }
+
+    public long countReactionDislikes(Post post) {
         return post.getReactions().stream()
                 .filter(r -> r.getReaction().equals(Reaction.DISLIKES))
                 .count();
@@ -156,7 +160,6 @@ public class PostServiceImpl implements PostService {
             throw new AuthorizationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
         }
     }
-
 
 
 }

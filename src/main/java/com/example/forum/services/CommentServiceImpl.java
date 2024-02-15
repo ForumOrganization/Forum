@@ -4,12 +4,10 @@ import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
-import com.example.forum.models.enums.Reaction;
 import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.CommentRepository;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.services.contracts.CommentService;
-import com.example.forum.utils.CommentFilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +20,8 @@ import static com.example.forum.utils.Messages.*;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    private CommentRepository commentRepository;
-    private PostRepository postRepository;
+    private final CommentRepository commentRepository;
+    private final PostRepository postRepository;
 
     @Autowired
     public CommentServiceImpl(CommentRepository commentRepository, PostRepository postRepository) {

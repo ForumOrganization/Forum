@@ -10,7 +10,6 @@ import com.example.forum.models.User;
 import com.example.forum.models.dtos.LoginDto;
 import com.example.forum.models.dtos.RegisterDto;
 import com.example.forum.models.enums.Role;
-import com.example.forum.models.enums.Status;
 import com.example.forum.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -40,6 +39,7 @@ public class AuthenticationMvcController {
         this.authenticationHelper = authenticationHelper;
         this.userMapper = userMapper;
     }
+
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
@@ -63,23 +63,23 @@ public class AuthenticationMvcController {
 
 
         try {
-            User user=authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
+            User user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             session.setAttribute("currentUser", login.getUsername());
-            session.setAttribute("isAdmin", user.getRole()== Role.ADMIN);
+            session.setAttribute("isAdmin", user.getRole() == Role.ADMIN);
 
-            if(user.isDeleted()) {
+            if (user.isDeleted()) {
                 session.setAttribute("isDelete", user.isDeleted());
-                throw  new EntityAlreadyDeleteException("id",String.valueOf(user.getId()));}
+                throw new EntityAlreadyDeleteException("id", String.valueOf(user.getId()));
+            }
 
             return "redirect:/";
         } catch (AuthorizationException e) {
             bindingResult.rejectValue("username", "auth_error", e.getMessage());
             return "LoginView";
-        }
-        catch (EntityAlreadyDeleteException e) {
+        } catch (EntityAlreadyDeleteException e) {
             model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "ErrorView";
+            return "ErrorDeleteUserView";
         }
     }
 
@@ -97,7 +97,7 @@ public class AuthenticationMvcController {
 
     @PostMapping("/register")
     public String handleRegister(@Valid @ModelAttribute("register") RegisterDto register,
-                                 BindingResult bindingResult,Model model) {
+                                 BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "RegisterView";
         }

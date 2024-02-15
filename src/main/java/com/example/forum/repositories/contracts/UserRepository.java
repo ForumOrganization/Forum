@@ -14,11 +14,7 @@ public interface UserRepository {
 
     User getByUsername(String username);
 
-    User getByUsernameFindUser(String username);
-
     User getByEmail(String email);
-
-    User getByEmailFindUser(String email);
 
     List<User> getByFirstName(String firstName);
 

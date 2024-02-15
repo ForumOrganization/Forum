@@ -28,7 +28,7 @@ public class UserDto {
     private String email;
 
     @NotNull(message = "Password can't be empty.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[_@$!%*?&])[A-Za-z\\d@$!%*?&]+$",
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@_$!%*?&])[A-Za-z\\d@_$!%*?&]+$",
             message = "Password must contains at least one uppercase letter, one lowercase letter, one digit, and one special character")
     private String password;
 

@@ -7,11 +7,8 @@ import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.CommentMapper;
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
-import com.example.forum.models.Reaction_comments;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.CommentDto;
-import com.example.forum.models.enums.Reaction;
-import com.example.forum.services.ReactionServiceImpl;
 import com.example.forum.services.contracts.CommentService;
 import com.example.forum.services.contracts.PostService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,16 +16,12 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/comments")
@@ -36,15 +29,13 @@ import java.util.Map;
 public class CommentMvcController {
     private final CommentService commentService;
     private final PostService postService;
-    private final ReactionServiceImpl reactionService;
     private final CommentMapper commentMapper;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public CommentMvcController(CommentService commentService, PostService postService, ReactionServiceImpl reactionService, CommentMapper commentMapper, AuthenticationHelper authenticationHelper) {
+    public CommentMvcController(CommentService commentService, PostService postService, CommentMapper commentMapper, AuthenticationHelper authenticationHelper) {
         this.commentService = commentService;
         this.postService = postService;
-        this.reactionService = reactionService;
         this.commentMapper = commentMapper;
         this.authenticationHelper = authenticationHelper;
     }
@@ -60,11 +51,11 @@ public class CommentMvcController {
         return request.getRequestURI();
     }
 
-    @GetMapping
+    @GetMapping("/post/{postId}")
     public String showAllComments(@PathVariable int postId, Model model) {
         List<Comment> comments = commentService.getAllCommentsByPostId(postId);
         model.addAttribute("comments", comments);
-        return "CommentsView";
+        return "CommentView";
     }
 
     @GetMapping("/{id}")
@@ -95,6 +86,7 @@ public class CommentMvcController {
         }
 
         model.addAttribute("comment", new CommentDto());
+        model.addAttribute("postId", postId);
         return "CommentCreateView";
     }
 

@@ -4,7 +4,6 @@ import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
-import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
 import com.example.forum.utils.TagFilterOptions;
 import org.hibernate.Session;
@@ -21,13 +20,11 @@ import java.util.Map;
 @Repository
 public class TagRepositoryImpl implements TagRepository {
 
-    private SessionFactory sessionFactory;
-    private PostRepository postRepository;
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    public TagRepositoryImpl(SessionFactory sessionFactory, PostRepository postRepository) {
+    public TagRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
-        this.postRepository = postRepository;
     }
 
     @Override
@@ -91,7 +88,7 @@ public class TagRepositoryImpl implements TagRepository {
 
             List<Tag> tag = query.list();
 
-            if (tag.size() == 0) {
+            if (tag.isEmpty()) {
                 throw new EntityNotFoundException("Tag", "this name");
             }
 
@@ -127,7 +124,7 @@ public class TagRepositoryImpl implements TagRepository {
 
             List<Post> result = query.getResultList();
 
-            if (result.size() == 0) {
+            if (result.isEmpty()) {
                 throw new EntityNotFoundException("Posts", "tag name");
             }
 
@@ -145,7 +142,7 @@ public class TagRepositoryImpl implements TagRepository {
 
             List<Tag> result = query.getResultList();
 
-            if (result.size() == 0) {
+            if (result.isEmpty()) {
                 throw new EntityNotFoundException("Tags", "post id");
             }
 
@@ -186,10 +183,8 @@ public class TagRepositoryImpl implements TagRepository {
                 session.merge(post);
                 session.getTransaction().commit();
             }
-        } catch (Exception e) {
-
-            e.printStackTrace();
         }
+
     }
 
     @Override

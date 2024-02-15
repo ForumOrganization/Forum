@@ -59,7 +59,7 @@ public class UserRestController {
             authenticationHelper.tryGetUser(headers);
             UserFilterOptions userFilterOptions =
                     new UserFilterOptions(
-                            username, firstName, lastName, email,role,status, sortBy, sortOrder);
+                            username, firstName, lastName, email, role, status, sortBy, sortOrder);
 
             List<User> users = userService.getAll(userFilterOptions);
 

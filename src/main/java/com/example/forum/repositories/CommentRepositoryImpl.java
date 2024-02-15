@@ -14,15 +14,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public class CommentRepositoryImpl implements CommentRepository {
 
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     @Autowired
     public CommentRepositoryImpl(SessionFactory sessionFactory) {
@@ -30,7 +27,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> getAllCommentsByPostId(int postId ) {
+    public List<Comment> getAllCommentsByPostId(int postId) {
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, postId);
 
@@ -41,10 +38,10 @@ public class CommentRepositoryImpl implements CommentRepository {
             List<Comment> comments = session.createQuery("select c From Comment c WHERE c.post.id= :postId Order by c.creationTime ", Comment.class)
                     .setParameter("postId", postId).list();
 
-//            if (comments.isEmpty()) {
-//                throw new EntityNotFoundException("Comments");
-//
-//            }
+            if (comments.isEmpty()) {
+                throw new EntityNotFoundException("Comments");
+
+            }
             return comments;
         }
 

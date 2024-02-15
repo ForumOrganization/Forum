@@ -81,6 +81,7 @@ public class HomeMvcController {
 
     @GetMapping("/user")
     public String showUserProfile(HttpSession session, Model model) {
+
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
             model.addAttribute("currentUser", user);

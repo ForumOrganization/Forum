@@ -42,7 +42,7 @@ public class PostMvcController {
     public PostMvcController(PostService postService, CommentService commentService, ReactionService reactionService, PostMapper postMapper,
                              AuthenticationHelper authenticationHelper) {
         this.postService = postService;
-        this.commentService=commentService;
+        this.commentService = commentService;
         this.reactionService = reactionService;
         this.postMapper = postMapper;
         this.authenticationHelper = authenticationHelper;
@@ -60,7 +60,7 @@ public class PostMvcController {
 
     @GetMapping
     public String showAllPosts(@ModelAttribute("filterOptions") PostFilterDto filterDto,
-                               Model model,HttpSession session) {
+                               Model model) {
         PostFilterOptions filterOptions = new PostFilterOptions(
                 filterDto.getTitle(),
                 filterDto.getCreatedBy(),
@@ -75,7 +75,7 @@ public class PostMvcController {
     }
 
     @GetMapping("/{id}")
-    public String showSinglePost(@PathVariable int id, Model model,HttpSession session) {
+    public String showSinglePost(@PathVariable int id, Model model, HttpSession session) {
         try {
             authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
@@ -84,15 +84,15 @@ public class PostMvcController {
 
         try {
             Post post = postService.getById(id);
-            List<Comment> comments=commentService.getAllCommentsByPostId(id);
-            long likeCount=postService.countReactionLikes(post);
-            long dislikeCount=postService.countReactionDislikes(post);
+            List<Comment> comments = commentService.getAllCommentsByPostId(id);
+            long likeCount = postService.countReactionLikes(post);
+            long dislikeCount = postService.countReactionDislikes(post);
 
-            model.addAttribute("likeCount",likeCount);
-            model.addAttribute("dislikeCount",dislikeCount);
+            model.addAttribute("likeCount", likeCount);
+            model.addAttribute("dislikeCount", dislikeCount);
             model.addAttribute("postId", id);
             model.addAttribute("post", post);
-            if(!comments.isEmpty()) {
+            if (!comments.isEmpty()) {
                 model.addAttribute("comments", comments);
             }
             return "PostView";
@@ -228,58 +228,62 @@ public class PostMvcController {
             return "ErrorView";
         }
     }
+
     @GetMapping("/most-recent-posts")
     public String showMostRecentPosts(Model model) {
         List<Post> mostRecentPosts = postService.getMostRecentPosts();
         model.addAttribute("posts", mostRecentPosts);
         return "TopRecentPostsView";
     }
+
     @GetMapping("/most-commented-posts")
     public String showMostCommentedPosts(Model model) {
         List<Post> mostCommentedPosts = postService.getTopCommentedPosts();
         model.addAttribute("posts", mostCommentedPosts);
         return "MostCommentedPostsView";
     }
+
     @GetMapping("/{postId}/like")
-    public String likeComment (@PathVariable int postId, HttpSession session) {
+    public String likeComment(@PathVariable int postId, HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-        Reaction_posts reaction=reactionService.findReactionByPostIdAndUserId(postId,user.getId());
-        if(reaction!=null&& reaction.getReaction().equals(Reaction.LIKES)){
-            reactionService.deleteReactionPost(reaction.getId(),user);
-            return "redirect:/posts/"+postId;
+        Reaction_posts reaction = reactionService.findReactionByPostIdAndUserId(postId, user.getId());
+        if (reaction != null && reaction.getReaction().equals(Reaction.LIKES)) {
+            reactionService.deleteReactionPost(reaction.getId(), user);
+            return "redirect:/posts/" + postId;
 
         }
         Reaction_posts reactionPost = new Reaction_posts();
         reactionPost.setReaction(Reaction.LIKES);
         reactionPost.setUser(user);
-        postService.reactToPost(postId,reactionPost);
-        return "redirect:/posts/"+postId;
+        postService.reactToPost(postId, reactionPost);
+        return "redirect:/posts/" + postId;
 
     }
+
     @GetMapping("/{postId}/dislike")
-    public String dislikeComment (@PathVariable int postId, HttpSession session) {
+    public String dislikeComment(@PathVariable int postId, HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-        Reaction_posts reaction=reactionService.findReactionByPostIdAndUserId(postId,user.getId());
-        if(reaction!=null&& reaction.getReaction().equals(Reaction.DISLIKES)){
-            reactionService.deleteReactionPost(reaction.getId(),user);
-            return "redirect:/posts/"+postId;
+        Reaction_posts reaction = reactionService.findReactionByPostIdAndUserId(postId, user.getId());
+        if (reaction != null && reaction.getReaction().equals(Reaction.DISLIKES)) {
+            reactionService.deleteReactionPost(reaction.getId(), user);
+            return "redirect:/posts/" + postId;
 
         }
         Reaction_posts reactionPost = new Reaction_posts();
         reactionPost.setReaction(Reaction.DISLIKES);
         reactionPost.setUser(user);
-        postService.reactToPost(postId,reactionPost);
-        return "redirect:/posts/"+postId;
+        postService.reactToPost(postId, reactionPost);
+        return "redirect:/posts/" + postId;
 
     }
 }

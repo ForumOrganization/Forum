@@ -19,8 +19,6 @@
             <option value="ADMIN">ADMIN</option>
             <option value="USER">USER</option>
         </select>
-<!--        <input type="text" placeholder="Role" th:field="*{role}"/>-->
-<!--        <input type="text" placeholder="Status" th:field="*{status}"/>-->
         <select th:field="*{status}">
             <option value="">Status</option>
             <option value="ACTIVE">ACTIVE</option>
@@ -94,12 +92,12 @@
 <!--                        <button type="submit" th:if="${user.getRole() == T(com.example.forum.models.enums.Role).ADMIN}" >Update to User</button>-->
                     </form>
                 </div>
-                <div class="cell">
-                    <form th:action="@{'/users/' + ${user.id} + '/delete'}" method="post">
-                        <button type="submit" >Delete</button>
-                    </form>
+<!--                <div class="cell">-->
+<!--                    <form th:action="@{'/users/' + ${user.id} + '/delete'}" method="post">-->
+<!--                        <button type="submit" >Delete</button>-->
+<!--                    </form>-->
 
-                </div>
+<!--                </div>-->
             </div>
         </div>
     </div>
