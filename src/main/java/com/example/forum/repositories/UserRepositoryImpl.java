@@ -63,11 +63,11 @@ public class UserRepositoryImpl implements UserRepository {
 
             userFilterOptions.getRole().ifPresent(value -> {
                 filters.add(" role = :role ");
-                params.put("role",String.format("%%%s%%", value));
+                params.put("role", value);
             });
-            userFilterOptions.getRole().ifPresent(value -> {
+            userFilterOptions.getStatus().ifPresent(value -> {
                 filters.add(" status = :status ");
-                params.put("status",String.format("%%%s%%", value));
+                params.put("status", value);
             });
 
             StringBuilder queryString = new StringBuilder("from User");

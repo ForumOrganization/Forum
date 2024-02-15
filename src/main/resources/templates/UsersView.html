@@ -4,15 +4,6 @@
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
 
-<!--<h1>All Users</h1>-->
-<!--<div id="users-list">-->
-<!--    &lt;!&ndash; Loop through users and display them &ndash;&gt;-->
-<!--    <div th:each="user : ${users}">-->
-<!--        <p th:text="${user.username}"></p>-->
-<!--        &lt;!&ndash; Display other user details as needed &ndash;&gt;-->
-<!--    </div>-->
-<!--</div>-->
-<!--<script src="../static/scripts.js"></script>-->
 <div th:fragment="usersView-form(Users)">
 <div class="body-content" th:if="${isAuthenticated && session.isAdmin}">
 
@@ -23,18 +14,18 @@
         <input type="text" placeholder="First Name" th:field="*{firstName}"/>
         <input type="text" placeholder="Last Name" th:field="*{lastName}"/>
         <input type="text" placeholder="Email" th:field="*{email}"/>
-<!--        <select th:field="*{role}">-->
-<!--            <option value="">Role</option>-->
-<!--            <option value="ROLE.ADMIN">ADMIN</option>-->
-<!--            <option value="USER">USER</option>-->
-<!--        </select>-->
-        <input type="text" placeholder="Role" th:field="*{role}"/>
-        <input type="text" placeholder="Status" th:field="*{status}"/>
-<!--        <select th:field="*{status}">-->
-<!--            <option value="">Status</option>-->
-<!--            <option value="ACTIVE">ACTIVE</option>-->
-<!--            <option value="BLOCKED">BLOCKED</option>-->
-<!--        </select>-->
+        <select th:field="*{role}">
+            <option value="">Role</option>
+            <option value="ADMIN">ADMIN</option>
+            <option value="USER">USER</option>
+        </select>
+<!--        <input type="text" placeholder="Role" th:field="*{role}"/>-->
+<!--        <input type="text" placeholder="Status" th:field="*{status}"/>-->
+        <select th:field="*{status}">
+            <option value="">Status</option>
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="BLOCKED">BLOCKED</option>
+        </select>
 
 
         <select th:field="*{sortBy}">
@@ -66,8 +57,10 @@
         <div class="table">
             <div class="header">
                 <div class="header-cell" th:text="#{user.label.username}">Username</div>
-                <div class="header-cell" th:text="#{user.label.first-name}">First Name</div>
-                <div class="header-cell" th:text="#{user.label.last-name}">Last Name</div>
+<!--                <div class="header-cell" th:text="#{user.label.first-name}">First Name</div>-->
+<!--                <div class="header-cell" th:text="#{user.label.last-name}">Last Name</div>-->
+                <div class="header-cell" th:text="#{user.label.full-name}">Full Name</div>
+
                 <div class="header-cell" th:text="#{user.label.email}">Email</div>
                 <div class="header-cell" th:text="#{user.label.role}">Role</div>
                 <div class="header-cell" th:text="#{user.label.status}">Status</div>
@@ -76,8 +69,10 @@
                 <div class="cell">
                     <a href="#" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.username}">User</a>
                 </div>
-                <div class="cell" th:text="${user.firstName}">First Name</div>
-                <div class="cell" th:text="${user.lastName}">Last Name</div>
+<!--                <div class="cell" th:text="${user.firstName}">First Name</div>-->
+<!--                <div class="cell" th:text="${user.lastName}">Last Name</div>-->
+                <div class="cell" th:text="${user.firstName + ' ' + user.lastName}">Full Name</div>
+
                 <div class="cell" th:text="${user.email}">Email</div>
                 <div class="cell" th:text="${user.role}">Role</div>
                 <div class="cell" th:text="${user.status}">Status</div>
