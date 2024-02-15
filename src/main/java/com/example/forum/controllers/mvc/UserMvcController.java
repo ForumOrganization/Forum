@@ -54,6 +54,15 @@ public class UserMvcController {
         return request.getRequestURI();
     }
 
+
+    @GetMapping("/number-of-users")
+    public String showAllNumber(Model model) {
+        long num = userService.getAllNumber();
+        String number = String.format("%d", num);
+        model.addAttribute("number", number);
+        return "HomeView";
+    }
+
     @GetMapping
     public String showAllUsers(@ModelAttribute("userFilterOptions") UserFilterDto filterDto,
                                Model model, HttpSession session) {

@@ -44,7 +44,17 @@
         <div id="welcome-message">
             <h2 th:text="#{home.welcome}">Welcome (design)!</h2>
             <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
+            <div class="cell">
+                <p>
+                    <a th:href="@{'/users/number-of-users'}">Number of active users:</a>
+<!--                                    <p>Number of active users:</p>-->
+                    <a href="#" th:href="@{/users/number-of-users}" th:text="${number}"></a>
+                </p>
+
+            </div>
+
             <div class="back">
+
                 <img src="../static/images/logo2.png" th:src="@{/images/logo4.png}" alt="Healthy Living Hub logo"/>
             </div>
             <p>Healthy Habits, Happy Hearts!</p>

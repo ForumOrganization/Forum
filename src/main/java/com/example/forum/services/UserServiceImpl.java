@@ -35,6 +35,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public long getAllNumber() {
+        return this.userRepository.getAllNumber();
+    }
+
+    @Override
     public User getById(int id) {
         return this.userRepository.getById(id);
     }

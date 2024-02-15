@@ -4,6 +4,7 @@ import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.User;
+import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.utils.UserFilterOptions;
 import org.hibernate.Session;
@@ -85,6 +86,16 @@ public class UserRepositoryImpl implements UserRepository {
             return query.list();
         }
     }
+
+    @Override
+    public long getAllNumber() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<User> query = session.createQuery("FROM User where status = :status", User.class);
+            query.setParameter("status", Status.ACTIVE);
+            return query.list().size();
+
+        }}
+
 
     @Override
     public User getById(int id) {
