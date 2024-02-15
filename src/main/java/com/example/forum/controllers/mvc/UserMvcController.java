@@ -10,6 +10,7 @@ import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PhoneNumberDto;
 import com.example.forum.models.dtos.UserDto;
+import com.example.forum.models.dtos.UserDto3;
 import com.example.forum.models.dtos.UserFilterDto;
 import com.example.forum.models.enums.Role;
 import com.example.forum.services.contracts.UserService;

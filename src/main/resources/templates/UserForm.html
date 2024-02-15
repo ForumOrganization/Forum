@@ -79,6 +79,10 @@
         <input type="text" th:field="*{password}"/><br/>
         <label class="error" th:errors="*{password}">Password error placeholder</label><br/><br/>
 
+<!--        <label th:text="#{user.label.password-confirm}">Confirm password</label><br/>-->
+<!--        <input type="text" th:field="*{secondPassword}"/><br/>-->
+<!--        <label class="error" th:errors="*{secondPassword}">Password error placeholder</label><br/><br/>-->
+
         <div th:if="${session.isAdmin}">
 
                 <label th:text="#{user.label.phoneNumber}">Phone Number</label><br/>
