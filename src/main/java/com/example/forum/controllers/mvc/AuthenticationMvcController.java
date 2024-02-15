@@ -1,6 +1,8 @@
 package com.example.forum.controllers.mvc;
 
 import com.example.forum.exceptions.AuthorizationException;
+import com.example.forum.exceptions.DuplicateEntityException;
+import com.example.forum.exceptions.EntityAlreadyDeleteException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.UserMapper;
@@ -12,6 +14,7 @@ import com.example.forum.services.contracts.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -82,7 +85,7 @@ public class AuthenticationMvcController {
 
     @PostMapping("/register")
     public String handleRegister(@Valid @ModelAttribute("register") RegisterDto register,
-                                 BindingResult bindingResult) {
+                                 BindingResult bindingResult,Model model) {
         if (bindingResult.hasErrors()) {
             return "RegisterView";
         }
@@ -96,9 +99,17 @@ public class AuthenticationMvcController {
             User user = userMapper.fromDto(register);
             userService.registerUser(user);
             return "redirect:/auth/login";
-        } catch (EntityNotFoundException e) {
-            bindingResult.rejectValue("username", "username_error", e.getMessage());
-            return "RegisterView";
+//        } catch (EntityNotFoundException e) {
+//            bindingResult.rejectValue("username", "username_error", e.getMessage());
+//            return "RegisterView";
+        }catch (EntityAlreadyDeleteException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 }

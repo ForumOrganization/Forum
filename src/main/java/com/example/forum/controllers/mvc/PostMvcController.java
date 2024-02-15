@@ -59,13 +59,20 @@ public class PostMvcController {
     }
 
     @GetMapping
-    public String showAllPosts(@ModelAttribute("filterOptions") PostFilterDto filterDto, Model model) {
+    public String showAllPosts(@ModelAttribute("filterOptions") PostFilterDto filterDto,
+                               Model model,HttpSession session) {
         PostFilterOptions filterOptions = new PostFilterOptions(
                 filterDto.getTitle(),
                 filterDto.getCreatedBy(),
                 filterDto.getCreationTime(),
                 filterDto.getSortBy(),
                 filterDto.getSortOrder());
+        try {
+            authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+
         List<Post> posts = postService.getAll(filterOptions);
         model.addAttribute("filterOptions", filterDto);
         model.addAttribute("posts", posts);
@@ -138,8 +145,13 @@ public class PostMvcController {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("title", "duplicate_post", e.getMessage());
-            return "PostCreateView";
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 

@@ -98,9 +98,9 @@ public class UserServiceImpl implements UserService {
         checkAccessPermissions(deleteUser, executingUser, DELETE_USER_MESSAGE_ERROR);
         User userToDelete = getById(deleteUser);
 
-//        if (userToDelete.isDeleted()) {
-//            throw new EntityAlreadyDeleteException("User", "id", String.valueOf(deleteUser));
-//        }
+        if (userToDelete.isDeleted()) {
+            throw new EntityAlreadyDeleteException("User", "id", String.valueOf(deleteUser));
+        }
 
         userRepository.deleteUser(deleteUser);
     }

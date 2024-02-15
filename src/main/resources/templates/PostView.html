@@ -19,7 +19,6 @@
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/update}">Update</a>
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
         <a th:if="${isAuthenticated}" th:href="@{/comments/new/posts/{postId}(postId=${postId})}">Create Comment</a>
-        <a th:if="${isAuthenticated}" th:href="@{/comments/new/posts/{postId}(postId=${postId})}">Create Comment</a>
         <a th:if="${isAuthenticated}" th:href="@{__${requestURI}__/like}">
             <i class="fa-regular fa-thumbs-up"></i>
             <span th:text="${likeCount}">likes</span>

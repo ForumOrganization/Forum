@@ -61,7 +61,8 @@ public class UserMvcController {
     }
 
     @GetMapping
-    public String showAllUsers(@ModelAttribute("userFilterOptions") UserFilterDto filterDto, Model model) {
+    public String showAllUsers(@ModelAttribute("userFilterOptions") UserFilterDto filterDto,
+                               Model model,HttpSession session) {
         UserFilterOptions userFilterOptions = new UserFilterOptions(
                 filterDto.getUsername(),
                 filterDto.getFirstName(),
@@ -71,6 +72,11 @@ public class UserMvcController {
                 filterDto.getStatus(),
                 filterDto.getSortBy(),
                 filterDto.getSortOrder());
+        try {
+            authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
         List<User> users = userService.getAll(userFilterOptions);
         model.addAttribute("filterOptions", filterDto);
         model.addAttribute("users", users);
@@ -181,6 +187,10 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 
@@ -230,8 +240,34 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
-
     @GetMapping("/{id}/delete")
+    public String showDeleteUserPage(@PathVariable int id, Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            userService.deleteUser(id, user);
+            return "redirect:/auth/login";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityAlreadyDeleteException e) {
+            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+
+    @PostMapping("/{id}/delete")
     public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
         User user;
         try {
@@ -241,18 +277,18 @@ public class UserMvcController {
         }
 
         try {
-            user = authenticationHelper.tryGetCurrentUser(session);
             userService.deleteUser(id, user);
-//            session.invalidate();
-            session.isNew();
-            session.invalidate();
-            return "redirect:/auth/login";
+            return "redirect:/admin";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (EntityAlreadyDeleteException e) {
+            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
