@@ -2,6 +2,7 @@ package com.example.forum.services;
 
 import com.example.forum.models.Reaction_comments;
 import com.example.forum.models.Reaction_posts;
+import com.example.forum.models.User;
 import com.example.forum.models.enums.Reaction;
 import com.example.forum.repositories.contracts.ReactionRepository;
 import org.junit.jupiter.api.Test;
@@ -15,8 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ReactionServiceImplTest {
@@ -95,5 +95,47 @@ public class ReactionServiceImplTest {
 
         Mockito.verify(reactionRepository, times(1)).
                 updateReactionComment(reaction, commentId);
+    }
+
+    @Test
+    public void testDeleteReactionPost() {
+
+        int reactionId = 123;
+        User user = new User();
+        doNothing().when(reactionRepository).deleteReactionPost(reactionId, user);
+
+        reactionService.deleteReactionPost(reactionId, user);
+
+        verify(reactionRepository, times(1)).deleteReactionPost(reactionId, user);
+    }
+
+    @Test
+    public void testFindReactionByCommentIdAndUserId() {
+
+        int commentId = 123;
+        int userId = 456;
+        Reaction_comments expectedReaction = new Reaction_comments();
+
+
+        when(reactionRepository.findReactionByCommentIdAndUserId(commentId, userId)).thenReturn(expectedReaction);
+
+        Reaction_comments actualReaction = reactionService.findReactionByCommentIdAndUserId(commentId, userId);
+        assertEquals(expectedReaction, actualReaction);
+        verify(reactionRepository, times(1)).findReactionByCommentIdAndUserId(commentId, userId);
+    }
+
+    @Test
+    public void testFindReactionByPostIdAndUserId() {
+
+        int postId = 123;
+        int userId = 456;
+        Reaction_posts expectedReaction = new Reaction_posts();
+        when(reactionRepository.findReactionByPostIdAndUserId(postId, userId)).thenReturn(expectedReaction);
+
+        Reaction_posts actualReaction = reactionService.findReactionByPostIdAndUserId(postId, userId);
+
+        assertEquals(expectedReaction, actualReaction);
+
+        verify(reactionRepository, times(1)).findReactionByPostIdAndUserId(postId, userId);
     }
 }

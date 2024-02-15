@@ -40,7 +40,6 @@ public class TagServiceImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-//        TagService tagService = Mockito.mock(TagService.class);
         postRepository = mock(PostRepository.class);
         tagService = new TagServiceImpl(tagRepository, postRepository);
     }
@@ -136,7 +135,7 @@ public class TagServiceImplTest {
     void test_CreateTagInPost() {
         int postId = 1;
         int authorId = 1;
-        User user = new User(); // Simulate authorized user
+        User user = new User();
         Post post = new Post();
         post.setCreatedBy(user);
         Tag tag = new Tag();
@@ -187,4 +186,45 @@ public class TagServiceImplTest {
 
     }
 
+    @Test
+    public void testGetAllPostsByTagName() {
+        // Define sample data
+        String tagName = "exampleTag";
+        List<Post> expectedPosts = Arrays.asList(
+                new Post(),
+                new Post()
+        );
+
+        // Mock the behavior of tagRepository.getAllPostsByTagName() method
+        when(tagRepository.getAllPostsByTagName(tagName)).thenReturn(expectedPosts);
+
+        // Call the method under test
+        List<Post> actualPosts = tagService.getAllPostsByTagName(tagName);
+
+        // Verify that the method behaves as expected
+        assertEquals(expectedPosts.size(), actualPosts.size());
+        assertEquals(expectedPosts.get(0).getTitle(), actualPosts.get(0).getTitle());
+        assertEquals(expectedPosts.get(1).getContent(), actualPosts.get(1).getContent());
+    }
+
+    @Test
+    public void testGetAllTagsByPostId() {
+        // Define sample data
+        int postId = 123;
+        List<Tag> expectedTags = Arrays.asList(
+                new Tag(),
+                new Tag()
+        );
+
+        // Mock the behavior of tagRepository.getAllTagsByPostId() method
+        when(tagRepository.getAllTagsByPostId(postId)).thenReturn(expectedTags);
+
+        // Call the method under test
+        List<Tag> actualTags = tagService.getAllTagsByPostId(postId);
+
+        // Verify that the method behaves as expected
+        assertEquals(expectedTags.size(), actualTags.size());
+        assertEquals(expectedTags.get(0).getName(), actualTags.get(0).getName());
+        assertEquals(expectedTags.get(1).getName(), actualTags.get(1).getName());
+    }
 }
