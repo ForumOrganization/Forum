@@ -102,7 +102,7 @@ public class AuthenticationMvcController {
 //        } catch (EntityNotFoundException e) {
 //            bindingResult.rejectValue("username", "username_error", e.getMessage());
 //            return "RegisterView";
-        }catch (EntityAlreadyDeleteException e) {
+        }catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";

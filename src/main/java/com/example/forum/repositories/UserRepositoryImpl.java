@@ -229,6 +229,11 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
 
             for (Post post : targetUser.getPosts()) {
+                for(Comment comment:post.getComments()){
+                    comment.setDeleted(false);
+                    session.merge(comment);
+
+                }
                 post.setDeleted(false);
                 session.merge(post);
             }
@@ -251,6 +256,11 @@ public class UserRepositoryImpl implements UserRepository {
             session.beginTransaction();
 
             for (Post post : userToDelete.getPosts()) {
+                for(Comment comment:post.getComments()){
+                    comment.setDeleted(true);
+                    session.merge(comment);
+
+                }
                 post.setDeleted(true);
                 session.merge(post);
             }

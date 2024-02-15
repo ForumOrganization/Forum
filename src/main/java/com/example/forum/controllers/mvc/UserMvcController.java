@@ -128,47 +128,47 @@ public class UserMvcController {
         }
     }
 
-    @GetMapping("/new")
-    public String showNewUserPage(Model model, HttpSession session) {
-        try {
-            authenticationHelper.tryGetCurrentUser(session);
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
-
-        model.addAttribute("user", new UserDto());
-        return "UserCreateView";
-    }
-
-    @PostMapping("/new")
-    public String createUser(@Valid @ModelAttribute("user") UserDto userDto,
-                             BindingResult bindingResult,
-                             Model model,
-                             HttpSession session) {
-        User user;
-        try {
-            user = authenticationHelper.tryGetCurrentUser(session);
-        } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
-        }
-
-        if (bindingResult.hasErrors()) {
-            return "RegisterView";
-        }
-
-        try {
-            User userToCreate = userMapper.fromDtoRegister(userDto);
-            userService.registerUser(userToCreate);
-            return "redirect:/users";
-        } catch (EntityNotFoundException e) {
-            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-            model.addAttribute("error", e.getMessage());
-            return "ErrorView";
-        } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("username", "duplicate_user", e.getMessage());
-            return "UserCreateView";
-        }
-    }
+//    @GetMapping("/new")
+//    public String showNewUserPage(Model model, HttpSession session) {
+//        try {
+//            authenticationHelper.tryGetCurrentUser(session);
+//        } catch (AuthorizationException e) {
+//            return "redirect:/auth/login";
+//        }
+//
+//        model.addAttribute("user", new UserDto());
+//        return "UserCreateView";
+//    }
+//
+//    @PostMapping("/new")
+//    public String createUser(@Valid @ModelAttribute("user") UserDto userDto,
+//                             BindingResult bindingResult,
+//                             Model model,
+//                             HttpSession session) {
+//        User user;
+//        try {
+//            user = authenticationHelper.tryGetCurrentUser(session);
+//        } catch (AuthorizationException e) {
+//            return "redirect:/auth/login";
+//        }
+//
+//        if (bindingResult.hasErrors()) {
+//            return "RegisterView";
+//        }
+//
+//        try {
+//            User userToCreate = userMapper.fromDtoRegister(userDto);
+//            userService.registerUser(userToCreate);
+//            return "redirect:/users";
+//        } catch (EntityNotFoundException e) {
+//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        } catch (DuplicateEntityException e) {
+//            bindingResult.rejectValue("username", "duplicate_user", e.getMessage());
+//            return "UserCreateView";
+//        }
+//    }
 
     @GetMapping("/{id}/update")
     public String showEditUserPage(@PathVariable int id, Model model, HttpSession session) {
@@ -198,8 +198,8 @@ public class UserMvcController {
     @PostMapping("/{id}/update")
     public String updateUser(@PathVariable int id,
                              @Valid @ModelAttribute("user") UserDto dto,
-                             @Valid PhoneNumberDto phoneNumberDto,
                              BindingResult bindingResult,
+                             @Valid @ModelAttribute("phoneNumber") PhoneNumberDto phoneNumberDto,
                              Model model,
                              HttpSession session) {
         User user;
