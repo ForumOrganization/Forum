@@ -34,7 +34,6 @@ public class HomeMvcController {
         this.postService = postService;
     }
 
-
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
@@ -47,7 +46,6 @@ public class HomeMvcController {
         model.addAttribute("userNumber", userNum);
         model.addAttribute("postNumber", postNum);
         return "HomeView";
-
     }
 
     @GetMapping("/about")
@@ -69,21 +67,22 @@ public class HomeMvcController {
                 filterDto.getSortOrder());
         User user;
         try {
-            user=authenticationHelper.tryGetCurrentUser(session);
+            user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-            try{
-                if (user.getRole() != Role.ADMIN) {
-                    throw new AuthorizationException(UNAUTHORIZED_USER_ERROR_MESSAGE);
-                }
-                List<User> users = userService.getAll(user,userFilterOptions);
-                model.addAttribute("users", users);
-                model.addAttribute("user", user);
-                model.addAttribute("filterOptions",filterDto);
-                model.addAttribute("isAuthenticated", true);
-                return "AdminPortalView";
 
+        try {
+            if (user.getRole() != Role.ADMIN) {
+                throw new AuthorizationException(UNAUTHORIZED_USER_ERROR_MESSAGE);
+            }
+
+            List<User> users = userService.getAll(user, userFilterOptions);
+            model.addAttribute("users", users);
+            model.addAttribute("user", user);
+            model.addAttribute("filterOptions", filterDto);
+            model.addAttribute("isAuthenticated", true);
+            return "AdminPortalView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
@@ -97,7 +96,6 @@ public class HomeMvcController {
 
     @GetMapping("/user")
     public String showUserProfile(HttpSession session, Model model) {
-
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
             model.addAttribute("currentUser", user);
@@ -113,5 +111,4 @@ public class HomeMvcController {
             return "ErrorView";
         }
     }
-
 }

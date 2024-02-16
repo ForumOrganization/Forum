@@ -56,12 +56,12 @@ public class UserRestController {
                                         @RequestParam(required = false) String sortBy,
                                         @RequestParam(required = false) String sortOrder) {
         try {
-           User user= authenticationHelper.tryGetUser(headers);
+            User user = authenticationHelper.tryGetUser(headers);
             UserFilterOptions userFilterOptions =
                     new UserFilterOptions(
                             username, firstName, lastName, email, role, status, sortBy, sortOrder);
 
-            List<User> users = userService.getAll(user,userFilterOptions);
+            List<User> users = userService.getAll(user, userFilterOptions);
 
             return users.stream()
                     .map(userMapper::toDto)

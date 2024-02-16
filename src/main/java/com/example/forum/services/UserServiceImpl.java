@@ -202,7 +202,8 @@ public class UserServiceImpl implements UserService {
         } else if (userPhoneNumberToBeUpdate.getPhoneNumber() != null
                 && !userPhoneNumberToBeUpdate.getPhoneNumber().isEmpty()) {
 
-            if (userRepository.existsByPhoneNumber(userPhoneNumberToBeUpdate)) {
+            if (userRepository.existsByPhoneNumber(userPhoneNumberToBeUpdate)
+                    && !admin.getPhoneNumber().equals(userPhoneNumberToBeUpdate.getPhoneNumber())) {
                 throw new DuplicateEntityException("Admin", "phone number", userPhoneNumberToBeUpdate.getPhoneNumber());
             }
 

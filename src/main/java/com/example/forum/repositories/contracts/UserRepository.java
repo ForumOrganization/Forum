@@ -34,6 +34,4 @@ public interface UserRepository {
     boolean isDataBaseEmpty();
 
     boolean existsByPhoneNumber(User userPhoneNumberToBeUpdate);
-
-
 }

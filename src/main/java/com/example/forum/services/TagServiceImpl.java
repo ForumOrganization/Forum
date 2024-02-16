@@ -52,10 +52,9 @@ public class TagServiceImpl implements TagService {
             missingTag = true;
         }
 
-        if (missingTag) {
-            throw new EntityNotFoundException("Tag", "name", name);
-
-        }
+//        if (missingTag) {
+//            throw new EntityNotFoundException("Tag", "name", name);
+//        }
 
         return tag;
     }
@@ -139,6 +138,4 @@ public class TagServiceImpl implements TagService {
         checkAccessPermissions(authorId, user, DELETE_TAG_MESSAGE_ERROR);
         this.tagRepository.deleteTagInPost(postId, tagId);
     }
-
-
 }

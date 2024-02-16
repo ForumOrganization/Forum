@@ -25,5 +25,6 @@ public interface PostRepository {
     void update(Post post);
 
     void delete(int id);
- Post reactToPost(Post currentPost);
+
+    Post reactToPost(Post currentPost);
 }

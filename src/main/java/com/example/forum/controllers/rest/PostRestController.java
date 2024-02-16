@@ -5,9 +5,12 @@ import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.PostMapper;
+import com.example.forum.helpers.TagMapper;
 import com.example.forum.models.Post;
+import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PostDto;
+import com.example.forum.models.dtos.TagDto;
 import com.example.forum.services.contracts.PostService;
 import com.example.forum.utils.PostFilterOptions;
 import jakarta.validation.Valid;
@@ -19,7 +22,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -29,15 +31,16 @@ public class PostRestController {
     private final PostService postService;
     private final AuthenticationHelper authenticationHelper;
     private final PostMapper postMapper;
+    private final TagMapper tagMapper;
 
     @Autowired
-    public PostRestController(PostService postService, AuthenticationHelper authenticationHelper, PostMapper postMapper) {
+    public PostRestController(PostService postService, AuthenticationHelper authenticationHelper, PostMapper postMapper, TagMapper tagMapper) {
         this.postService = postService;
         this.authenticationHelper = authenticationHelper;
         this.postMapper = postMapper;
+        this.tagMapper = tagMapper;
     }
 
-    //TODO
     @GetMapping
     public List<Post> getAll(@RequestHeader HttpHeaders headers,
                              @RequestParam(required = false) String title,
@@ -91,11 +94,12 @@ public class PostRestController {
     }
 
     @PostMapping
-    public Post create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto) {
+    public Post create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto, @Valid @RequestBody TagDto tagDto) {
         try {
             User user = this.authenticationHelper.tryGetUser(headers);
             Post post = this.postMapper.fromDto(postDto);
-            postService.create(post, user);
+            Tag tag = this.tagMapper.fromDto(tagDto);
+            postService.create(post, user, tag);
             return post;
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());

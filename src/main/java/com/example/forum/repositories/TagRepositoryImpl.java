@@ -12,10 +12,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class TagRepositoryImpl implements TagRepository {
@@ -33,12 +30,10 @@ public class TagRepositoryImpl implements TagRepository {
             List<String> filters = new ArrayList<>();
             Map<String, Object> params = new HashMap<>();
 
-
             tagFilterOptions.getName().ifPresent(value -> {
                 filters.add("name like :name");
                 params.put("name", String.format("%%%s%%", value));
             });
-
 
             StringBuilder queryString = new StringBuilder("from Tag");
             if (!filters.isEmpty()) {
@@ -46,6 +41,7 @@ public class TagRepositoryImpl implements TagRepository {
                         .append(" where ")
                         .append(String.join(" and ", filters));
             }
+
             queryString.append(generateOrderBy(tagFilterOptions));
 
             Query<Tag> query = session.createQuery(queryString.toString(), Tag.class);
@@ -59,7 +55,6 @@ public class TagRepositoryImpl implements TagRepository {
             return list;
         }
     }
-
 
     @Override
     public Tag getTagById(int tagId) {
@@ -88,9 +83,9 @@ public class TagRepositoryImpl implements TagRepository {
 
             List<Tag> tag = query.list();
 
-            if (tag.isEmpty()) {
-                throw new EntityNotFoundException("Tag", "this name");
-            }
+//            if (tag.isEmpty()) {
+//                throw new EntityNotFoundException("Tag", "this name");
+//            }
 
             return tag.get(0);
         }
@@ -143,7 +138,8 @@ public class TagRepositoryImpl implements TagRepository {
             List<Tag> result = query.getResultList();
 
             if (result.isEmpty()) {
-                throw new EntityNotFoundException("Tags", "post id");
+//                throw new EntityNotFoundException("Tags", "post id");
+                return Collections.emptyList();
             }
 
             return result;
