@@ -4,6 +4,7 @@ import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
+import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
 import com.example.forum.utils.TagFilterOptions;
 import org.hibernate.Session;
@@ -152,9 +153,9 @@ public class TagRepositoryImpl implements TagRepository {
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, postId);
 
-            if (post == null) {
-                throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
-            }
+//            if (post == null) {
+//                throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
+//            }
 
             Query<Tag> query = session.createQuery(
                     "SELECT t FROM Tag t WHERE t.name = :name", Tag.class);
@@ -167,6 +168,7 @@ public class TagRepositoryImpl implements TagRepository {
                 session.beginTransaction();
                 session.persist(tag);
                 session.getTransaction().commit();
+
                 post.getTags().add(tag);
                 session.beginTransaction();
                 session.merge(post);

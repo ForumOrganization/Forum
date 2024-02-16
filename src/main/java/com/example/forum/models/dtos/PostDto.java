@@ -23,6 +23,8 @@ public class PostDto {
 
     private Set<CommentDto> comments;
 
+    private Set<TagDto> tags;
+
     public PostDto() {
 
     }
@@ -65,5 +67,13 @@ public class PostDto {
 
     public void setComments(Set<CommentDto> comments) {
         this.comments = comments;
+    }
+
+    public Set<TagDto> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<TagDto> tags) {
+        this.tags = tags;
     }
 }

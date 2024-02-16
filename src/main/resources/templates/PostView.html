@@ -14,6 +14,19 @@
         <p class="margin12" th:text="#{post.label.content} + ': ' +      ${post.content}">Content</p>
         <p class="margin12" th:text="#{post.label.createBy}  + ': ' + ${post.createdBy.username}">Created By</p>
         <p class="margin12" th:text="#{post.label.creation}  + ': ' + ${post.creationTime}">Creation Time</p>
+
+<!--        <p class="margin12">-->
+<!--            <span th:text="#{post.label.tag}">Tags:</span>-->
+<!--        <ul style="display: inline; list-style-type: none; padding: 0; margin: 0;">-->
+<!--            <li th:each="tag : ${post.tags}" th:text="${tag.name}" style="display: inline-block; margin-right: 5px;">Tag</li>-->
+<!--        </ul>-->
+<!--        </p>-->
+
+<!--        <p class="margin12" th:text="#{post.label.tag}">Tags: </p>-->
+<ul>
+        <li th:each="tag : ${post.tags}" th:text="${tag.name}">Tag</li>
+    </ul>
+
     </div>
     <h3>
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/update}">Update</a>
@@ -37,7 +50,6 @@
             <p th:text="${comment.content}"></p>
             <p th:text="'Created By: ' + ${comment.user.username}"></p>
             <p th:text="'Creation Time: ' + ${comment.getCreationTime()}"></p>
-
 
             <h4>
                 <!-- Update and Delete links -->
@@ -64,6 +76,7 @@
         </li>
     </ul>
 </div>
+
 <div th:if="${post.comments.isEmpty()}">
     <h2 th:text="#{comments.title.empty}">No comments yet.</h2>
 </div>

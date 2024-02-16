@@ -72,15 +72,14 @@ public class PostServiceImpl implements PostService {
     @Override
     public void create(Post post, User user, Tag tag) {
         checkBlockOrDeleteUser(user);
-        checkAccessPermissionsUser(post.getCreatedBy().getId(), user, CREATE_TAG_MESSAGE_ERROR);
 
 
         boolean duplicateExists = true;
 
         try {
-            Post existingPost = this.postRepository.getById(post.getId());
+            Post existingPost = this.postRepository.getByTitle(post.getTitle());
 
-            if (existingPost.getId() == post.getId()) {
+            if (existingPost.getTitle().equals(post.getTitle())) {
                 duplicateExists = false;
             }
 
@@ -95,14 +94,17 @@ public class PostServiceImpl implements PostService {
         post.setCreatedBy(user);
 
         if (tag != null) {
+            postRepository.create(post);
             tagRepository.createTagInPost(tag, post.getId(), user);
+        }else{
+            this.postRepository.create(post);
         }
 
-        this.postRepository.create(post);
+
     }
 
     @Override
-    public void update(Post post, User user) {
+    public void update(Post post, User user, Tag tag) {
         checkBlockOrDeleteUser(user);
         checkAccessPermissionsUser(post.getCreatedBy().getId(), user, UPDATE_USER_MESSAGE_ERROR);
 
@@ -123,7 +125,17 @@ public class PostServiceImpl implements PostService {
             throw new DuplicateEntityException("Post", "id", String.valueOf(post.getId()));
         }
 
-        this.postRepository.update(post);
+        if(tagRepository.getTagById(tag.getId())!=null){
+            tagRepository.updateTagInPost(tag);
+            postRepository.update(post);
+
+        }else{
+            postRepository.update(post);
+            tagRepository.updateTagInPost(tag);
+        }
+
+
+
     }
 
     @Override

@@ -24,7 +24,7 @@ public interface PostService {
 
     void create(Post post, User user, Tag tag);
 
-    void update(Post post, User user);
+    void update(Post post, User user, Tag tag);
 
     void delete(int id, User user);
 

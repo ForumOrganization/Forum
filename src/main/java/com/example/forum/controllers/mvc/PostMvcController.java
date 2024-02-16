@@ -134,8 +134,9 @@ public class PostMvcController {
 
     @PostMapping("/new")
     public String createPost(@Valid @ModelAttribute("post") PostDto postDto,
-                             BindingResult bindingResult,
+                             BindingResult postBindingResult,
                              @Valid @ModelAttribute("tag") TagDto tagDto,
+                             BindingResult tagBindingResult,
                              Model model,
                              HttpSession session) {
         User user;
@@ -145,7 +146,7 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
-        if (bindingResult.hasErrors()) {
+        if (postBindingResult.hasErrors()||tagBindingResult.hasErrors()) {
             return "PostCreateView";
         }
 
@@ -170,7 +171,9 @@ public class PostMvcController {
     }
 
     @GetMapping("/{id}/update")
-    public String showEditPostPage(@PathVariable int id, Model model, HttpSession session) {
+    public String showEditPostPage(@PathVariable int postId,
+                                   @PathVariable int tagId,
+                                   Model model, HttpSession session) {
         try {
             authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
@@ -178,10 +181,14 @@ public class PostMvcController {
         }
 
         try {
-            Post post = postService.getById(id);
+            Post post = postService.getById(postId);
             PostDto postDto = postMapper.toDto(post);
-            model.addAttribute("postId", id);
+            Tag tag=tagService.getTagById(tagId);
+            TagDto tagDto=tagMapper.toDto(tag);
+            model.addAttribute("postId", postId);
             model.addAttribute("post", postDto);
+            model.addAttribute("tagId", tagId);
+            model.addAttribute("tag", tagDto);
             return "PostUpdateView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -191,9 +198,12 @@ public class PostMvcController {
     }
 
     @PostMapping("/{id}/update")
-    public String updatePost(@PathVariable int id,
-                             @Valid @ModelAttribute("post") PostDto dto,
-                             BindingResult bindingResult,
+    public String updatePost(@PathVariable int postId,
+                             @PathVariable int tagId,
+                             @Valid @ModelAttribute("post") PostDto postDto,
+                             BindingResult postBindingResult,
+                             @Valid @ModelAttribute("tag") TagDto tagDto,
+                             BindingResult tagBindingResult,
                              Model model,
                              HttpSession session) {
         User user;
@@ -203,20 +213,21 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
-        if (bindingResult.hasErrors()) {
+        if (postBindingResult.hasErrors()||tagBindingResult.hasErrors()) {
             return "PostUpdateView";
         }
 
         try {
-            Post post = postMapper.fromDto(id, dto);
-            postService.update(post, user);
+            Post post = postMapper.fromDto(postId, postDto);
+            Tag tag=tagMapper.fromDto(tagId,tagDto);
+            postService.update(post, user,tag);
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (DuplicateEntityException e) {
-            bindingResult.rejectValue("title", "duplicate_post", e.getMessage());
+            postBindingResult.rejectValue("title", "duplicate_post", e.getMessage());
             return "PostUpdateView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());

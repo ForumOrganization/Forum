@@ -38,10 +38,10 @@ public class CommentRepositoryImpl implements CommentRepository {
             List<Comment> comments = session.createQuery("select c From Comment c WHERE c.post.id= :postId Order by c.creationTime ", Comment.class)
                     .setParameter("postId", postId).list();
 
-            if (comments.isEmpty()) {
-                throw new EntityNotFoundException("Comments");
-
-            }
+//            if (comments.isEmpty()) {
+//                throw new EntityNotFoundException("Comments");
+//
+//            }
             return comments;
         }
 

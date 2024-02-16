@@ -109,11 +109,13 @@ public class PostRestController {
     }
 
     @PutMapping("/{id}")
-    public Post update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto) {
+    public Post update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto,
+                       @PathVariable int tagId, @Valid @RequestBody TagDto tagDto) {
         try {
             User user = this.authenticationHelper.tryGetUser(headers);
             Post post = this.postMapper.fromDto(id, postDto);
-            this.postService.update(post, user);
+            Tag tag=this.tagMapper.fromDto(tagId,tagDto);
+            this.postService.update(post, user,tag);
             return post;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
