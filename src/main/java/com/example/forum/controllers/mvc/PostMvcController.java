@@ -5,16 +5,16 @@ import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.PostMapper;
-import com.example.forum.models.Comment;
-import com.example.forum.models.Post;
-import com.example.forum.models.Reaction_posts;
-import com.example.forum.models.User;
+import com.example.forum.helpers.TagMapper;
+import com.example.forum.models.*;
 import com.example.forum.models.dtos.PostDto;
 import com.example.forum.models.dtos.PostFilterDto;
+import com.example.forum.models.dtos.TagDto;
 import com.example.forum.models.enums.Reaction;
 import com.example.forum.services.contracts.CommentService;
 import com.example.forum.services.contracts.PostService;
 import com.example.forum.services.contracts.ReactionService;
+import com.example.forum.services.contracts.TagService;
 import com.example.forum.utils.PostFilterOptions;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -35,16 +36,20 @@ public class PostMvcController {
     private final PostService postService;
     private final CommentService commentService;
     private final ReactionService reactionService;
+    private final TagService tagService;
     private final PostMapper postMapper;
+    private final TagMapper tagMapper;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public PostMvcController(PostService postService, CommentService commentService, ReactionService reactionService, PostMapper postMapper,
+    public PostMvcController(PostService postService, CommentService commentService, ReactionService reactionService, TagService tagService, PostMapper postMapper, TagMapper tagMapper,
                              AuthenticationHelper authenticationHelper) {
         this.postService = postService;
         this.commentService = commentService;
         this.reactionService = reactionService;
+        this.tagService = tagService;
         this.postMapper = postMapper;
+        this.tagMapper = tagMapper;
         this.authenticationHelper = authenticationHelper;
     }
 
@@ -69,8 +74,16 @@ public class PostMvcController {
                 filterDto.getSortOrder());
 
         List<Post> posts = postService.getAll(filterOptions);
+        List<List<Tag>> tagsList = new ArrayList<>();
+
+        for (Post post : posts) {
+            List<Tag> tags = tagService.getAllTagsByPostId(post.getId());
+            tagsList.add(tags);
+        }
+
         model.addAttribute("filterOptions", filterDto);
         model.addAttribute("posts", posts);
+        model.addAttribute("tagsList", tagsList);
         return "PostsView";
     }
 
@@ -85,6 +98,7 @@ public class PostMvcController {
         try {
             Post post = postService.getById(id);
             List<Comment> comments = commentService.getAllCommentsByPostId(id);
+
             long likeCount = postService.countReactionLikes(post);
             long dislikeCount = postService.countReactionDislikes(post);
 
@@ -92,9 +106,11 @@ public class PostMvcController {
             model.addAttribute("dislikeCount", dislikeCount);
             model.addAttribute("postId", id);
             model.addAttribute("post", post);
+
             if (!comments.isEmpty()) {
                 model.addAttribute("comments", comments);
             }
+
             return "PostView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -112,12 +128,14 @@ public class PostMvcController {
         }
 
         model.addAttribute("post", new PostDto());
+        model.addAttribute("tag", new TagDto());
         return "PostCreateView";
     }
 
     @PostMapping("/new")
     public String createPost(@Valid @ModelAttribute("post") PostDto postDto,
                              BindingResult bindingResult,
+                             @Valid @ModelAttribute("tag") TagDto tagDto,
                              Model model,
                              HttpSession session) {
         User user;
@@ -133,7 +151,8 @@ public class PostMvcController {
 
         try {
             Post post = postMapper.fromDto(postDto);
-            postService.create(post, user);
+            Tag tag = tagMapper.fromDto(tagDto);
+            postService.create(post, user, tag);
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -251,18 +270,19 @@ public class PostMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
+
         Reaction_posts reaction = reactionService.findReactionByPostIdAndUserId(postId, user.getId());
+
         if (reaction != null && reaction.getReaction().equals(Reaction.LIKES)) {
             reactionService.deleteReactionPost(reaction.getId(), user);
             return "redirect:/posts/" + postId;
-
         }
+
         Reaction_posts reactionPost = new Reaction_posts();
         reactionPost.setReaction(Reaction.LIKES);
         reactionPost.setUser(user);
         postService.reactToPost(postId, reactionPost);
         return "redirect:/posts/" + postId;
-
     }
 
     @GetMapping("/{postId}/dislike")
@@ -273,17 +293,18 @@ public class PostMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
+
         Reaction_posts reaction = reactionService.findReactionByPostIdAndUserId(postId, user.getId());
+
         if (reaction != null && reaction.getReaction().equals(Reaction.DISLIKES)) {
             reactionService.deleteReactionPost(reaction.getId(), user);
             return "redirect:/posts/" + postId;
-
         }
+
         Reaction_posts reactionPost = new Reaction_posts();
         reactionPost.setReaction(Reaction.DISLIKES);
         reactionPost.setUser(user);
         postService.reactToPost(postId, reactionPost);
         return "redirect:/posts/" + postId;
-
     }
 }

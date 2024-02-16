@@ -39,6 +39,7 @@ public class TagRestController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String sortBy,
             @RequestParam(required = false) String sortOrder) {
+
         TagFilterOptions tagFilterOptions = new TagFilterOptions(name, sortBy, sortOrder);
 
         try {
@@ -104,7 +105,6 @@ public class TagRestController {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
-
 
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<Void> deleteTagInPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @RequestHeader HttpHeaders headers) {

@@ -5,11 +5,13 @@ import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
 import com.example.forum.models.Reaction_posts;
+import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.models.enums.Reaction;
 import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.ReactionRepository;
+import com.example.forum.repositories.contracts.TagRepository;
 import com.example.forum.services.contracts.PostService;
 import com.example.forum.utils.PostFilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +29,13 @@ public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
     private final ReactionRepository reactionRepository;
+    private final TagRepository tagRepository;
 
     @Autowired
-    public PostServiceImpl(PostRepository postRepository, ReactionRepository reactionRepository) {
+    public PostServiceImpl(PostRepository postRepository, ReactionRepository reactionRepository, TagRepository tagRepository) {
         this.postRepository = postRepository;
         this.reactionRepository = reactionRepository;
+        this.tagRepository = tagRepository;
     }
 
     @Override
@@ -66,8 +70,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void create(Post post, User user) {
+    public void create(Post post, User user, Tag tag) {
         checkBlockOrDeleteUser(user);
+        checkAccessPermissionsUser(post.getCreatedBy().getId(), user, CREATE_TAG_MESSAGE_ERROR);
+
 
         boolean duplicateExists = true;
 
@@ -87,6 +93,11 @@ public class PostServiceImpl implements PostService {
         }
 
         post.setCreatedBy(user);
+
+        if (tag != null) {
+            tagRepository.createTagInPost(tag, post.getId(), user);
+        }
+
         this.postRepository.create(post);
     }
 

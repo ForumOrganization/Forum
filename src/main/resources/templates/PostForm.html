@@ -19,6 +19,12 @@
         <label class="error" th:errors="*{content}">Content error placeholder</label>
         <br/><br/>
 
+        <label th:text="#{post.label.tag}">Tag</label>
+        <br/>
+        <input type="text" th:field="*{tags}"/>
+        <label class="error" th:errors="*{tags}">Tag error placeholder</label>
+        <br/><br/>
+
 <!--        <label th:text="#{post.label.createdBy} + ': ' +      ${post.createdBy.email}">user@mail.com</label>-->
 <!--        <br/>-->
 <!--        <label th:text="#{post.label.createBy}">CreatedBy</label>-->

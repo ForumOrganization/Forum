@@ -40,7 +40,6 @@ public class CommentMvcController {
         this.authenticationHelper = authenticationHelper;
     }
 
-
     @ModelAttribute("isAuthenticated")
     public boolean populateIsAuthenticated(HttpSession session) {
         return session.getAttribute("currentUser") != null;
@@ -65,6 +64,7 @@ public class CommentMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
+
         try {
             Comment comment = commentService.getCommentById(id);
             model.addAttribute("comment", comment);

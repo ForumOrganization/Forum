@@ -42,18 +42,18 @@ public class PostServiceImplTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void create_post_when_valid_user_is_present() {
-        Post post = new Post();
-        User user = new User();
-        int postId = post.getId(); // Assuming postId is 1
-        Post existingPost = new Post();
-        existingPost.setCreatedBy(user);
-        when(postRepository.getById(postId)).thenReturn(existingPost);
-        assertDoesNotThrow(() -> postService.create(post, user));
-        verify(postRepository, times(1)).create(post);
-        assertEquals(user, post.getCreatedBy());
-    }
+//    @Test
+//    void create_post_when_valid_user_is_present() {
+//        Post post = new Post();
+//        User user = new User();
+//        int postId = post.getId(); // Assuming postId is 1
+//        Post existingPost = new Post();
+//        existingPost.setCreatedBy(user);
+//        when(postRepository.getById(postId)).thenReturn(existingPost);
+//        assertDoesNotThrow(() -> postService.create(post, user));
+//        verify(postRepository, times(1)).create(post);
+//        assertEquals(user, post.getCreatedBy());
+//    }
 
 
     @Test

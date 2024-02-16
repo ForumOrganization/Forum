@@ -1,10 +1,10 @@
 package com.example.forum.models.dtos;
 
+import com.example.forum.models.Tag;
 import jakarta.validation.constraints.Size;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 public class PostDto {
@@ -18,7 +18,9 @@ public class PostDto {
     private String content;
 
     private UserDto createdBy;
+
     private LocalDate creationTime;
+
     private Set<CommentDto> comments;
 
     public PostDto() {

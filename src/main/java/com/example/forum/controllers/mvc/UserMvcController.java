@@ -277,7 +277,7 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }catch (DeletionRestrictedException e) {
+        } catch (DeletionRestrictedException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
@@ -320,7 +320,7 @@ public class UserMvcController {
                                     HttpSession session) {
         User user;
         try {
-           user=authenticationHelper.tryGetCurrentUser(session);
+            user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
@@ -337,7 +337,7 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }catch (AuthorizationException e) {
+        } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
@@ -373,12 +373,13 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
+
     @GetMapping("/{id}/update-to-user")
     public String updateToUserForm(@PathVariable int id, Model model,
-                                    HttpSession session) {
+                                   HttpSession session) {
         User user;
         try {
-            user=authenticationHelper.tryGetCurrentUser(session);
+            user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
@@ -391,15 +392,15 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }catch (DuplicateEntityException e) {
+        } catch (DuplicateEntityException e) {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }catch (AuthorizationException e) {
+        } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        }catch (DeletionRestrictedException e) {
+        } catch (DeletionRestrictedException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
@@ -439,6 +440,7 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
+
     @GetMapping("/{id}/block")
     public String showBlockUserPage(@PathVariable int id, HttpSession session, Model model) {
         try {
@@ -446,7 +448,7 @@ public class UserMvcController {
             User userToBeBlocked = userService.getById(id);
             userService.blockUser(currentUser, userToBeBlocked);
             return "redirect:/admin";
-        }catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
@@ -490,6 +492,7 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
+
     @GetMapping("/{id}/unblock")
     public String showUnblockUserPage(@PathVariable int id, HttpSession session, Model model) {
         try {

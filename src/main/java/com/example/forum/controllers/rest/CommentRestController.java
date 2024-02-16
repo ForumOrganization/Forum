@@ -9,7 +9,6 @@ import com.example.forum.models.Post;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.CommentDto;
 import com.example.forum.services.contracts.CommentService;
-import com.example.forum.utils.CommentFilterOptions;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -66,7 +65,6 @@ public class CommentRestController {
         }
     }
 
-    //TODO Validation on the length of the content.
     @PostMapping("/post/{postId}")
     public Comment createComment(@RequestHeader HttpHeaders headers, @PathVariable int postId, @Valid @RequestBody CommentDto commentDto) {
         try {
@@ -81,7 +79,6 @@ public class CommentRestController {
         }
     }
 
-    //TODO Validation on the length of the content.
     @PutMapping("/{id}")
     public Comment updateComment(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody CommentDto commentDto) {
         try {
