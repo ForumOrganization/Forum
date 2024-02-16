@@ -45,14 +45,23 @@
             <h2 th:text="#{home.welcome}">Welcome (design)!</h2>
             <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
 
-                <h5>
+            <div>
+            <h5>
 
                     <a th:href="@{/}">Number of active users:
 <!--                                    <p>Number of active users:</p>-->
-                    <span th:text="${number}">num</span>
+                    <span th:text="${userNumber}">userNum</span>
                     </a>
                 </h5>
 
+            <h5>
+
+                <a th:href="@{/}">Number of posts:
+                    <!--                                    <p>Number of active users:</p>-->
+                    <span th:text="${postNumber}">postNum</span>
+                </a>
+            </h5>
+            </div>
 
             <div class="back">
 

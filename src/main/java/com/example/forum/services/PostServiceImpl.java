@@ -46,6 +46,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public long getAllNumber() {
+        return postRepository.getAllNumber();
+    }
+
+    @Override
     public List<Post> getMostRecentPosts() {
         return this.postRepository.getMostRecentPosts();
     }
