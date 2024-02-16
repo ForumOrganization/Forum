@@ -73,6 +73,15 @@ public class PostRepositoryImpl implements PostRepository {
     }
 
     @Override
+    public long getAllNumber() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Post> query = session.createQuery("FROM Post", Post.class);
+            return query.list().size();
+
+        }}
+
+
+    @Override
     public List<Post> getTopCommentedPosts() {
         try (Session session = sessionFactory.openSession()) {
             Query<Post> query = session.createQuery(

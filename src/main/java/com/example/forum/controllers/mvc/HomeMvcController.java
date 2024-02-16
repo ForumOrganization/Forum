@@ -6,6 +6,7 @@ import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.UserFilterDto;
 import com.example.forum.models.enums.Role;
+import com.example.forum.services.contracts.PostService;
 import com.example.forum.services.contracts.UserService;
 import com.example.forum.utils.UserFilterOptions;
 import jakarta.servlet.http.HttpSession;
@@ -25,10 +26,12 @@ import static com.example.forum.utils.Messages.UNAUTHORIZED_USER_ERROR_MESSAGE;
 public class HomeMvcController {
     private final AuthenticationHelper authenticationHelper;
     private final UserService userService;
+    private final PostService postService;
 
-    public HomeMvcController(AuthenticationHelper authenticationHelper, UserService userService) {
+    public HomeMvcController(AuthenticationHelper authenticationHelper, UserService userService, PostService postService) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
+        this.postService = postService;
     }
 
     @ModelAttribute("isAuthenticated")
@@ -38,8 +41,10 @@ public class HomeMvcController {
 
     @GetMapping
     public String showHomePage(Model model) {
-        long num = userService.getAllNumber();
-        model.addAttribute("number", num);
+        long userNum = userService.getAllNumber();
+        long postNum = postService.getAllNumber();
+        model.addAttribute("userNumber", userNum);
+        model.addAttribute("postNumber", postNum);
         return "HomeView";
     }
 
