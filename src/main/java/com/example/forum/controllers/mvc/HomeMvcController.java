@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
+import static com.example.forum.utils.Messages.UNAUTHORIZED_USER_ERROR_MESSAGE;
+
 @Controller
 @RequestMapping("/")
 public class HomeMvcController {
@@ -36,8 +38,11 @@ public class HomeMvcController {
     }
 
     @GetMapping
-    public String showHomePage() {
+    public String showHomePage(Model model) {
+        long num = userService.getAllNumber();
+        model.addAttribute("number", num);
         return "HomeView";
+
     }
 
     @GetMapping("/about")
@@ -57,25 +62,31 @@ public class HomeMvcController {
                 filterDto.getStatus(),
                 filterDto.getSortBy(),
                 filterDto.getSortOrder());
-
+        User user;
         try {
-            User user = authenticationHelper.tryGetCurrentUser(session);
-
-            if (user.getRole() == Role.ADMIN) {
-                List<User> users = userService.getAll(userFilterOptions);
+            user=authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+            try{
+                if (user.getRole() != Role.ADMIN) {
+                    throw new AuthorizationException(UNAUTHORIZED_USER_ERROR_MESSAGE);
+                }
+                List<User> users = userService.getAll(user,userFilterOptions);
                 model.addAttribute("users", users);
-            }
+                model.addAttribute("user", user);
+                model.addAttribute("filterOptions",filterDto);
+                model.addAttribute("isAuthenticated", true);
+                return "AdminPortalView";
 
-            model.addAttribute("user", user);
-            model.addAttribute("filterOptions",filterDto);
-            model.addAttribute("isAuthenticated", true);
-            return "AdminPortalView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         } catch (AuthorizationException e) {
-            return "redirect:/auth/login";
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 
@@ -97,4 +108,5 @@ public class HomeMvcController {
             return "ErrorView";
         }
     }
+
 }

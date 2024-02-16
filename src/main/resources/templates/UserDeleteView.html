@@ -8,9 +8,16 @@
 <div class="body-content">
     <h1>User Deletion Successful</h1>
     <p class="success-message">The user has been successfully deleted.</p>
-    <!-- Optionally, you can add a link to redirect users to another page -->
-    <p><a href="/">Go back to home page</a>/ <a href="/auth/logout">Logout</a></p>
+
 </div>
 <form th:replace="~{HomeView.html :: footer}"></form>
+
+<script th:inline="javascript">
+
+    setTimeout(function() {
+        window.location.href = '/auth/logout';
+    }, 3000);
+
+</script>
 </body>
 </html>

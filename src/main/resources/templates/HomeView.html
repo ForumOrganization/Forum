@@ -44,14 +44,15 @@
         <div id="welcome-message">
             <h2 th:text="#{home.welcome}">Welcome (design)!</h2>
             <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
-            <div class="cell">
-                <p>
-                    <a th:href="@{'/users/number-of-users'}">Number of active users:</a>
-<!--                                    <p>Number of active users:</p>-->
-                    <a href="#" th:href="@{/users/number-of-users}" th:text="${number}"></a>
-                </p>
 
-            </div>
+                <h5>
+
+                    <a th:href="@{/}">Number of active users:
+<!--                                    <p>Number of active users:</p>-->
+                    <span th:text="${number}">num</span>
+                    </a>
+                </h5>
+
 
             <div class="back">
 

@@ -10,7 +10,7 @@
         <h2 th:text="${currentUser.firstName} + ' ' + ${currentUser.lastName}"></h2>
         <p th:text="'Email: ' + ${currentUser.email}"></p>
         <p th:text="'Role: ' + ${currentUser.role}"></p>
-        <p  th:if="${currentUser.getRole() == T(com.example.forum.models.enums.Role).ADMIN}" class="margin12" th:text="#{user.label.phoneNumber}  + ': ' +       ${currentUser.phoneNumber}">Phone number</p>
+        <p  th:if="${currentUser.getRole().toString() =='ADMIN'}" class="margin12" th:text="#{user.label.phoneNumber}  + ': ' +       ${currentUser.phoneNumber}">Phone number</p>
 
     </div>
 

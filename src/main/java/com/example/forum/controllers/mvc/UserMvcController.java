@@ -55,13 +55,13 @@ public class UserMvcController {
     }
 
 
-    @GetMapping("/number-of-users")
-    public String showAllNumber(Model model) {
-        long num = userService.getAllNumber();
-        String number = String.format("%d", num);
-        model.addAttribute("number", number);
-        return "HomeView";
-    }
+//    @GetMapping("/number-of-users")
+//    public String showAllNumber(Model model) {
+//        long num = userService.getAllNumber();
+////        String number = String.format("%d", num);
+//        model.addAttribute("number", num);
+//        return "HomeView";
+//    }
 
     @GetMapping
     public String showAllUsers(@ModelAttribute("userFilterOptions") UserFilterDto filterDto,
@@ -75,17 +75,26 @@ public class UserMvcController {
                 filterDto.getStatus(),
                 filterDto.getSortBy(),
                 filterDto.getSortOrder());
+        User user;
         try {
-            authenticationHelper.tryGetCurrentUser(session);
+            user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-        List<User> users = userService.getAll(userFilterOptions);
-        model.addAttribute("filterOptions", filterDto);
-        model.addAttribute("users", users);
-        userService.getAll(userFilterOptions);
-        return "AdminPortalView";
+        try {
+            List<User> users = userService.getAll(user, userFilterOptions);
+            model.addAttribute("filterOptions", filterDto);
+            model.addAttribute("users", users);
+            userService.getAll(user, userFilterOptions);
+            return "AdminPortalView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+
     }
+
 
     @GetMapping("/{id}")
     public String showSingleUser(@PathVariable int id, Model model, HttpSession session) {
@@ -194,6 +203,10 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 
@@ -233,6 +246,10 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         }
     }
 
@@ -252,49 +269,80 @@ public class UserMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
+        } catch (EntityAlreadyDeleteException e) {
+            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (EntityAlreadyDeleteException e) {
-            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
+        }catch (DeletionRestrictedException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
     }
 
-    @PostMapping("/{id}/delete")
-    public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
+//    @PostMapping("/{id}/delete")
+//    public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
+//        User user;
+//        try {
+//            user = authenticationHelper.tryGetCurrentUser(session);
+//        } catch (AuthorizationException e) {
+//            return "redirect:/auth/login";
+//        }
+//
+//        try {
+//            userService.deleteUser(id, user);
+//            return "redirect:/admin";
+//        } catch (EntityNotFoundException e) {
+//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        } catch (AuthorizationException e) {
+//            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        } catch (EntityAlreadyDeleteException e) {
+//            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        }catch (DeletionRestrictedException e) {
+//            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+//            model.addAttribute("error", e.getMessage());
+//            return "ErrorView";
+//        }
+//    }
+
+    @GetMapping("/{id}/update-to-admin")
+    public String updateToAdminForm(@PathVariable int id, Model model,
+                                    HttpSession session) {
         User user;
         try {
-            user = authenticationHelper.tryGetCurrentUser(session);
+           user=authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
 
         try {
-            userService.deleteUser(id, user);
+            User userToUpdate = userService.getById(id);
+            userService.updateToAdmin(userToUpdate, user);
             return "redirect:/admin";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (AuthorizationException e) {
-            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
-        } catch (EntityAlreadyDeleteException e) {
-            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
+        }catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
     }
-
-//    @GetMapping("/{id}/update-to-admin")
-//    public String updateToAdminForm(@PathVariable int id, Model model) {
-//        model.addAttribute("userId", id);
-//        return "UpdateToAdminView";
-//    }
 
     @PostMapping("/{id}/update-to-admin")
     public String updateToAdmin(@PathVariable int id,
@@ -321,6 +369,38 @@ public class UserMvcController {
             return "ErrorView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+    @GetMapping("/{id}/update-to-user")
+    public String updateToUserForm(@PathVariable int id, Model model,
+                                    HttpSession session) {
+        User user;
+        try {
+            user=authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            User userToUpdate = userService.getById(id);
+            userService.updateToUser(userToUpdate, user);
+            return "redirect:/admin";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }catch (DeletionRestrictedException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
@@ -359,6 +439,31 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
+    @GetMapping("/{id}/block")
+    public String showBlockUserPage(@PathVariable int id, HttpSession session, Model model) {
+        try {
+            User currentUser = authenticationHelper.tryGetCurrentUser(session);
+            User userToBeBlocked = userService.getById(id);
+            userService.blockUser(currentUser, userToBeBlocked);
+            return "redirect:/admin";
+        }catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.CONFLICT.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DeletionRestrictedException e) {
+            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
 
     @PostMapping("/{id}/block")
     public String blockUser(@PathVariable int id, HttpSession session, Model model) {
@@ -381,6 +486,27 @@ public class UserMvcController {
             return "ErrorView";
         } catch (DeletionRestrictedException e) {
             model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    }
+    @GetMapping("/{id}/unblock")
+    public String showUnblockUserPage(@PathVariable int id, HttpSession session, Model model) {
+        try {
+            User currentUser = authenticationHelper.tryGetCurrentUser(session);
+            User userToBeUnblocked = userService.getById(id);
+            userService.unBlockUser(currentUser, userToBeUnblocked);
+            return "redirect:/admin";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (DuplicateEntityException e) {
+            model.addAttribute("statusCode", HttpStatus.BAD_REQUEST.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }

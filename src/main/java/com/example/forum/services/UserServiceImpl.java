@@ -30,7 +30,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll(UserFilterOptions userFilterOptions) {
+    public List<User> getAll(User user,UserFilterOptions userFilterOptions) {
+        checkAccessPermissionsAdmin(user, SEARCH_ADMIN_MESSAGE_ERROR);
         return this.userRepository.getAll(userFilterOptions);
     }
 
@@ -106,6 +107,8 @@ public class UserServiceImpl implements UserService {
 
         if (userToDelete.isDeleted()) {
             throw new EntityAlreadyDeleteException("User", "id", String.valueOf(deleteUser));
+        }if (userToDelete.getId() == 1) {
+            throw new DeletionRestrictedException(MASTER_ADMIN_MESSAGE_ERROR);
         }
 
         userRepository.deleteUser(deleteUser);
@@ -153,7 +156,7 @@ public class UserServiceImpl implements UserService {
                     "User", "id", String.valueOf(targetUser.getId()), " is already an user.");
         }
 
-        checkAccessPermissionsAdmin(executingUser, UPDATE_TO_ADMIN_ERROR_MESSAGE);
+        checkAccessPermissionsAdmin(executingUser, UPDATE_TO_USER_ERROR_MESSAGE);
         if (targetUser.getId() == 1) {
             throw new DeletionRestrictedException(MASTER_ADMIN_MESSAGE_ERROR);
         }
@@ -163,6 +166,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void blockUser(User admin, User blockUser) {
+        checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         if (blockUser.getStatus() == Status.BLOCKED) {
             throw new DuplicateEntityException(
                     "User", "id", String.valueOf(blockUser.getId()), "has already been blocked");
@@ -170,19 +174,18 @@ public class UserServiceImpl implements UserService {
         if (blockUser.getId() == 1) {
             throw new DeletionRestrictedException(MASTER_ADMIN_MESSAGE_ERROR_BLOCK);
         }
-        checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         blockUser.setStatus(Status.BLOCKED);
         userRepository.updateUser(blockUser);
     }
 
     @Override
     public void unBlockUser(User admin, User unBlockUser) {
+        checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         if (unBlockUser.getStatus() == Status.ACTIVE) {
             throw new DuplicateEntityException(
                     "User", "id", String.valueOf(unBlockUser.getId()), "has already been activated");
         }
 
-        checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
         unBlockUser.setStatus(Status.ACTIVE);
         userRepository.updateUser(unBlockUser);
     }
