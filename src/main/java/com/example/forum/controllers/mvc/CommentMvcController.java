@@ -79,14 +79,16 @@ public class CommentMvcController {
     @GetMapping("/new/posts/{postId}")
     public String showNewCommentPage(@PathVariable("postId") int postId,
                                      Model model, HttpSession session) {
+        User user;
         try {
-            authenticationHelper.tryGetCurrentUser(session);
+           user= authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
 
         model.addAttribute("comment", new CommentDto());
         model.addAttribute("postId", postId);
+        model.addAttribute("currentUser", user);
         return "CommentCreateView";
     }
 
@@ -131,8 +133,9 @@ public class CommentMvcController {
     public String showEditCommentPage(@PathVariable int commentId,
 //                                      @PathVariable ("postId") int postId,
                                       Model model, HttpSession session) {
+        User user;
         try {
-            authenticationHelper.tryGetCurrentUser(session);
+           user= authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
@@ -142,6 +145,7 @@ public class CommentMvcController {
             CommentDto commentDto = commentMapper.toDto(comment);
             model.addAttribute("commentId", commentId);
             model.addAttribute("comment", commentDto);
+            model.addAttribute("currentUser", user);
             return "CommentUpdateView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());

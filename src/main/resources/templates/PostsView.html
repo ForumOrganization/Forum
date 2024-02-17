@@ -3,7 +3,7 @@
 <form th:replace="~{HomeView.html :: head('All Posts')}"></form>
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
-    <div>
+    <div th:unless="${isAuthenticated}">
         <p>
         <a th:href="@{'/posts/most-recent-posts'}">Most recent posts</a>
         </p>
@@ -19,6 +19,8 @@
         <input type="text" placeholder="Title" th:field="*{title}"/>
         <input type="text" placeholder="Create By" th:field="*{createdBy}"/>
         <input type="text" placeholder="Creation Time" th:field="*{creationTime}"/>
+
+
 <!--        <th:block th:with="formattedDate=${filterOptions.creationTime != null ? #dates.format(filterOptions.creationTime, 'yyyy-MM-dd') : null}"></th:block>-->
 
 <!--        &lt;!&ndash; Use the formattedDate variable as the value of the input field &ndash;&gt;-->
@@ -66,6 +68,12 @@
                 <div class="cell" th:text="${post.content}">Content</div>
                 <div class="cell" th:text="${post.createdBy.username}">Create By</div>
                 <div class="cell" th:text="${post.creationTime}">Creation Time</div>
+                <div class="cell">
+                    <form th:action="@{'/posts/' + ${post.id} + '/delete'}" method="post">
+                        <button type="submit" >Delete</button>
+                    </form>
+
+                </div>
             </div>
         </div>
     </div>

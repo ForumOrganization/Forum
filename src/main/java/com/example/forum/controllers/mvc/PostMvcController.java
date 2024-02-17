@@ -65,32 +65,39 @@ public class PostMvcController {
 
     @GetMapping
     public String showAllPosts(@ModelAttribute("filterOptions") PostFilterDto filterDto,
-                               Model model) {
-        PostFilterOptions filterOptions = new PostFilterOptions(
-                filterDto.getTitle(),
-                filterDto.getCreatedBy(),
-                filterDto.getCreationTime(),
-                filterDto.getSortBy(),
-                filterDto.getSortOrder());
-
-        List<Post> posts = postService.getAll(filterOptions);
-        List<List<Tag>> tagsList = new ArrayList<>();
-
-        for (Post post : posts) {
-            List<Tag> tags = tagService.getAllTagsByPostId(post.getId());
-            tagsList.add(tags);
+                               Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetCurrentUser(session);
+            if (user != null) {
+                model.addAttribute("currentUser", user);
+            }
+            PostFilterOptions filterOptions = new PostFilterOptions(
+                    filterDto.getTitle(),
+                    filterDto.getCreatedBy(),
+                    filterDto.getCreationTime(),
+                    filterDto.getSortBy(),
+                    filterDto.getSortOrder());
+            List<Post> posts = postService.getAll(filterOptions);
+            List<List<Tag>> tagsList = new ArrayList<>();
+            for (Post post : posts) {
+                List<Tag> tags = tagService.getAllTagsByPostId(post.getId());
+                tagsList.add(tags);
+            }
+            model.addAttribute("filterOptions", filterDto);
+            model.addAttribute("posts", posts);
+            model.addAttribute("tagsList", tagsList);
+            return "PostsView";
+        } catch (AuthorizationException e) {
+            return "PostsView";
         }
-
-        model.addAttribute("filterOptions", filterDto);
-        model.addAttribute("posts", posts);
-        model.addAttribute("tagsList", tagsList);
-        return "PostsView";
     }
+
 
     @GetMapping("/{id}")
     public String showSinglePost(@PathVariable int id, Model model, HttpSession session) {
+        User user;
         try {
-            authenticationHelper.tryGetCurrentUser(session);
+           user= authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
@@ -106,6 +113,7 @@ public class PostMvcController {
             model.addAttribute("dislikeCount", dislikeCount);
             model.addAttribute("postId", id);
             model.addAttribute("post", post);
+            model.addAttribute("currentUser", user);
 
             if (!comments.isEmpty()) {
                 model.addAttribute("comments", comments);
@@ -121,14 +129,15 @@ public class PostMvcController {
 
     @GetMapping("/new")
     public String showNewPostPage(Model model, HttpSession session) {
+        User user;
         try {
-            authenticationHelper.tryGetCurrentUser(session);
+            user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-
         model.addAttribute("post", new PostDto());
         model.addAttribute("tag", new TagDto());
+        model.addAttribute("currentUser", user);
         return "PostCreateView";
     }
 
@@ -171,24 +180,26 @@ public class PostMvcController {
     }
 
     @GetMapping("/{id}/update")
-    public String showEditPostPage(@PathVariable int postId,
+    public String showEditPostPage(@PathVariable int id,
                                    @PathVariable int tagId,
                                    Model model, HttpSession session) {
+        User user;
         try {
-            authenticationHelper.tryGetCurrentUser(session);
+            user=authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
 
         try {
-            Post post = postService.getById(postId);
+            Post post = postService.getById(id);
             PostDto postDto = postMapper.toDto(post);
             Tag tag=tagService.getTagById(tagId);
             TagDto tagDto=tagMapper.toDto(tag);
-            model.addAttribute("postId", postId);
+            model.addAttribute("postId", id);
             model.addAttribute("post", postDto);
             model.addAttribute("tagId", tagId);
             model.addAttribute("tag", tagDto);
+//            model.addAttribute("currentUser", user);
             return "PostUpdateView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -237,6 +248,27 @@ public class PostMvcController {
     }
 
     @GetMapping("/{id}/delete")
+    public String showDeletePage(@PathVariable int id, Model model, HttpSession session) {
+        User user;
+        try {
+            user = authenticationHelper.tryGetCurrentUser(session);
+        } catch (AuthorizationException e) {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            postService.delete(id, user);
+            return "redirect:/posts";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        } catch (AuthorizationException e) {
+            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+    } @PostMapping("/{id}/delete")
     public String deletePost(@PathVariable int id, Model model, HttpSession session) {
         User user;
         try {

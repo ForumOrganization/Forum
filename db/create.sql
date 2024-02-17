@@ -6,7 +6,7 @@ CREATE TABLE users
     username   VARCHAR(50) UNIQUE NOT NULL,
     email      VARCHAR(50) UNIQUE NOT NULL,
     password   VARCHAR(50)        NOT NULL,
-    profile_picture VARCHAR(255),
+    profile_picture VARCHAR(255) default '/images/users/default.png',
     role       ENUM ('ADMIN', 'USER'),
     is_deleted BOOLEAN DEFAULT FALSE,
     status     ENUM ('BLOCKED', 'ACTIVE')

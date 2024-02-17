@@ -9,6 +9,12 @@
         <!--            <input type="file" name="file" accept="image/*">-->
         <!--            <input type="submit" value="Upload">-->
         <!--        </form>-->
+        <form method="post" th:action="@{/upload-profile-picture}" enctype="multipart/form-data">
+
+<!--        <form method="post" th:action="@{'/users/' + ${userId} + '/upload-profile-picture'}" enctype="multipart/form-data">-->
+            <input type="file" name="file" accept="image/*">
+            <input type="submit" value="Upload">
+        </form>
         <form th:replace="~{UserForm.html :: user-form(Update)}"></form>
 <!--        <form th:action="@{'/users/' + ${userId} + '/phone-number'}">-->
 <!--            <label th:if="${session.isAdmin}" th:text="#{user.label.phoneNumber}">Phone Number</label>-->

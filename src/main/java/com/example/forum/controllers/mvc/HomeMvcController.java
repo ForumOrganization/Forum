@@ -13,10 +13,15 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import static com.example.forum.utils.Messages.UNAUTHORIZED_USER_ERROR_MESSAGE;
@@ -40,17 +45,38 @@ public class HomeMvcController {
     }
 
     @GetMapping
-    public String showHomePage(Model model) {
+    public String showHomePage(Model model, HttpSession session) {
+
         long userNum = userService.getAllNumber();
         long postNum = postService.getAllNumber();
         model.addAttribute("userNumber", userNum);
         model.addAttribute("postNumber", postNum);
-        return "HomeView";
+
+        try {
+            User user = authenticationHelper.tryGetCurrentUser(session);
+            if (user != null) {
+                model.addAttribute("currentUser", user);
+            }
+
+            return "HomeView";
+        } catch (AuthorizationException e) {
+            return "HomeView";
+        }
     }
 
     @GetMapping("/about")
-    public String showAboutPage() {
-        return "AboutView";
+    public String showAboutPage(Model model, HttpSession session) {
+        try {
+            User user = authenticationHelper.tryGetCurrentUser(session);
+
+            if (user != null) {
+                model.addAttribute("currentUser", user);
+            }
+
+            return "AboutView";
+        } catch (AuthorizationException e) {
+            return "AboutView";
+        }
     }
 
     @GetMapping("/admin")
@@ -80,6 +106,7 @@ public class HomeMvcController {
             List<User> users = userService.getAll(user, userFilterOptions);
             model.addAttribute("users", users);
             model.addAttribute("user", user);
+            model.addAttribute("currentUser", user);
             model.addAttribute("filterOptions", filterDto);
             model.addAttribute("isAuthenticated", true);
             return "AdminPortalView";
@@ -110,5 +137,41 @@ public class HomeMvcController {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
+    }
+    @GetMapping("/upload-profile-picture")
+    public String getProfilePicture(Model model, HttpSession session) {
+        User user = authenticationHelper.tryGetCurrentUser(session);
+        String profilePictureUrl = userService.getProfilePictureUrl(user.getUsername());
+        model.addAttribute("profilePictureUrl", profilePictureUrl);
+        model.addAttribute("currentUser", user);
+        model.addAttribute("isAuthenticated", true);
+        return "HomeView";
+    }
+
+    @PostMapping("/upload-profile-picture")
+    public String uploadProfilePicture( @RequestParam("file") MultipartFile file,
+                                       HttpSession session, Model model) {
+        try {
+            String fileName = file.getOriginalFilename();
+            String uploadDir = "static/images/";
+            System.out.println(uploadDir);
+            System.out.println(fileName);
+
+            String relativeUrl = "/images/" + fileName;
+            userService.saveProfilePictureUrl(
+                    authenticationHelper.tryGetCurrentUser(session).getUsername(), relativeUrl);
+            Path uploadPath = Paths.get(uploadDir);
+            Files.createDirectories(uploadPath);
+
+            try (InputStream inputStream = file.getInputStream()) {
+                Path filePath = uploadPath.resolve(fileName);
+                System.out.println(filePath);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            }
+        } catch (IOException e) {
+            return "AccessDeniedView";
+        }
+
+        return "redirect:/";
     }
 }

@@ -23,6 +23,14 @@
 <!--            <img src="./images/logo2.png">-->
             <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
 
+            <img th:if="${isAuthenticated}" th:href="@{/upload-profile-picture}" class="card-img-top"
+                 th:src="${(currentUser.profilePicture!=null && !currentUser.profilePicture.equals('/images/users/default.png')) ? currentUser.profilePicture : '/images/users/default.png'}"
+                 alt="Profile Picture"/>
+            <p>
+                <i th:text="${session.currentUser}" th:if="${isAuthenticated}"></i>
+            </p>
+
+
             <ul>
                 <!--All user-->
                 <li><a href="#" th:href="@{/posts}" th:text="#{navigation.all-posts}">Browse all posts</a></li>

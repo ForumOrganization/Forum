@@ -19,14 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Controller
@@ -54,15 +47,6 @@ public class UserMvcController {
         return request.getRequestURI();
     }
 
-
-//    @GetMapping("/number-of-users")
-//    public String showAllNumber(Model model) {
-//        long num = userService.getAllNumber();
-////        String number = String.format("%d", num);
-//        model.addAttribute("number", num);
-//        return "HomeView";
-//    }
-
     @GetMapping
     public String showAllUsers(@ModelAttribute("userFilterOptions") UserFilterDto filterDto,
                                Model model, HttpSession session) {
@@ -85,6 +69,7 @@ public class UserMvcController {
             List<User> users = userService.getAll(user, userFilterOptions);
             model.addAttribute("filterOptions", filterDto);
             model.addAttribute("users", users);
+            model.addAttribute("currentUser", user);
             userService.getAll(user, userFilterOptions);
             return "AdminPortalView";
         } catch (AuthorizationException e) {
@@ -108,6 +93,7 @@ public class UserMvcController {
         try {
             User user = userService.getById(id);
             model.addAttribute("user", user);
+            model.addAttribute("currentUser", user);
             model.addAttribute("isAuthenticated", true);
             return "UserView";
         } catch (EntityNotFoundException e) {
@@ -117,69 +103,6 @@ public class UserMvcController {
         }
     }
 
-//    @GetMapping("/{userId}/posts")
-//    public String showAllUserPosts(@PathVariable int userId, Model model, HttpSession session) {
-//
-//            try {
-//               authenticationHelper.tryGetCurrentUser(session);
-//            } catch (AuthorizationException e) {
-//                return "redirect:/auth/login";
-//            }
-//
-//            try{
-//            User targetUser = userService.getById(userId);
-//            Set<Post> posts = targetUser.getPosts();
-//            model.addAttribute("posts", posts);
-//
-//            return "redirect:/posts";
-//        } catch (EntityNotFoundException e) {
-//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "ErrorView";
-//        }
-//    }
-
-//    @GetMapping("/new")
-//    public String showNewUserPage(Model model, HttpSession session) {
-//        try {
-//            authenticationHelper.tryGetCurrentUser(session);
-//        } catch (AuthorizationException e) {
-//            return "redirect:/auth/login";
-//        }
-//
-//        model.addAttribute("user", new UserDto());
-//        return "UserCreateView";
-//    }
-//
-//    @PostMapping("/new")
-//    public String createUser(@Valid @ModelAttribute("user") UserDto userDto,
-//                             BindingResult bindingResult,
-//                             Model model,
-//                             HttpSession session) {
-//        User user;
-//        try {
-//            user = authenticationHelper.tryGetCurrentUser(session);
-//        } catch (AuthorizationException e) {
-//            return "redirect:/auth/login";
-//        }
-//
-//        if (bindingResult.hasErrors()) {
-//            return "RegisterView";
-//        }
-//
-//        try {
-//            User userToCreate = userMapper.fromDtoRegister(userDto);
-//            userService.registerUser(userToCreate);
-//            return "redirect:/users";
-//        } catch (EntityNotFoundException e) {
-//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "ErrorView";
-//        } catch (DuplicateEntityException e) {
-//            bindingResult.rejectValue("username", "duplicate_user", e.getMessage());
-//            return "UserCreateView";
-//        }
-//    }
 
     @GetMapping("/{id}/update")
     public String showEditUserPage(@PathVariable int id, Model model, HttpSession session) {
@@ -194,6 +117,7 @@ public class UserMvcController {
             UserDto userDto = userMapper.userToDto(user);
             model.addAttribute("userId", id);
             model.addAttribute("user", userDto);
+            model.addAttribute("currentUser", user);
             return "UserUpdateView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -536,30 +460,30 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
-
-    @PostMapping("/{id}/upload-profile-picture")
-    public String uploadProfilePicture(@PathVariable int id, @RequestParam("file") MultipartFile file,
-                                       HttpSession session, Model model) {
-        try {
-            String fileName = "/mages/" + file.getOriginalFilename();
-            String uploadDir = "static/images/";
-
-            String relativeUrl = "/images/" + fileName;
-            userService.saveProfilePictureUrl(
-                    authenticationHelper.tryGetCurrentUser(session).getUsername(), relativeUrl);
-            Path uploadPath = Paths.get(uploadDir);
-            Files.createDirectories(uploadPath);
-
-            try (InputStream inputStream = file.getInputStream()) {
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-            }
-        } catch (IOException e) {
-            return "AccessDeniedView";
-        }
-
-        return "redirect:/users/username/" + authenticationHelper
-                .tryGetCurrentUser(session)
-                .getUsername();
-    }
+//
+//    @PostMapping("/{id}/upload-profile-picture")
+//    public String uploadProfilePicture(@PathVariable int id, @RequestParam("file") MultipartFile file,
+//                                       HttpSession session, Model model) {
+//        try {
+//            String fileName = "/mages/" + file.getOriginalFilename();
+//            String uploadDir = "static/images/";
+//
+//            String relativeUrl = "/images/" + fileName;
+//            userService.saveProfilePictureUrl(
+//                    authenticationHelper.tryGetCurrentUser(session).getUsername(), relativeUrl);
+//            Path uploadPath = Paths.get(uploadDir);
+//            Files.createDirectories(uploadPath);
+//
+//            try (InputStream inputStream = file.getInputStream()) {
+//                Path filePath = uploadPath.resolve(fileName);
+//                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+//            }
+//        } catch (IOException e) {
+//            return "AccessDeniedView";
+//        }
+//
+//        return "redirect:/users/username/" + authenticationHelper
+//                .tryGetCurrentUser(session)
+//                .getUsername();
+//    }
 }

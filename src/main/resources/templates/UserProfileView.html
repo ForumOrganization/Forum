@@ -23,10 +23,10 @@
     <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>
 </div>
 <div th:each="user : ${users}" class="col mb-5">
-    <div class="card h-100" data-bs-toggle="modal" th:attr="data-bs-target='#userModal' + ${user.id}">
+    <div class="card h-100" data-bs-toggle="modal" th:attr="data-bs-target='#userModal' + ${currentUser.id}">
         <!-- User image-->
-        <img class="card-img-top" src="../static/images/users/default.jpg"
-             th:src="${user.getProfilePicture != null ? user.getProfilePicture : '/images/users/default.jpg'}"
+        <img class="card-img-top" src="../static/images/users/default.png"
+             th:src="${currentUser.getProfilePicture != null ? currentUser.getProfilePicture : '/images/users/default.png'}"
              alt="User Profile Picture"/>
         <!-- User details-->
         <div class="card-body p-4">
