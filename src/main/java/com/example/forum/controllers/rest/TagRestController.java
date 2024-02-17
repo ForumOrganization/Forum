@@ -5,11 +5,18 @@ import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.TagMapper;
+import com.example.forum.models.Comment;
+import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.TagDto;
 import com.example.forum.services.contracts.TagService;
 import com.example.forum.utils.TagFilterOptions;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,6 +41,13 @@ public class TagRestController {
     }
 
     @GetMapping
+    @Operation(tags ={"Get all tags"},
+            summary = "This method retrieve information for all tags.",
+            description = "This method search for all tags. When a person is authorized and there are valid tags, a list with all tags will be presented.",
+            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "Tag(s) were found successfully"),
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to access the tag(s)."),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Tag.class)), description = "Tag(s) is/were not found.")
+            })
     public List<Tag> getAllTags(
             @RequestHeader HttpHeaders headers,
             @RequestParam(required = false) String name,
@@ -53,6 +67,16 @@ public class TagRestController {
     }
 
     @GetMapping("/{tagId}")
+    @Operation(tags ={"Get a tag"},
+            operationId = "id to be searched for",
+            summary = "This method search for a tag when id is given.",
+            description = "This method search for a tag. A valid id must be given as an input.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts id as a parameters.",
+                    content = @Content(schema = @Schema(implementation = Tag.class))),
+            parameters = {@Parameter( name = "tagId", description = "path variable", example = "5")},
+            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The tag has been found successfully"),
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to access this tag."),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Tag.class)), description = "Tag with this id was not found.")})
     public Tag getTagById(@RequestHeader HttpHeaders headers, @PathVariable int tagId) {
         try {
             authenticationHelper.tryGetUser(headers);
@@ -65,6 +89,15 @@ public class TagRestController {
     }
 
     @GetMapping("/search")
+    @Operation(tags ={"Search for a tag"},
+            summary = "This method search for a tag when tag name is given.",
+            description = "This method aim to find a tag. A valid name must be given as an input.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts name parameters.",
+                    content = @Content(schema = @Schema(implementation = Tag.class))),
+            parameters = {@Parameter( name = "name", description = "Tag name", example = "healthy food")},
+            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The tag has been updated successfully"),
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to search for this tag."),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Tag.class)), description = "Tag with this name was not found.")})
     public Tag getTagByName(@RequestHeader HttpHeaders headers, @RequestParam String name) {
         try {
             authenticationHelper.tryGetUser(headers);
@@ -77,6 +110,14 @@ public class TagRestController {
     }
 
     @PostMapping("/posts/{postId}")
+    @Operation(tags ={"Create a tag in post"},
+            summary = "This method creates a tag in post when post id is given.",
+            description = "This method creates a tag in post. A valid object must be given as an input.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request that accepts object parameters.",
+                    content = @Content(schema = @Schema(implementation = Tag.class))),
+            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The tag in this post has been created successfully"),
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to create a tag in post."),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The post with this id was not found.")})
     public ResponseEntity<Tag> createTagInPost(@PathVariable int postId, @Valid @RequestBody TagDto tagDto, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -91,6 +132,18 @@ public class TagRestController {
     }
 
     @PutMapping("/posts/{postId}/tag/{tagId}")
+    @Operation(tags ={"Update a tag"},
+            operationId = "id to be updated",
+            summary = "This method update a tag when id is given.",
+            description = "This method update a tag in a post. Valid post id and tag id must be given as an input.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts TagDto parameters.",
+                    content = @Content(schema = @Schema(implementation = Tag.class))),
+            parameters = {@Parameter( name = "postId", description = "path variable", example = "5"),
+                    @Parameter( name = "tagtId", description = "path variable", example = "1")
+            },
+            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The tag has been updated successfully"),
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to modify this tag."),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Tag.class)), description = "Tag with this id was not found.")})
     public ResponseEntity<Tag> updateTagInPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @PathVariable int tagId, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);
@@ -107,6 +160,16 @@ public class TagRestController {
     }
 
     @DeleteMapping("/posts/{postId}")
+    @Operation(tags ={"Delete a tag in a post"},
+            operationId = "id to be deleted",
+            summary = "This method delete a tag in a post when tag is given.",
+            description = "This method delete a tag in a post. A valid tag object must be given as an input as well as post id.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request that accepts post id",
+                    content = @Content(schema = @Schema(implementation = Tag.class))),
+            parameters = {@Parameter( name = "postId", description = "path variable", example = "5")},
+            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The post has been deleted successfully"),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The post with this id was not found."),
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to delete this post.")})
     public ResponseEntity<Void> deleteTagInPost(@Valid @RequestBody TagDto tagDto, @PathVariable int postId, @RequestHeader HttpHeaders headers) {
         try {
             User user = authenticationHelper.tryGetUser(headers);

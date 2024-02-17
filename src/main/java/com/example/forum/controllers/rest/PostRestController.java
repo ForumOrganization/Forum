@@ -6,6 +6,7 @@ import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.PostMapper;
 import com.example.forum.helpers.TagMapper;
+import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
@@ -53,7 +54,8 @@ public class PostRestController {
             summary = "This method retrieve information for all posts.",
             description = "This method search for all post. When a person is authorized and there are valid posts, a list with all posts will be presented.",
             responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "Posts were found successfully"),
-                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to access the posts.")})
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to access the posts."),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post(s) is/were not found.")})
     public List<Post> getAll(@RequestHeader HttpHeaders headers,
                              @RequestParam(required = false) String title,
                              @RequestParam(required = false) String createdBy,
@@ -90,7 +92,8 @@ public class PostRestController {
                     content = @Content(schema = @Schema(implementation = Post.class))),
             parameters = {@Parameter( name = "postId", description = "path variable", example = "5")},
             responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been found successfully"),
-                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to access this post.")})
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to access this post."),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post with this id was not found.")})
     public Post getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
         try {
             authenticationHelper.tryGetUser(headers);
@@ -105,12 +108,13 @@ public class PostRestController {
     @GetMapping("/search")
     @Operation(tags ={"Search for a post"},
             summary = "This method search for a post when title is given.",
-            description = "This method for a post post. A valid title must be given as an input.",
+            description = "This method search for a post. A valid title must be given as an input.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts title parameters.",
                     content = @Content(schema = @Schema(implementation = Post.class))),
             parameters = {@Parameter( name = "postTitle", description = "Post title", example = "new post")},
             responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been updated successfully"),
-                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to modify this post.")})
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to search for this post."),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post with this title was not found.")})
     public Post getByTitle(@RequestHeader HttpHeaders headers, @RequestParam String title) {
         try {
             authenticationHelper.tryGetUser(headers);
@@ -129,7 +133,8 @@ public class PostRestController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request that accepts object parameters.",
                     content = @Content(schema = @Schema(implementation = Post.class))),
             responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been created successfully"),
-                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to create a post.")})
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to create a post."),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post with this id was not found.")})
     public Post create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto, @Valid @RequestBody TagDto tagDto) {
         try {
             User user = this.authenticationHelper.tryGetUser(headers);
@@ -153,8 +158,8 @@ public class PostRestController {
                     content = @Content(schema = @Schema(implementation = Post.class))),
             parameters = {@Parameter( name = "postId", description = "path variable", example = "5")},
             responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been updated successfully"),
-                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post with this id was not found."),
-                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to modify this post.")})
+                    @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to modify this post."),
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post with this id was not found.")})
     public Post update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto,
                        @PathVariable int tagId, @Valid @RequestBody TagDto tagDto) {
         try {
