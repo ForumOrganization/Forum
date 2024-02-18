@@ -3,8 +3,6 @@
 <div th:replace="~{HomeView.html :: head(${post.title})}"></div>
 <script src="https://kit.fontawesome.com/30f218fe1f.js" crossorigin="anonymous"></script>
 
-
-<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
 <body>
 <div th:replace="~{HomeView.html :: header}"></div>
 
@@ -16,14 +14,6 @@
         <p class="margin12" th:text="#{post.label.createBy}  + ': ' + ${post.createdBy.username}">Created By</p>
         <p class="margin12" th:text="#{post.label.creation}  + ': ' + ${post.creationTime}">Creation Time</p>
 
-<!--        <p class="margin12">-->
-<!--            <span th:text="#{post.label.tag}">Tags:</span>-->
-<!--        <ul style="display: inline; list-style-type: none; padding: 0; margin: 0;">-->
-<!--            <li th:each="tag : ${post.tags}" th:text="${tag.name}" style="display: inline-block; margin-right: 5px;">Tag</li>-->
-<!--        </ul>-->
-<!--        </p>-->
-
-<!--        <p class="margin12" th:text="#{post.label.tag}">Tags: </p>-->
 <ul>
         <li th:each="tag : ${post.tags}" th:text="${tag.name}">Tag</li>
     </ul>
@@ -32,7 +22,7 @@
     <h3>
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/update}">Update</a>
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
-        <a th:if="${isAuthenticated}" th:href="@{/comments/new/posts/{postId}(postId=${postId})}">Create Comment</a>
+        <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/newComment}">Create Comment</a>
         <a th:if="${isAuthenticated}" th:href="@{__${requestURI}__/like}">
             <i class="fa-regular fa-thumbs-up"></i>
             <span th:text="${likeCount}">likes</span>
@@ -47,32 +37,16 @@
 <h3>Comments:</h3>
 <div th:if="${comments}">
     <ul>
-        <li th:each="comment : ${comments}" data-comment-id="${comment.id}">
+        <li th:each="comment : ${comments}" class="comment-item">
             <p th:text="${comment.content}"></p>
             <p th:text="'Created By: ' + ${comment.user.username}"></p>
             <p th:text="'Creation Time: ' + ${comment.getCreationTime()}"></p>
 
             <h4>
-                <!-- Update and Delete links -->
-                <a th:if="${isAuthenticated}" th:href="@{'/comments/'+${comment.id}+'/update'}">Update</a>
-                <a th:if="${isAuthenticated}" th:href="@{'/comments/'+${comment.id}+'/delete'}">Delete</a>
+                <a th:if="${isAuthenticated}" th:href="@{'/posts/'+${post.id}+'/comments/'+${comment.id}+'/update'}">Update</a>
+                <a th:if="${isAuthenticated}" th:href="@{'/posts/'+${post.id}+'/comments/'+${comment.id}+'/delete'}">Delete</a>
 
-
-
-                <span class="likeButton">
-<a th:if="${isAuthenticated}" href="#" class="likeLink" th:onclick="'likeComment(\'' + ${comment.id} + '\'); return false;'">
-    <i class="fa-regular fa-thumbs-up"></i>
-    <span class="likeCount" th:id="'likeCount-' + ${comment.id}">0</span>
-</a>
-</span>
-                <span class="dislikeButton">
-<a th:if="${isAuthenticated}" href="#" class="dislikeLink" th:onclick="'dislikeComment(\'' + ${comment.id} + '\'); return false;'">
-    <i class="fa-regular fa-thumbs-down"></i>
-    <span class="dislikeCount" th:id="'dislikeCount-' + ${comment.id}">0</span>
-</a>
-</span>
             </h4>
-
 
         </li>
     </ul>

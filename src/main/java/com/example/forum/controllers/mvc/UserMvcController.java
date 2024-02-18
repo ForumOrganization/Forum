@@ -207,38 +207,6 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
-
-//    @PostMapping("/{id}/delete")
-//    public String deleteUser(@PathVariable int id, Model model, HttpSession session) {
-//        User user;
-//        try {
-//            user = authenticationHelper.tryGetCurrentUser(session);
-//        } catch (AuthorizationException e) {
-//            return "redirect:/auth/login";
-//        }
-//
-//        try {
-//            userService.deleteUser(id, user);
-//            return "redirect:/admin";
-//        } catch (EntityNotFoundException e) {
-//            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "ErrorView";
-//        } catch (AuthorizationException e) {
-//            model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "ErrorView";
-//        } catch (EntityAlreadyDeleteException e) {
-//            model.addAttribute("statusCode", HttpStatus.GONE.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "ErrorView";
-//        }catch (DeletionRestrictedException e) {
-//            model.addAttribute("statusCode", HttpStatus.FORBIDDEN.getReasonPhrase());
-//            model.addAttribute("error", e.getMessage());
-//            return "ErrorView";
-//        }
-//    }
-
     @GetMapping("/{id}/update-to-admin")
     public String updateToAdminForm(@PathVariable int id, Model model,
                                     HttpSession session) {
@@ -460,30 +428,5 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
-//
-//    @PostMapping("/{id}/upload-profile-picture")
-//    public String uploadProfilePicture(@PathVariable int id, @RequestParam("file") MultipartFile file,
-//                                       HttpSession session, Model model) {
-//        try {
-//            String fileName = "/mages/" + file.getOriginalFilename();
-//            String uploadDir = "static/images/";
-//
-//            String relativeUrl = "/images/" + fileName;
-//            userService.saveProfilePictureUrl(
-//                    authenticationHelper.tryGetCurrentUser(session).getUsername(), relativeUrl);
-//            Path uploadPath = Paths.get(uploadDir);
-//            Files.createDirectories(uploadPath);
-//
-//            try (InputStream inputStream = file.getInputStream()) {
-//                Path filePath = uploadPath.resolve(fileName);
-//                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-//            }
-//        } catch (IOException e) {
-//            return "AccessDeniedView";
-//        }
-//
-//        return "redirect:/users/username/" + authenticationHelper
-//                .tryGetCurrentUser(session)
-//                .getUsername();
-//    }
+
 }

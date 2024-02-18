@@ -22,11 +22,10 @@ public class CommentMapper {
         this.userService = userService;
     }
 
-    public Comment fromDto(int id, CommentDto dto) {
+    public Comment fromDto(int id, CommentDto dto,Post post) {
         Comment comment = fromDto(dto);
         comment.setId(id);
         comment.setContent(dto.getContent());
-        Post post = postService.getByComment(id);
         comment.setPost(post);
         User user = userService.getUserByComment(id);
         comment.setUser(user);

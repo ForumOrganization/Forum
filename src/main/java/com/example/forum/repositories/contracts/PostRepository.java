@@ -18,8 +18,6 @@ public interface PostRepository {
 
     Post getByTitle(String title);
 
-    Post getByComment(int commentId);
-
     void create(Post post);
 
     void update(Post post);

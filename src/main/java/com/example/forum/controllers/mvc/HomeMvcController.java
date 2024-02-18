@@ -150,7 +150,7 @@ public class HomeMvcController {
 
     @PostMapping("/upload-profile-picture")
     public String uploadProfilePicture( @RequestParam("file") MultipartFile file,
-                                       HttpSession session, Model model) {
+                                       HttpSession session){
         try {
             String fileName = file.getOriginalFilename();
             String uploadDir = "static/images/";

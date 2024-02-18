@@ -21,8 +21,6 @@ public interface PostService {
 
     Post getByTitle(String title);
 
-    Post getByComment(int commentId);
-
     void create(Post post, User user,List<Tag>tags);
 
     void update(Post post, User user,List<Tag> tags);

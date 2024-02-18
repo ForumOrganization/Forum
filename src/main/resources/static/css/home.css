@@ -198,3 +198,28 @@ nav > img {
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
 }
+.comment-item {
+    margin-bottom: 20px; /* Adjust margin as needed */
+    padding: 10px; /* Adjust padding as needed */
+    border: 1px solid #ccc; /* Add border for better separation */
+    border-radius: 5px; /* Optional: Add border radius for rounded corners */
+    background-color: #f9f9f9; /* Optional: Add background color */
+}
+
+.comment-item p {
+    margin: 5px 0; /* Adjust margin for paragraphs inside comment */
+}
+
+.comment-item h4 {
+    margin-top: 10px; /* Adjust margin as needed */
+}
+
+.comment-item a {
+    margin-right: 10px; /* Adjust margin as needed */
+    color: #007bff; /* Optional: Change link color */
+    text-decoration: none; /* Optional: Remove underline */
+}
+
+.comment-item a:hover {
+    color: #0056b3; /* Optional: Change link color on hover */
+}

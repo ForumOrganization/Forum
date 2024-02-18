@@ -71,11 +71,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getByComment(int commentId) {
-        return this.postRepository.getByComment(commentId);
-    }
-
-    @Override
     public void create(Post post, User user, List<Tag> tags) {
         checkBlockOrDeleteUser(user);
 

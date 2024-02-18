@@ -43,7 +43,6 @@ CommentServiceImpl implements CommentService {
     @Override
     public void createComment(Comment comment, int postId, User user) {
         checkBlockOrDeleteUser(user);
-
         Post post = postRepository.getById(postId);
 
         comment.setUser(user);
@@ -55,7 +54,7 @@ CommentServiceImpl implements CommentService {
     @Override
     public void updateComment(Comment comment, User user) {
         checkBlockOrDeleteUser(user);
-        //Comment commentToUpdate = commentRepository.getCommentById(comment.getId());
+        Comment commentToUpdate = commentRepository.getCommentById(comment.getId());
         checkAccessPermissionsUser(comment.getUser().getId(), user, UPDATE_USER_MESSAGE_ERROR);
         this.commentRepository.updateComment(comment);
     }

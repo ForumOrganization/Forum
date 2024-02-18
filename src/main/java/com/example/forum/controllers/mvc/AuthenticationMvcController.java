@@ -110,12 +110,7 @@ public class AuthenticationMvcController {
             User user = userMapper.fromDto(register);
             userService.registerUser(user);
             return "redirect:/auth/login";
-        }
-//        catch (EntityNotFoundException e) {
-//            bindingResult.rejectValue("username", "username_error", e.getMessage());
-//            return "RegisterView";
-//        }
-        catch (EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
