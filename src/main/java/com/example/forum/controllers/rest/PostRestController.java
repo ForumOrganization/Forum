@@ -12,6 +12,7 @@ import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PostDto;
 import com.example.forum.models.dtos.TagDto;
+import com.example.forum.models.dtos.TagListDto;
 import com.example.forum.services.contracts.PostService;
 import com.example.forum.utils.PostFilterOptions;
 import io.swagger.v3.oas.annotations.Operation;
@@ -135,12 +136,12 @@ public class PostRestController {
             responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been created successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to create a post."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post with this id was not found.")})
-    public Post create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto, @Valid @RequestBody TagDto tagDto) {
+    public Post create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto, @Valid @RequestBody TagListDto tagDtos) {
         try {
             User user = this.authenticationHelper.tryGetUser(headers);
             Post post = this.postMapper.fromDto(postDto);
-            Tag tag = this.tagMapper.fromDto(tagDto);
-            postService.create(post, user, tag);
+            List<Tag> newTags= tagMapper.fromListDto(tagDtos);
+            postService.create(post, user, newTags);
             return post;
         } catch (AuthorizationException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
@@ -161,12 +162,12 @@ public class PostRestController {
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to modify this post."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post with this id was not found.")})
     public Post update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto,
-                       @PathVariable int tagId, @Valid @RequestBody TagDto tagDto) {
+                       @PathVariable int tagId, @Valid @RequestBody TagListDto tagDtos) {
         try {
             User user = this.authenticationHelper.tryGetUser(headers);
             Post post = this.postMapper.fromDto(id, postDto);
-            Tag tag=this.tagMapper.fromDto(tagId,tagDto);
-            this.postService.update(post, user,tag);
+            List<Tag> newTags= tagMapper.fromListDto(tagDtos);
+            this.postService.update(post, user,newTags);
             return post;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

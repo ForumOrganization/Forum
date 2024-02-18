@@ -8,7 +8,6 @@ import com.example.forum.models.User;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
 import com.example.forum.services.contracts.TagService;
-import com.example.forum.utils.TagFilterOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,21 +42,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getTagByName(String name) {
-        boolean missingTag = false;
-
-        Tag tag = new Tag();
-
-        try {
-            tag = tagRepository.getTagByName(name);
-        } catch (EntityNotFoundException e) {
-            missingTag = true;
-        }
-
-//        if (missingTag) {
-//            throw new EntityNotFoundException("Tag", "name", name);
-//        }
-
-        return tag;
+      return tagRepository.getTagByName(name);
     }
 
     @Override
@@ -78,41 +63,30 @@ public class TagServiceImpl implements TagService {
     @Override
     public void createTagInPost(Tag tag, int postId, User user) {
         User author = postRepository.getById(postId).getCreatedBy();
-        int authorId = author.getId();
-        checkAccessPermissionsUser(authorId, user, CREATE_TAG_MESSAGE_ERROR);
+        checkAccessPermissionsUser(author.getId(), user, CREATE_TAG_MESSAGE_ERROR);
+        boolean duplicateExists = true;
+        try {
+            Tag existingTag = tagRepository.getTagById(tag.getId());
+
+            if (existingTag.getName().equals( tag.getName()) ){
+                duplicateExists = false;
+            }
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new DuplicateEntityException("Tag", "name", tag.getName());
+        }
         this.tagRepository.createTagInPost(tag, postId, user);
     }
 
     @Override
     public void updateTagInPost(Tag tag, User user, int postId, int tagId) {
         User author = postRepository.getById(postId).getCreatedBy();
-        int authorId = author.getId();
-        checkAccessPermissions(authorId, user, MODIFY_TAG_ERROR_MESSAGE);
+        checkAccessPermissions(author.getId(), user, MODIFY_TAG_ERROR_MESSAGE);
 
         boolean duplicateExists = true;
-        boolean missingComment = false;
-        boolean missingTag = false;
-
-        try {
-            tagRepository.getTagById(tagId);
-        } catch (EntityNotFoundException e) {
-            missingTag = true;
-        }
-
-        if (missingTag) {
-            throw new EntityNotFoundException("Tag", "name", tag.getName());
-        }
-
-        try {
-            postRepository.getById(postId);
-        } catch (EntityNotFoundException e) {
-            missingComment = true;
-        }
-
-        if (missingComment) {
-            throw new EntityNotFoundException("Post", "id", String.valueOf(postId));
-        }
-
         try {
             Tag existingTag = tagRepository.getTagById(tag.getId());
 
@@ -124,19 +98,17 @@ public class TagServiceImpl implements TagService {
         }
 
         if (duplicateExists) {
-            throw new DuplicateEntityException("Tag", "name", tag.getName());
+            throw new DuplicateEntityException("Tag", "id", String.valueOf(tagId));
         }
 
         this.tagRepository.updateTagInPost(tag);
     }
 
     @Override
-    public void deleteTagInPost(Tag tag, User user, int postId, String tagName) {
+    public void deleteTagInPost(Tag tag,User user, int postId) {
         User author = postRepository.getById(postId).getCreatedBy();
-        Tag tag1 = tagRepository.getTagByName(tagName);
-        int tagId = tag1.getId();
-        int authorId = author.getId();
-        checkAccessPermissions(authorId, user, DELETE_TAG_MESSAGE_ERROR);
-        this.tagRepository.deleteTagInPost(postId, tagId);
+        Tag tagToDelete = tagRepository.getTagById(tag.getId());
+        checkAccessPermissions(author.getId(), user, DELETE_TAG_MESSAGE_ERROR);
+        this.tagRepository.deleteTagInPost(postId, tagToDelete.getId());
     }
 }

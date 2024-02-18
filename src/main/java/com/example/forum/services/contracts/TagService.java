@@ -25,5 +25,5 @@ public interface TagService {
 
     void updateTagInPost(Tag tag, User user, int postId, int tagId);
 
-    void deleteTagInPost(Tag tag, User user, int postId, String tagName);
+    void deleteTagInPost(Tag tag,User user, int postId);
 }
