@@ -18,7 +18,8 @@ import static com.example.forum.utils.CheckPermission.checkAccessPermissionsUser
 import static com.example.forum.utils.Messages.*;
 
 @Service
-public class CommentServiceImpl implements CommentService {
+public class
+CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;

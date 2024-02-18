@@ -7,7 +7,6 @@ import java.util.List;
 public class TagListDto {
 
     private List<String> names;
-
     public TagListDto() {
         this.names=new ArrayList<>();
     }

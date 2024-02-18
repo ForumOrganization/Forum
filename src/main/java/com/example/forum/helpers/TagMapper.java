@@ -31,18 +31,19 @@ public class TagMapper {
         tag.setName(dto.getName());
         return tag;
     }
+
     public List<Tag> fromListDto(TagListDto dtos) {
         List<Tag> tags = new ArrayList<>();
-        if(dtos.getNames()==null){
+        if (dtos.getNames() == null) {
             return tags;
         }
-       for(String name:dtos.getNames()){
-           Tag tag=new Tag();
-           tag.setName(name);
-           tags.add(tag);
-       }
-       return tags;
-       }
+        for (String name : dtos.getNames()) {
+            Tag tag = new Tag();
+            tag.setName(name);
+            tags.add(tag);
+        }
+        return tags;
+    }
 
 
     public TagDto toDto(Tag tag) {

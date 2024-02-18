@@ -179,6 +179,7 @@ public class PostRepositoryImpl implements PostRepository {
         }
     }
 
+
     @Override
     public void update(Post post) {
         try (Session session = sessionFactory.openSession()) {

@@ -30,6 +30,7 @@ public class TagServiceImpl implements TagService {
         this.postRepository = postRepository;
     }
 
+
     @Override
     public List<Tag> getAllTags() {
         return tagRepository.getAllTags();

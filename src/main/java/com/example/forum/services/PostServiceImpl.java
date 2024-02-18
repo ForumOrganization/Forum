@@ -130,6 +130,7 @@ public class PostServiceImpl implements PostService {
             duplicateExists = false;
         }
 
+
         if (duplicateExists) {
             throw new DuplicateEntityException("Post", "id", String.valueOf(post.getId()));
         }
