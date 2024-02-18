@@ -50,9 +50,9 @@ public class TagServiceImplTest {
         expectedTags.add(new Tag());
         expectedTags.add(new Tag());
 
-        when(tagRepository.getAllTags(null)).thenReturn(expectedTags);
+        when(tagRepository.getAllTags()).thenReturn(expectedTags);
 
-        List<Tag> actualTags = tagService.getAllTags(null);
+        List<Tag> actualTags = tagService.getAllTags();
 
         assertEquals(expectedTags.size(), actualTags.size());
         for (int i = 0; i < expectedTags.size(); i++) {

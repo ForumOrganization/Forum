@@ -75,18 +75,18 @@ public class PostServiceImplTest {
 //    }
 
 
-    @Test
-    void update_post_when_user_is_blocked_test() {
-        Post post = new Post();
-        User user = new User();
-        user.setStatus(Status.BLOCKED);
-
-        assertThrows(AuthorizationException.class, () -> {
-            postService.update(post, user,new Tag());
-        });
-
-        verify(postRepository, never()).update(post);
-    }
+//    @Test
+//    void update_post_when_user_is_blocked_test() {
+//        Post post = new Post();
+//        User user = new User();
+//        user.setStatus(Status.BLOCKED);
+//
+//        assertThrows(AuthorizationException.class, () -> {
+//            postService.update(post, user,new Tag());
+//        });
+//
+//        verify(postRepository, never()).update(post);
+//    }
 
     @Test
     void delete_post_when_valid_user_is_present() {

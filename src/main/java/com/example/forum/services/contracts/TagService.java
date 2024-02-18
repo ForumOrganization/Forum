@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TagService {
 
-    List<Tag> getAllTags(TagFilterOptions tagFilterOptions);
+    List<Tag> getAllTags();
 
     Tag getTagById(int tagId);
 

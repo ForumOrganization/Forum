@@ -26,34 +26,37 @@ public class TagRepositoryImpl implements TagRepository {
     }
 
     @Override
-    public List<Tag> getAllTags(TagFilterOptions tagFilterOptions) {
+    public List<Tag> getAllTags() {
         try (Session session = sessionFactory.openSession()) {
-            List<String> filters = new ArrayList<>();
-            Map<String, Object> params = new HashMap<>();
+            Query<Tag> query = session.createQuery("SELECT t from Tag t", Tag.class);
+           return query.list();
 
-            tagFilterOptions.getName().ifPresent(value -> {
-                filters.add("name like :name");
-                params.put("name", String.format("%%%s%%", value));
-            });
-
-            StringBuilder queryString = new StringBuilder("from Tag");
-            if (!filters.isEmpty()) {
-                queryString
-                        .append(" where ")
-                        .append(String.join(" and ", filters));
-            }
-
-            queryString.append(generateOrderBy(tagFilterOptions));
-
-            Query<Tag> query = session.createQuery(queryString.toString(), Tag.class);
-            query.setProperties(params);
-            List<Tag> list = query.list();
-
-            if (list.isEmpty()) {
-                throw new EntityNotFoundException("Tags");
-            }
-
-            return list;
+//            List<String> filters = new ArrayList<>();
+//            Map<String, Object> params = new HashMap<>();
+//
+//            tagFilterOptions.getName().ifPresent(value -> {
+//                filters.add("name like :name");
+//                params.put("name", String.format("%%%s%%", value));
+//            });
+//
+//            StringBuilder queryString = new StringBuilder("from Tag");
+//            if (!filters.isEmpty()) {
+//                queryString
+//                        .append(" where ")
+//                        .append(String.join(" and ", filters));
+//            }
+//
+//            queryString.append(generateOrderBy(tagFilterOptions));
+//
+//            Query<Tag> query = session.createQuery(queryString.toString(), Tag.class);
+//            query.setProperties(params);
+//            List<Tag> list = query.list();
+//
+//            if (list.isEmpty()) {
+//                throw new EntityNotFoundException("Tags");
+//            }
+//
+//            return list;
         }
     }
 

@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 public class TagDto {
 
-    @NotNull(message = "Tag name can't be empty")
+//    @NotNull(message = "Tag name can't be empty")
     private String name;
 
     public TagDto() {

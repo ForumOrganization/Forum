@@ -10,12 +10,14 @@ import com.example.forum.models.*;
 import com.example.forum.models.dtos.PostDto;
 import com.example.forum.models.dtos.PostFilterDto;
 import com.example.forum.models.dtos.TagDto;
+import com.example.forum.models.dtos.TagListDto;
 import com.example.forum.models.enums.Reaction;
 import com.example.forum.services.contracts.CommentService;
 import com.example.forum.services.contracts.PostService;
 import com.example.forum.services.contracts.ReactionService;
 import com.example.forum.services.contracts.TagService;
 import com.example.forum.utils.PostFilterOptions;
+import com.example.forum.utils.TagFilterOptions;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -27,6 +29,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -135,8 +138,17 @@ public class PostMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
+//        List<String> dummy= Arrays.asList("Tag 1", "Tag2");
+//        TagListDto newTags=new TagListDto();
+//        newTags.setNames(dummy);
+        List<Tag> allTags=tagService.getAllTags();
+                TagListDto newTags=new TagListDto();
+                newTags.setNames(new ArrayList<>());
+
+
         model.addAttribute("post", new PostDto());
-        model.addAttribute("tag", new TagDto());
+        model.addAttribute("allTags",allTags);
+        model.addAttribute("newTags", newTags);
         model.addAttribute("currentUser", user);
         return "PostCreateView";
     }
@@ -144,7 +156,7 @@ public class PostMvcController {
     @PostMapping("/new")
     public String createPost(@Valid @ModelAttribute("post") PostDto postDto,
                              BindingResult postBindingResult,
-                             @Valid @ModelAttribute("tag") TagDto tagDto,
+                             @Valid @ModelAttribute("newTags") TagListDto tagDtos,
                              BindingResult tagBindingResult,
                              Model model,
                              HttpSession session) {
@@ -161,8 +173,10 @@ public class PostMvcController {
 
         try {
             Post post = postMapper.fromDto(postDto);
-            Tag tag = tagMapper.fromDto(tagDto);
-            postService.create(post, user, tag);
+            List<Tag> newTags= tagMapper.fromListDto(tagDtos);
+            postService.create(post, user, newTags);
+            model.addAttribute("newTags", newTags);
+
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -181,7 +195,6 @@ public class PostMvcController {
 
     @GetMapping("/{id}/update")
     public String showEditPostPage(@PathVariable int id,
-                                   @PathVariable int tagId,
                                    Model model, HttpSession session) {
         User user;
         try {
@@ -190,16 +203,22 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
+
         try {
             Post post = postService.getById(id);
             PostDto postDto = postMapper.toDto(post);
-            Tag tag=tagService.getTagById(tagId);
-            TagDto tagDto=tagMapper.toDto(tag);
+            List<Tag> allTags=tagService.getAllTags();
+            TagListDto newTags= new TagListDto();
+            List<Tag> postTags=tagService.getAllTagsByPostId(post.getId());
+            for(Tag tag:postTags){
+                newTags.getNames().add(tag.getName());
+            }
+
             model.addAttribute("postId", id);
             model.addAttribute("post", postDto);
-            model.addAttribute("tagId", tagId);
-            model.addAttribute("tag", tagDto);
-//            model.addAttribute("currentUser", user);
+            model.addAttribute("allTags", allTags);
+            model.addAttribute("newTags", newTags);
+            model.addAttribute("currentUser", user);
             return "PostUpdateView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -209,12 +228,11 @@ public class PostMvcController {
     }
 
     @PostMapping("/{id}/update")
-    public String updatePost(@PathVariable int postId,
-                             @PathVariable int tagId,
+    public String updatePost(@PathVariable int id,
                              @Valid @ModelAttribute("post") PostDto postDto,
                              BindingResult postBindingResult,
-                             @Valid @ModelAttribute("tag") TagDto tagDto,
-                             BindingResult tagBindingResult,
+                             @Valid @ModelAttribute("newTags") TagListDto tagDtos,
+                             BindingResult tagsBindingResult,
                              Model model,
                              HttpSession session) {
         User user;
@@ -224,14 +242,15 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
-        if (postBindingResult.hasErrors()||tagBindingResult.hasErrors()) {
+        if (postBindingResult.hasErrors()||tagsBindingResult.hasErrors()) {
             return "PostUpdateView";
         }
 
         try {
-            Post post = postMapper.fromDto(postId, postDto);
-            Tag tag=tagMapper.fromDto(tagId,tagDto);
-            postService.update(post, user,tag);
+            Post post = postMapper.fromDto(id, postDto);
+            List<Tag> newTags= tagMapper.fromListDto(tagDtos);
+
+            postService.update(post, user,newTags);
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());

@@ -75,7 +75,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void create(Post post, User user, Tag tag) {
+    public void create(Post post, User user, List<Tag> tags) {
         checkBlockOrDeleteUser(user);
 
 
@@ -97,19 +97,23 @@ public class PostServiceImpl implements PostService {
         }
 
         post.setCreatedBy(user);
-
-        if (tag != null) {
-            postRepository.create(post);
-            tagRepository.createTagInPost(tag, post.getId(), user);
-        }else{
+        if(tags.isEmpty()){
             this.postRepository.create(post);
-        }
+        }else {
+//            List<Tag> existingTags = tagRepository.getAllTags();
+            this.postRepository.create(post);
+            for (Tag tag : tags) {
+//                if (!existingTags.contains(tag)) {
+                    tagRepository.createTagInPost(tag, post.getId(), user);
 
+
+            }
+        }
 
     }
 
     @Override
-    public void update(Post post, User user, Tag tag) {
+    public void update(Post post, User user, List<Tag> tags) {
         checkBlockOrDeleteUser(user);
         checkAccessPermissionsUser(post.getCreatedBy().getId(), user, UPDATE_USER_MESSAGE_ERROR);
 
@@ -129,18 +133,22 @@ public class PostServiceImpl implements PostService {
         if (duplicateExists) {
             throw new DuplicateEntityException("Post", "id", String.valueOf(post.getId()));
         }
+        List<Tag> existingAllTags=tagRepository.getAllTags();
+        List <Tag> existingTagsInPost=tagRepository.getAllTagsByPostId(post.getId());
+        for (Tag tag : existingTagsInPost) {
+            for(Tag newTag : tags){
+                if(!tag.getName().contains(newTag.getName())){
+                    Tag tagToBeDelete=tagRepository.getTagByName(tag.getName());
+                    tagRepository.deleteTagInPost(post.getId(),tagToBeDelete.getId());
+                }else if(!newTag.getName().contains(tag.getName())){
+                    tagRepository.createTagInPost(newTag, post.getId(), user);
+                }else{
+                    postRepository.update(post);
 
-        if(tagRepository.getTagById(tag.getId())!=null){
-            tagRepository.updateTagInPost(tag);
-            postRepository.update(post);
+                }
+            }
 
-        }else{
-            postRepository.update(post);
-            tagRepository.updateTagInPost(tag);
         }
-
-
-
     }
 
     @Override

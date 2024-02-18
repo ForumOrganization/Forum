@@ -23,9 +23,9 @@ public interface PostService {
 
     Post getByComment(int commentId);
 
-    void create(Post post, User user, Tag tag);
+    void create(Post post, User user,List<Tag>tags);
 
-    void update(Post post, User user, Tag tag);
+    void update(Post post, User user,List<Tag> tags);
 
     void delete(int id, User user);
 

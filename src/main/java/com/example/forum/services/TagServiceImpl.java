@@ -31,8 +31,8 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> getAllTags(TagFilterOptions tagFilterOptions) {
-        return tagRepository.getAllTags(tagFilterOptions);
+    public List<Tag> getAllTags() {
+        return tagRepository.getAllTags();
     }
 
     @Override

@@ -41,15 +41,15 @@ public class TagRestController {
             @RequestParam(required = false) String sortOrder) {
 
         TagFilterOptions tagFilterOptions = new TagFilterOptions(name, sortBy, sortOrder);
-
-        try {
-            authenticationHelper.tryGetUser(headers);
-            return tagService.getAllTags(tagFilterOptions);
-        } catch (EntityNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (AuthorizationException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        }
+        return tagService.getAllTags();
+//        try {
+//            authenticationHelper.tryGetUser(headers);
+//
+//        } catch (EntityNotFoundException e) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+//        } catch (AuthorizationException e) {
+//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+//        }
     }
 
     @GetMapping("/{tagId}")

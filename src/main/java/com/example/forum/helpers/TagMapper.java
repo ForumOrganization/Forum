@@ -4,8 +4,12 @@ import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.dtos.PostDto;
 import com.example.forum.models.dtos.TagDto;
+import com.example.forum.models.dtos.TagListDto;
 import com.example.forum.services.contracts.TagService;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class TagMapper {
@@ -27,6 +31,20 @@ public class TagMapper {
         tag.setName(dto.getName());
         return tag;
     }
+    public List<Tag> fromListDto(TagListDto dtos) {
+        List<Tag> tags = new ArrayList<>();
+        if(dtos.getNames()==null){
+            return tags;
+        }
+       for(String name:dtos.getNames()){
+           Tag tag=new Tag();
+           tag.setName(name);
+           tags.add(tag);
+       }
+       return tags;
+       }
+
+
     public TagDto toDto(Tag tag) {
         TagDto tagDto = new TagDto();
         tagDto.setName(tag.getName());

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface TagRepository {
 
-    List<Tag> getAllTags(TagFilterOptions tagFilterOptions);
+    List<Tag> getAllTags();
 
     Tag getTagById(int tagId);
 
@@ -24,6 +24,7 @@ public interface TagRepository {
     void createTagInPost(Tag tag, int postId, User user);
 
     void updateTagInPost(Tag tag);
+
 
     void deleteTagInPost(int postId, int tagId);
 }
