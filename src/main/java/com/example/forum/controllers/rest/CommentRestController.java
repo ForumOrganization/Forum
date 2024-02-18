@@ -48,12 +48,13 @@ public class CommentRestController {
             operationId = "post id to be searched for",
             summary = "This method retrieve information for all comments regarding a given post.",
             description = "This method search for all comments for one post. When a person is authorized and there are comments, a list with all comments for a particular post will be presented.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts id as a parameters.",
-                    content = @Content(schema = @Schema(implementation = Post.class))),
+//            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts id as a parameters.",
+//                    content = @Content(schema = @Schema(implementation = Post.class))),
             parameters = {@Parameter(name = "postId", description = "path variable", example = "5")},
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Comment.class)), description = "Comment(s) was/were found successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Comment.class)), description = "You are not allowed to access the comment(s)."),
-                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Comment.class)), description = "Post with this id was not found.")})
+                    @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Comment.class)), description = "Post with this id was not found.")
+    })
     public List<Comment> getAllCommentsByPostId(@RequestHeader HttpHeaders headers, @PathVariable int postId,
                                                 @RequestParam(required = false) String content,
                                                 @RequestParam(required = false) Post post,
@@ -76,9 +77,9 @@ public class CommentRestController {
             operationId = "id to be searched for",
             summary = "This method search for a comment when comment id is given.",
             description = "This method search for a comment. A valid id must be given as an input.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts comment id as a parameters.",
-                    content = @Content(schema = @Schema(implementation = Comment.class))),
-            parameters = {@Parameter(name = "postId", description = "path variable", example = "5")},
+//            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts comment id as a parameters.",
+//                    content = @Content(schema = @Schema(implementation = Comment.class))),
+            parameters = {@Parameter(name = "commentId", description = "path variable", example = "5")},
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Comment.class)), description = "The comment has been retrieved successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Comment.class)), description = "You are not allowed to access this comment."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Comment.class)), description = "Comment with this id was not found.")})
@@ -97,6 +98,7 @@ public class CommentRestController {
     @Operation(tags = {"Create a comment"},
             summary = "This method creates a comment to a given post when post id is given.",
             description = "This method creates a comment. A valid post id must be given as an input.",
+            parameters = {@Parameter(name = "postId", description = "path variable", example = "5")},
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request that accepts post id parameters.",
                     content = @Content(schema = @Schema(implementation = Comment.class))),
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Comment.class)), description = "The comment has been found successfully"),
@@ -121,8 +123,10 @@ public class CommentRestController {
             summary = "This method update a comment when id is given.",
             description = "This method update a comment. A valid object must be given as an input. An optional feature is that a tag can be attached to the post.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts CommentDto as a parameter.",
-                    content = @Content(schema = @Schema(implementation = Comment.class))),
-            parameters = {@Parameter(name = "commentId", description = "path variable", example = "5")},
+                    content = @Content(schema = @Schema(implementation = CommentDto.class))),
+            parameters = {@Parameter(name = "commentId", description = "comment id", example = "5"),
+//                    @Parameter(name = "postId", description = "post id", example = "5")
+            },
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Comment.class)), description = "The comment has been updated successfully"),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Comment.class)), description = "The comment with this id was not found."),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Comment.class)), description = "You are not allowed to modify this comment.")})
@@ -147,7 +151,7 @@ public class CommentRestController {
             description = "This method delete a comment. A valid object must be given as an input.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request that accepts comment id",
                     content = @Content(schema = @Schema(implementation = Comment.class))),
-            parameters = {@Parameter(name = "commentId", description = "path variable", example = "5")},
+            parameters = {@Parameter(name = "commentId", description = "comment id", example = "5")},
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Comment.class)), description = "The comment has been deleted successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Comment.class)), description = "You are not allowed to delete this comment."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Comment.class)), description = "The comment with this id was not found.")})

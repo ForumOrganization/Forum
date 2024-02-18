@@ -61,8 +61,6 @@ public class TagRestController {
             operationId = "id to be searched for",
             summary = "This method search for a tag when id is given.",
             description = "This method search for a tag. A valid id must be given as an input.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts id as a parameters.",
-                    content = @Content(schema = @Schema(implementation = Tag.class))),
             parameters = {@Parameter(name = "tagId", description = "path variable", example = "5")},
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The tag has been found successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to access this tag."),
@@ -82,9 +80,8 @@ public class TagRestController {
     @Operation(tags = {"Search for a tag"},
             summary = "This method search for a tag when tag name is given.",
             description = "This method aim to find a tag. A valid name must be given as an input.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts name parameters.",
-                    content = @Content(schema = @Schema(implementation = Tag.class))),
-            parameters = {@Parameter(name = "name", description = "Tag name", example = "healthy food")},
+//
+            parameters = {@Parameter(name = "tagName", description = "Tag name", example = "healthy food")},
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The tag has been updated successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to search for this tag."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Tag.class)), description = "Tag with this name was not found.")})
@@ -103,8 +100,9 @@ public class TagRestController {
     @Operation(tags = {"Create a tag in post"},
             summary = "This method creates a tag in post when post id is given.",
             description = "This method creates a tag in post. A valid object must be given as an input.",
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request that accepts object parameters.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request that accepts tag dto object as a parameters.",
                     content = @Content(schema = @Schema(implementation = Tag.class))),
+            parameters = {@Parameter(name = "postId", description = "Post id", example = "healthy food")},
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The tag in this post has been created successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to create a tag in post."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The post with this id was not found.")})
@@ -128,8 +126,8 @@ public class TagRestController {
             description = "This method update a tag in a post. Valid post id and tag id must be given as an input.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts TagDto parameters.",
                     content = @Content(schema = @Schema(implementation = Tag.class))),
-            parameters = {@Parameter(name = "postId", description = "path variable", example = "5"),
-                    @Parameter(name = "tagtId", description = "path variable", example = "1")
+            parameters = {@Parameter(name = "id", description = "post id/ path variable", example = "5"),
+//                    @Parameter(name = "id", description = "tag id/ path variable", example = "1")
             },
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The tag has been updated successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to modify this tag."),
@@ -156,7 +154,7 @@ public class TagRestController {
             description = "This method delete a tag in a post. A valid tag object must be given as an input as well as post id.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request that accepts post id",
                     content = @Content(schema = @Schema(implementation = Tag.class))),
-            parameters = {@Parameter(name = "postId", description = "path variable", example = "5")},
+            parameters = {@Parameter(name = "id", description = "post id/ path variable", example = "5")},
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The post has been deleted successfully"),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Tag.class)), description = "The post with this id was not found."),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Tag.class)), description = "You are not allowed to delete this post.")})
