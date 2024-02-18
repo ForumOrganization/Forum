@@ -1,52 +1,46 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('All Posts')}"></form>
-<body>
+<link href="../static/css/posts.css" th:href="@{/css/posts.css}" rel="stylesheet"/>
 <form th:replace="~{HomeView.html :: header}"></form>
-    <div th:unless="${isAuthenticated}">
-        <p>
+<body>
+<div id="notAuthenticated" th:unless="${isAuthenticated}">
+    <p>
         <a th:href="@{'/posts/most-recent-posts'}">Most recent posts</a>
-        </p>
-        <p>
+    </p>
+    <p>
         <a th:href="@{'/posts/most-commented-posts'}">Most commented posts</a>
-        </p>
-    </div>
+    </p>
+</div>
 <div class="body-content" th:if="${isAuthenticated}">
 
-    <form action="#" th:action="@{/posts}" method="get" th:object="${filterOptions}">
-        <label th:text="#{posts.filter.label}">Filter Options</label>
+    <form id="filterForm" action="#" th:action="@{/posts}" method="get" th:object="${filterOptions}">
+        <label for="title" th:text="#{posts.filter.label}">Filter Options</label>
         <br/><br/>
-        <input type="text" placeholder="Title" th:field="*{title}"/>
-        <input type="text" placeholder="Create By" th:field="*{createdBy}"/>
-        <input type="text" placeholder="Creation Time" th:field="*{creationTime}"/>
+        <input type="text" id="title" placeholder="Title" th:field="*{title}"/>
+        <input type="text" id="createdBy" placeholder="Create By" th:field="*{createdBy}"/>
+        <input type="text" id="creationTime" placeholder="Creation Time" th:field="*{creationTime}"/>
 
-
-<!--        <th:block th:with="formattedDate=${filterOptions.creationTime != null ? #dates.format(filterOptions.creationTime, 'yyyy-MM-dd') : null}"></th:block>-->
-
-<!--        &lt;!&ndash; Use the formattedDate variable as the value of the input field &ndash;&gt;-->
-<!--        <input type="date" placeholder="Creation Time" th:field="*{creationTime}" th:value="${formattedDate}">-->
-<!--        -->
-        <select th:field="*{sortBy}">
+        <select id="sortBy" th:field="*{sortBy}">
             <option value="">Sort By</option>
             <option value="title">Title</option>
             <option value="date">Creation Time</option>
             <option value="createdBy">CreatedBy</option>
         </select>
-        <select th:field="*{sortOrder}">
+        <select id="sortOrder" th:field="*{sortOrder}">
             <option value="">Sort Order</option>
             <option value="asc">Ascending</option>
             <option value="desc">Descending</option>
         </select>
-<!--        <br/><br/>-->
 
         <input type="submit" value="Search"/>
     </form>
-    <div th:if="${posts.isEmpty()}">
+    <div id="noPosts" th:if="${posts.isEmpty()}">
         <h2 th:text="#{posts.title.empty}">No Posts</h2>
     </div>
 
 
-    <div th:unless="${posts.isEmpty()}">
+    <div id="allPosts" th:unless="${posts.isEmpty()}">
         <h2 th:text="#{posts.title}">All Posts</h2>
 
         <div class="table">
@@ -78,7 +72,6 @@
         </div>
     </div>
 </div>
-
-<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
+<form th:replace="~{HomeView.html :: footer}"></form>
 </html>

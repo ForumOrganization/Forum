@@ -1,0 +1,194 @@
+/*!* Body *!*/
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    background-color: #f0f0f0;*/
+/*    color: #333;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
+
+/*!* Header *!*/
+/*header {*/
+/*    background-color: #333;*/
+/*    color: #fff;*/
+/*    padding: 10px;*/
+/*}*/
+
+/*!* Comment Form Container *!*/
+/*.comment-form-container {*/
+/*    background-color: #fff;*/
+/*    border: 1px solid #ccc;*/
+/*    padding: 20px;*/
+/*    margin: 20px;*/
+/*}*/
+
+/*!* Comment Form Title *!*/
+/*.comment-form-title {*/
+/*    font-size: 24px;*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/*!* Comment Form Label *!*/
+/*.comment-form-label {*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*!* Comment Form Input *!*/
+/*.comment-form-input {*/
+/*    width: 100%;*/
+/*    padding: 10px;*/
+/*    margin-bottom: 20px;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 5px;*/
+/*}*/
+
+/*!* Comment Form Error *!*/
+/*.comment-form-error {*/
+/*    color: red;*/
+/*    font-size: 12px;*/
+/*    display: none;*/
+/*}*/
+
+/*!* Comment Form Submit Button *!*/
+/*.comment-form-submit {*/
+/*    background-color: #333;*/
+/*    color: #fff;*/
+/*    padding: 10px 20px;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*    transition: background-color 0.3s;*/
+/*}*/
+
+/*.comment-form-submit:hover {*/
+/*    background-color: #555;*/
+/*}*/
+
+/*!* Footer *!*/
+/*footer {*/
+/*    background-color: #333;*/
+/*    color: #fff;*/
+/*    padding: 10px;*/
+/*    text-align: center;*/
+/*}*/
+
+
+
+
+
+
+
+
+
+
+
+/* Resetting default browser styles */
+body, h1, h2, h3, h4, h5, h6, p, ul, li, a, img {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    line-height: 1.6;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Header styles */
+header {
+    background-color: #007bff;
+    padding: 10px 0;
+}
+
+header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+header nav a {
+    color: #fff;
+    margin-right: 20px;
+}
+
+header nav ul {
+    list-style: none;
+    display: flex;
+}
+
+header nav ul li {
+    margin-right: 10px;
+}
+
+header nav ul li:last-child {
+    margin-right: 0;
+}
+
+header nav ul li a {
+    color: #fff;
+}
+
+/* Body content styles */
+.body-content {
+    margin: 20px;
+}
+
+/* Comment form container styles */
+.comment-form-container {
+    margin-bottom: 20px;
+}
+
+.comment-form-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Comment form styles */
+.comment-form {
+    margin-bottom: 20px;
+}
+
+.comment-form-label {
+    font-weight: bold;
+}
+
+.comment-form-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+}
+
+.comment-form-error {
+    color: red;
+    display: none;
+}
+
+.comment-form-submit {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.comment-form-submit:hover {
+    background-color: #0056b3;
+}

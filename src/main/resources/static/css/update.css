@@ -27,35 +27,19 @@ body {
     text-align: center;
 }
 
-/* Post Form Styles */
-#post-form {
+/* Upload Form Styles */
+#upload-form {
     margin-top: 20px;
 }
 
-/* Form Group Styles */
-.form-group {
-    margin-bottom: 20px;
+/* File Input Styles */
+#file-input {
+    margin-bottom: 10px;
 }
 
-/* Label Styles */
-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-/* Input Styles */
-input[type="text"],
-input[type="email"] {
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 10px;
-    width: 100%;
-}
-
-/* Button Styles */
-button[type="submit"] {
-    background-color: #333;
+/* Submit Button Styles */
+#submit-button {
+    background-color: #007bff;
     border: none;
     border-radius: 3px;
     color: #fff;
@@ -64,15 +48,20 @@ button[type="submit"] {
     text-transform: uppercase;
 }
 
-/* Button Hover Styles */
-button[type="submit"]:hover {
-    background-color: #555;
+/* Submit Button Hover Styles */
+#submit-button:hover {
+    background-color: #0056b3;
+}
+
+/* User Form Styles */
+#user-form {
+    margin-top: 20px;
 }
 
 /* Footer Form Styles */
 #footer-form {
     background-color: #333;
     color: #fff;
-    padding: 10px;
+    padding: 20px 0;
     text-align: center;
 }

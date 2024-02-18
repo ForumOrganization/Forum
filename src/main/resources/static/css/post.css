@@ -1,0 +1,243 @@
+/*!* General Styles *!*/
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    background-color: #f0f0f0;*/
+/*    color: #333;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
+
+/*h2, h3 {*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*h2.post-title {*/
+/*    font-size: 24px;*/
+/*    color: #333;*/
+/*}*/
+
+/*h3.comments-title {*/
+/*    font-size: 20px;*/
+/*    color: #333;*/
+/*}*/
+
+/*ul {*/
+/*    list-style: none;*/
+/*    padding: 0;*/
+/*}*/
+
+/*!* Post Styles *!*/
+/*.post-details {*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/*.post-details p {*/
+/*    margin: 12px 0;*/
+/*}*/
+
+/*.post-details ul {*/
+/*    margin: 12px 0;*/
+/*}*/
+
+/*.post-actions a {*/
+/*    margin-right: 10px;*/
+/*    text-decoration: none;*/
+/*    color: #333;*/
+/*}*/
+
+/*.post-actions a:hover {*/
+/*    color: #666;*/
+/*}*/
+
+/*!* Comment Styles *!*/
+/*.comments {*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*.comment {*/
+/*    margin-bottom: 20px;*/
+/*    padding: 10px;*/
+/*    background-color: #fff;*/
+/*    border: 1px solid #ccc;*/
+/*}*/
+
+/*.comment-content {*/
+/*    margin: 0;*/
+/*}*/
+
+/*.comment-actions a {*/
+/*    margin-right: 10px;*/
+/*    text-decoration: none;*/
+/*    color: #333;*/
+/*}*/
+
+/*.comment-actions a:hover {*/
+/*    color: #666;*/
+/*}*/
+
+/*.no-comments {*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*.no-comments-title {*/
+/*    font-size: 20px;*/
+/*    color: #333;*/
+/*}*/
+
+/*!* Footer Styles *!*/
+/*#footer {*/
+/*    margin-top: 20px;*/
+/*    padding: 20px;*/
+/*    background-color: #333;*/
+/*    color: #fff;*/
+/*    text-align: center;*/
+/*}*/
+
+/*#footer a {*/
+/*    color: #fff;*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*#footer a:hover {*/
+/*    color: #ccc;*/
+/*}*/
+
+
+
+
+
+
+
+
+
+/* Resetting default browser styles */
+body, h1, h2, h3, h4, h5, h6, p, ul, li, a, img {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    line-height: 1.6;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Header styles */
+#header {
+    background-color: #007bff;
+    padding: 10px 0;
+}
+
+#header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+#header nav a {
+    color: #fff;
+    margin-right: 20px;
+}
+
+#header nav ul {
+    list-style: none;
+    display: flex;
+}
+
+#header nav ul li {
+    margin-right: 10px;
+}
+
+#header nav ul li:last-child {
+    margin-right: 0;
+}
+
+#header nav ul li a {
+    color: #fff;
+}
+
+/* Body content styles */
+.body-content {
+    margin: 20px;
+}
+
+/* Post title styles */
+.post-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Post details styles */
+.post-details {
+    margin-bottom: 20px;
+}
+
+.post-details p {
+    margin-bottom: 10px;
+}
+
+/* Post actions styles */
+.post-actions {
+    margin-bottom: 20px;
+}
+
+.post-actions a {
+    margin-right: 10px;
+}
+
+/* Comments title styles */
+.comments-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Comments styles */
+.comments {
+    margin-bottom: 20px;
+}
+
+.comment {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.comment p {
+    margin-bottom: 10px;
+}
+
+.comment-actions {
+    margin-top: 10px;
+}
+
+.comment-actions a {
+    margin-right: 10px;
+}
+
+/* No comments styles */
+.no-comments {
+    margin-bottom: 20px;
+}
+
+.no-comments-title {
+    font-size: 24px;
+    font-weight: bold;
+}

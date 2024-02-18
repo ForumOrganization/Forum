@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('New Post')}"></form>
+<link href="../static/css/create.css" th:href="@{/css/create.css}" rel="stylesheet"/>
+<form th:replace="~{HomeView.html :: header}"></form>
 <body>
 <div class="body-content">
     <div th:style="text-align">
-        <form th:replace="~{HomeView.html :: header}"></form>
         <form th:replace="~{PostForm.html :: post-form('New Post')}"></form>
-        <form th:replace="~{HomeView.html :: footer}"></form>
     </div>
 </div>
 </body>
+<form th:replace="~{HomeView.html :: footer}"></form>
 </html>

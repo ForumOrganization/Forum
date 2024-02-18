@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('Admin Portal')}"></form>
-<body>
+<link href="../static/css/admin.css" th:href="@{/css/admin.css}" rel="stylesheet"/>
+
 <form th:replace="~{HomeView.html :: header}"></form>
+<body>
 <!--<div class="body-content">-->
 <!--    <h2 th:if="${isAuthenticated && session.isAdmin}" th:text="#{admin.welcome}">Welcome (design)!</h2>-->
 <!--    <h2 th:text="${user}" th:if="${isAuthenticated}"></h2>-->
 <!--    <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>-->
 <!--    <p>Welcome my dear Admin!</p>-->
-    <form th:replace="~{UsersView.html :: usersView-form(Users)}"></form>
+<form th:replace="~{UsersView.html :: usersView-form(Users)}"></form>
 
 <!--    <form action="#" th:action="@{/users/{id}/update-to-admin(id=${user.id})}" th:object="${user}" method="post">-->
 <!--        &lt;!&ndash;        <div class="form-group">&ndash;&gt;-->
@@ -43,6 +45,6 @@
 <!--        </div>-->
 <!--    </div>-->
 
-<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
+<form th:replace="~{HomeView.html :: footer}"></form>
 </html>

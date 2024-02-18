@@ -5,7 +5,8 @@ fieldset {
     width: 25em;
     border-radius: 2px;
     border-color: #2d333b;
-    background: #1b1f24;
+    /*background: #1b1f24;*/
+    background: #D4F1F9;
     box-shadow: 0 2px 2px #131518;
 }
 
@@ -15,7 +16,8 @@ fieldset legend {
     text-transform: uppercase;
     letter-spacing: 0.12em;
     text-align: center;
-    background: #171a1e;
+    /*background: #171a1e;*/
+    background-color: #007bff;
     -o-border-image: linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, #2d333b 50%) 1 round;
     border-image: linear-gradient(180deg, rgba(255, 255, 255, 0) 50%, #2d333b 50%) 1 round;
     border-width: 1px;
@@ -25,11 +27,16 @@ fieldset legend {
     margin: 0 auto;
 }
 
+fieldset legend {
+    color: white;
+}
+
 input, input + label > i {
     border-radius: 3px;
     box-shadow: none;
     border: 1px solid #384049;
-    background: #15171b;
+    /*background: #15171b;*/
+    background-color: #007bff;
     display: block;
     width: 100%;
     color: white;

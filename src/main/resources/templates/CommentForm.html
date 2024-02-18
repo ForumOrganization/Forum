@@ -1,40 +1,27 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<div th:replace="~{HomeView.html :: head(${comment.content})}"></div>
+<head th:replace="~{HomeView.html :: head(${comment.content})}"></head>
+<link href="../static/css/posts.css" th:href="@{/css/posts.css}" rel="stylesheet"/>
+
+<header th:replace="~{HomeView.html :: header}"></header>
 <body>
-<div th:replace="~{HomeView.html :: header}"></div>
 
-<div th:fragment="comment-form(content)">
-    <h2 th:text="${content}">Content</h2>
+<div id="comment-form-container" class="comment-form-container" th:fragment="comment-form(content)">
+    <h2 class="comment-form-title" th:text="${content}">Content</h2>
 
-    <form action="#" th:action="@{__${requestURI}__}" th:object="${comment}" method="post">
+    <form id="comment-form" class="comment-form" action="#" th:action="@{__${requestURI}__}" th:object="${comment}" method="post">
 
-        <label th:text="#{comment.label.content}">Content</label>
+        <label class="comment-form-label" th:text="#{comment.label.content}">Content</label>
 
-    <!--    <form action="#" th:action="@{/comments/{id}/update(id=${commentId})}" th:object="${comment}" method="post">        <label th:text="#{comment.label.content}">Content</label>-->
         <br/>
-        <input type="text" th:field="*{content}"/>
-        <label class="error" th:errors="*{content}">Content error placeholder</label>
+        <input id="comment-content" class="comment-form-input" type="text" th:field="*{content}"/>
+        <label id="comment-content-error" class="comment-form-error" th:errors="*{content}">Content error placeholder</label>
         <br/><br/>
 
-<!--        <label th:text="#{comment.label.createdBy}">Create By</label>-->
-<!--        <br/>-->
-<!--        <input type="text" th:field="*{user.username}"/>-->
-<!--        <label class="error" th:errors="*{user.username}">Create By error placeholder</label>-->
-<!--        <br/><br/>-->
-
-<!--        <h3>-->
-<!--            <a href="#" th:href="@{__${requestURI}__/update}">Update</a>-->
-<!--            <a href="#" th:href="@{__${requestURI}__/delete}">Delete</a>-->
-<!--        </h3>-->
-
-        <br/><br/>
-
-        <input type="submit" value="Save"/>
+        <input type="submit" class="comment-form-submit" value="Save"/>
     </form>
 </div>
 
-<footer th:fragment="footer">
-    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow())
-    + ' Healthy Living Hub'}">Healthy Living Hub</small>
-</footer>
+</body>
+<footer th:replace="~{HomeView.html :: footer}"></footer>
+</html>

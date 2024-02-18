@@ -106,15 +106,16 @@ public class UserMvcController {
 
     @GetMapping("/{id}/update")
     public String showEditUserPage(@PathVariable int id, Model model, HttpSession session) {
+        User user;
         try {
-            authenticationHelper.tryGetCurrentUser(session);
+            user = authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
 
         try {
-            User user = userService.getById(id);
-            UserDto userDto = userMapper.userToDto(user);
+            User userToBeUpdated = userService.getById(id);
+            UserDto userDto = userMapper.userToDto(userToBeUpdated);
             model.addAttribute("userId", id);
             model.addAttribute("user", userDto);
             model.addAttribute("currentUser", user);
@@ -147,7 +148,9 @@ public class UserMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
+
         if (bindingResult.hasErrors()) {
+            model.addAttribute("currentUser", user);
             return "UserUpdateView";
         }
 

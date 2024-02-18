@@ -1,0 +1,279 @@
+/*!* Body *!*/
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    background-color: #f4f4f4;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*}*/
+
+/*!* Header *!*/
+/*#header {*/
+/*    background-color: #333;*/
+/*    color: #fff;*/
+/*    padding: 10px;*/
+/*    text-align: center;*/
+/*}*/
+
+/*!* Navigation *!*/
+/*#notAuthenticated {*/
+/*    background-color: #f4f4f4;*/
+/*    padding: 10px;*/
+/*    text-align: center;*/
+/*}*/
+
+/*#notAuthenticated a {*/
+/*    color: #333;*/
+/*    text-decoration: none;*/
+/*}*/
+
+/*#notAuthenticated a:hover {*/
+/*    color: #000;*/
+/*}*/
+
+/*!* Body Content *!*/
+/*.body-content {*/
+/*    padding: 20px;*/
+/*}*/
+
+/*!* Filter Form *!*/
+/*#filterForm {*/
+/*    background-color: #fff;*/
+/*    padding: 20px;*/
+/*    border-radius: 5px;*/
+/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*#filterForm label {*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*#filterForm input[type="text"],*/
+/*#filterForm select {*/
+/*    width: 100%;*/
+/*    padding: 10px;*/
+/*    margin-bottom: 10px;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 5px;*/
+/*}*/
+
+/*#filterForm input[type="submit"] {*/
+/*    background-color: #333;*/
+/*    color: #fff;*/
+/*    padding: 10px 20px;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*#filterForm input[type="submit"]:hover {*/
+/*    background-color: #000;*/
+/*}*/
+
+/*!* No Posts *!*/
+/*#noPosts {*/
+/*    text-align: center;*/
+/*    padding: 20px;*/
+/*}*/
+
+/*!* All Posts *!*/
+/*#allPosts {*/
+/*    background-color: #fff;*/
+/*    padding: 20px;*/
+/*    border-radius: 5px;*/
+/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*!* Table *!*/
+/*.table {*/
+/*    width: 100%;*/
+/*    border-collapse: collapse;*/
+/*}*/
+
+/*.header-cell,*/
+/*.cell {*/
+/*    padding: 10px;*/
+/*    border: 1px solid #ccc;*/
+/*}*/
+
+/*.header-cell {*/
+/*    background-color: #f4f4f4;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*!* Delete Button *!*/
+/*.cell button {*/
+/*    background-color: #f00;*/
+/*    color: #fff;*/
+/*    padding: 5px 10px;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.cell button:hover {*/
+/*    background-color: #d00;*/
+/*}*/
+
+
+
+
+
+
+
+
+
+
+/* Resetting default browser styles */
+body, h1, h2, h3, h4, h5, h6, p, ul, li, a, img {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+/* Global styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    color: #333;
+    line-height: 1.6;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Header styles */
+#header {
+    background-color: #007bff;
+    padding: 10px 0;
+}
+
+#header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+#header nav a {
+    color: #fff;
+    margin-right: 20px;
+}
+
+#header nav ul {
+    list-style: none;
+    display: flex;
+}
+
+#header nav ul li {
+    margin-right: 10px;
+}
+
+#header nav ul li:last-child {
+    margin-right: 0;
+}
+
+#header nav ul li a {
+    color: #fff;
+}
+
+/* Body content styles */
+.body-content {
+    margin: 20px;
+}
+
+/* Filter form styles */
+#filterForm {
+    margin-bottom: 20px;
+}
+
+#filterForm label {
+    font-weight: bold;
+}
+
+#filterForm input[type="text"], #filterForm select {
+    margin-right: 10px;
+    padding: 5px;
+}
+
+#filterForm input[type="submit"] {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#filterForm input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* No posts styles */
+#noPosts {
+    margin-bottom: 20px;
+}
+
+#noPosts h2 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* All posts styles */
+#allPosts {
+    margin-bottom: 20px;
+}
+
+#allPosts h2 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Table styles */
+.table {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.header, .row {
+    display: table-row;
+}
+
+.header-cell, .cell {
+    display: table-cell;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.header-cell {
+    font-weight: bold;
+    background-color: #f0f0f0;
+}
+
+.row:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.row:hover {
+    background-color: #f0f0f0;
+}
+
+/* Footer styles */
+#footer {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+#footer small {
+    font-size: 14px;
+}

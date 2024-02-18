@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('Most commented posts')}"></form>
-<body>
+<link href="../static/css/posts.css" th:href="@{/css/posts.css}" rel="stylesheet"/>
 <form th:replace="~{HomeView.html :: header}"></form>
-
+<body>
 <div class="body-content">
   <div th:unless="${posts.isEmpty()}">
     <h2 th:text="#{posts.title}">Most commented posts</h2>
@@ -26,7 +26,6 @@
     </div>
   </div>
 </div>
-
-<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
+<form th:replace="~{HomeView.html :: footer}"></form>
 </html>

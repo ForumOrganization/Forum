@@ -1,0 +1,163 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styles */
+#header {
+    background-color: #007bff;
+    color: black;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Footer Styles */
+#footer {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Body Content Styles */
+.body-content {
+    text-align: center;
+    padding: 10px 50px 50px 50px;
+}
+
+/* User Welcome Styles */
+#user-welcome {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* User Name Styles */
+#user-name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* User Email Styles */
+#user-email {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* User Role Styles */
+#user-role {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* User Phone Styles */
+#user-phone {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* User Actions Styles */
+#user-actions {
+    margin-top: 20px;
+}
+
+/* Update Link Styles */
+#update-link {
+    background-color: #007bff;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+/* Update Link Hover Styles */
+#update-link:hover {
+    background-color: #0056b3;
+}
+
+/* Delete Link Styles */
+#delete-link {
+    background-color: #dc3545;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+/* Delete Link Hover Styles */
+#delete-link:hover {
+    background-color: #c82333;
+}
+
+/* Logo Container Styles */
+#logo-container {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* Logo Styles */
+#logo {
+    width: 200px;
+    height: 200px;
+}
+
+/* Card Styles */
+.card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+/* Card Image Styles */
+.card-img-top {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+/* Card Body Styles */
+.card-body {
+    padding: 10px;
+}
+
+/* Card Title Styles */
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Card Text Styles */
+.card-text {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+/* Card Link Styles */
+.card-link {
+    background-color: #007bff;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 20px;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+/* Card Link Hover Styles */
+.card-link:hover {
+    background-color: #0056b3;
+}

@@ -18,17 +18,15 @@
 <!--<form th:replace="~{PostForm.html :: footer}"></form>-->
 
 <div id="box">
-    <header th:fragment="header">
+    <header id="header" th:fragment="header">
         <nav>
-<!--            <img src="./images/logo2.png">-->
+            <!--            <img src="./images/logo2.png">-->
             <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
 
-            <img th:if="${isAuthenticated}" th:href="@{/upload-profile-picture}" class="card-img-top"
+            <img id="profile-picture" th:if="${isAuthenticated}" th:href="@{/upload-profile-picture}" class="card-img-top"
                  th:src="${(currentUser.profilePicture!=null && !currentUser.profilePicture.equals('/images/users/default.png')) ? currentUser.profilePicture : '/images/users/default.png'}"
                  alt="Profile Picture"/>
-            <p>
-                <i th:text="${session.currentUser}" th:if="${isAuthenticated}"></i>
-            </p>
+            <p id="current-user" th:text="${session.currentUser}" th:if="${isAuthenticated}"></p>
 
 
             <ul>
@@ -53,26 +51,23 @@
             <h2 th:text="#{home.welcome}">Welcome (design)!</h2>
             <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>
 
-            <div>
-            <h5>
-
+            <div id="statistics">
+                <h5>
                     <a th:href="@{/}">Number of active users:
-<!--                                    <p>Number of active users:</p>-->
-                    <span th:text="${userNumber}">userNum</span>
+                        <!--                                    <p>Number of active users:</p>-->
+                        <span th:text="${userNumber}">userNum</span>
                     </a>
                 </h5>
 
-            <h5>
-
-                <a th:href="@{/}">Number of posts:
-                    <!--                                    <p>Number of active users:</p>-->
-                    <span th:text="${postNumber}">postNum</span>
-                </a>
-            </h5>
+                <h5>
+                    <a th:href="@{/}">Number of posts:
+                        <!--                                    <p>Number of active users:</p>-->
+                        <span th:text="${postNumber}">postNum</span>
+                    </a>
+                </h5>
             </div>
 
-            <div class="back">
-
+            <div id="logo-container">
                 <img src="../static/images/logo2.png" th:src="@{/images/logo4.png}" alt="Healthy Living Hub logo"/>
             </div>
             <p>Healthy Habits, Happy Hearts!</p>
@@ -90,7 +85,7 @@
 <!--<a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a>-->
 <!--<a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>-->
 
-<footer th:fragment="footer">
+<footer id="footer" th:fragment="footer">
     <small th:text="${'© Copyright ' + #dates.year(#dates.createNow())
     + ' Healthy Living Hub'}">Healthy Living Hub</small>
 </footer>

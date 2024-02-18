@@ -169,6 +169,7 @@ public class PostMvcController {
         }
 
         if (postBindingResult.hasErrors() || tagBindingResult.hasErrors()) {
+            model.addAttribute("currentUser", user);
             return "PostCreateView";
         }
 
@@ -383,10 +384,18 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
-        model.addAttribute("comment", new CommentDto());
-        model.addAttribute("postId", postId);
-        model.addAttribute("currentUser", user);
-        return "CommentCreateView";
+        try {
+            Post existingPost = postService.getById(postId);
+            model.addAttribute("comment", new CommentDto());
+            model.addAttribute("postId", postId);
+            model.addAttribute("currentUser", user);
+            return "CommentCreateView";
+        } catch (EntityNotFoundException e) {
+            model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
+            model.addAttribute("error", e.getMessage());
+            return "ErrorView";
+        }
+
     }
 
     @PostMapping("/{postId}/newComment")
@@ -439,6 +448,7 @@ public class PostMvcController {
 
 
         try {
+            Post existingPost = postService.getById(postId);
             Comment comment = commentService.getCommentById(commentId);
             CommentDto commentDto = commentMapper.toDto(comment);
             model.addAttribute("commentId", commentId);

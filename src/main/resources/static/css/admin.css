@@ -1,0 +1,307 @@
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+/*#header {*/
+/*    background-color: #007bff;*/
+/*    color: #fff;*/
+/*    padding: 10px;*/
+/*    text-align: center;*/
+/*}*/
+#header {
+    background-color: #007bff;
+    color: black;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Footer */
+#footer {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+
+/* Form */
+form {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    padding: 20px;
+    width: 80%;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Label */
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Input */
+input[type="text"],
+input[type="email"] {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 10px;
+    width: 100%;
+}
+
+/* Button */
+button[type="submit"] {
+    background-color: #333;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    padding: 10px 20px;
+    text-transform: uppercase;
+}
+
+/* Button Hover */
+button[type="submit"]:hover {
+    background-color: #555;
+}
+
+/* Error */
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* User View Form */
+#usersView-form {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    width: 80%;
+    margin: 20px auto;
+}
+
+/* User View Form Title */
+#usersView-form h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* User View Form User List */
+#usersView-form .user-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* User View Form User Item */
+#usersView-form .user-item {
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+/* User View Form User Item Username */
+#usersView-form .user-item .username {
+    font-weight: bold;
+}
+
+/* User View Form User Item Block Button */
+#usersView-form .user-item .block-button {
+    background-color: #333;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    padding: 5px 10px;
+    text-transform: uppercase;
+}
+
+/* User View Form User Item Block Button Hover */
+#usersView-form .user-item .block-button:hover {
+    background-color: #555;
+}
+
+
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+/* Setting default font family and size */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+/* Header */
+/*header {*/
+/*    text-align: right;*/
+/*    padding: 10px 50px 10px 44px;*/
+/*    border-bottom: 1px solid #dee2e6;*/
+/*}*/
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px 50px 10px 50px;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Links */
+a {
+    color: #007bff;
+}
+
+/* Body content */
+.body-content {
+    text-align: center;
+    padding: 10px 50px 50px 50px;
+}
+
+/* Table */
+.table {
+    display: table;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid lightgrey;
+}
+
+.header {
+    display: table-header-group;
+    font-weight: bold;
+}
+
+.header-cell, .cell {
+    display: table-cell;
+    width: 20%;
+    padding: 12px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.rowGroup {
+    display: table-row-group;
+}
+
+.row {
+    display: table-row;
+}
+
+/* Form */
+.margin12 {
+    margin: 12px 0px 12px 0px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.form-input {
+    margin: 12px 0px 12px 0px;
+    width: 200px;
+    height: 25px;
+}
+
+.form-error {
+    color: #dc3545;
+}
+
+.btn-primary, .btn-danger {
+    margin: 12px 6px 12px 0px;
+    color: #fff;
+    border-radius: 5px;
+    height: 30px;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Navigation */
+nav, footer {
+    background-color: #007bff;
+    width: 100%;
+    display: flex;
+    font-size: 16px;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 0;
+    padding: 0 5px 0 3px;
+    margin: 0%;
+    color: white;
+}
+
+nav a {
+    text-decoration: none;
+    color: #8f8f8f;
+    font-size: 20px;
+    font-weight: bolder;
+    position: relative;
+    margin: 20px;
+}
+
+nav ul {
+    margin: 0 0 0 auto;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 2px;
+}
+
+nav a:hover {
+    cursor: pointer;
+    color: #45a29e;
+    font-weight: bolder;
+}
+
+/* Welcome Page */
+#welcomePage {
+    color: #45a29e;
+    font-size: 24px;
+    padding: 30px;
+    margin: 10px;
+}
+
+#welcomePage img {
+    width: 40%;
+}
+
+nav > img {
+    width: 90px;
+    height: 80px;
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+}
+
+.fa-thumbs-up, .fa-thumbs-down {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+}
+
+
+
+
+
+

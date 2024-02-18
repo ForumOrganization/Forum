@@ -1,0 +1,43 @@
+/* error.css */
+
+/* Body */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #212529;
+    margin: 0;
+    padding: 0;
+}
+
+/* Error Page Container */
+#error-page {
+    text-align: center;
+    margin-top: 50px;
+}
+
+/* Status Code */
+#status-code {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+/* Error Message */
+#error-message {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Go Back Link */
+#go-back-link {
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#go-back-link:hover {
+    background-color: #0056b3;
+}

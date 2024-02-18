@@ -1,28 +1,25 @@
 package com.example.forum.models.dtos;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.*;
 
 public class RegisterDto extends LoginDto {
 
-    @NotEmpty(message = "Password confirmation can't be empty")
-    private String passwordConfirm;
-
-    @NotEmpty(message = "First name can't be empty")
+    @NotNull(message = "First name can't be empty.")
+    @NotBlank(message = "First name can't be blank.")
+    @Size(min = 4, max = 32, message = "First name should be between 4 and 32 symbols.")
     private String firstName;
 
-    @NotEmpty(message = "Last name can't be empty")
+    @NotNull(message = "Last name can't be empty.")
+    @NotBlank(message = "Last name can't be blank.")
+    @Size(min = 4, max = 32, message = "Last name should be between 4 and 32 symbols.")
     private String lastName;
 
-    @NotEmpty(message = "Email can't be empty")
+    @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$",
+            message = "Invalid email format")
     private String email;
 
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
-    }
+    @NotEmpty(message = "Password confirmation can't be empty")
+    private String passwordConfirm;
 
     public String getFirstName() {
         return firstName;
@@ -48,4 +45,11 @@ public class RegisterDto extends LoginDto {
         this.email = email;
     }
 
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
 }

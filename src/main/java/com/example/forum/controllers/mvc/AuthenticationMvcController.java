@@ -89,7 +89,7 @@ public class AuthenticationMvcController {
     }
 
     @GetMapping("/register")
-    public String showRegisterPage(Model model) {
+    public String showRegisterPage(Model model, HttpSession session) {
         model.addAttribute("register", new RegisterDto());
         return "RegisterView";
     }

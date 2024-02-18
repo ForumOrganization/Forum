@@ -3,8 +3,6 @@ package com.example.forum.models.dtos;
 import com.example.forum.models.User;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.time.LocalDate;
 
 public class CommentDto {
 
@@ -12,7 +10,6 @@ public class CommentDto {
     private String content;
 
     private User user;
-
 
     public CommentDto() {
 
