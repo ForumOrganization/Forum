@@ -3,8 +3,9 @@
 <form th:replace="~{HomeView.html :: head(${comment.content})}"></form>
 <link href="../static/css/comments.css" th:href="@{/css/comments.css}" rel="stylesheet"/>
 
-<form th:replace="~{HomeView.html :: header}"></form>
 <body>
+<form th:replace="~{HomeView.html :: header}"></form>
+
 <div class="body-content">
     <h2 th:text="${comment.getContent()}">Comment Content</h2>
     <div th:style="text-align">
@@ -16,6 +17,7 @@
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
     </h3>
 </div>
-</body>
 <form th:replace="~{HomeView.html :: footer}"></form>
+
+</body>
 </html>

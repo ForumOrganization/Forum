@@ -3,13 +3,13 @@
 <form th:replace="~{HomeView.html :: head('New Comment')}"></form>
 <link href="../static/css/comments.css" th:href="@{/css/comments.css}" rel="stylesheet"/>
 
-<form th:replace="~{HomeView.html :: header}"></form>
 <body>
+<form th:replace="~{HomeView.html :: header}"></form>
 <div class="body-content">
     <div th:style="text-align">
         <form th:replace="~{CommentForm.html :: comment-form('New Comment')}"></form>
     </div>
 </div>
-</body>
 <form th:replace="~{HomeView.html :: footer}"></form>
+</body>
 </html>

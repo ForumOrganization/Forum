@@ -3,8 +3,8 @@
 <head th:replace="~{HomeView.html :: head(${comment.content})}"></head>
 <link href="../static/css/posts.css" th:href="@{/css/posts.css}" rel="stylesheet"/>
 
-<header th:replace="~{HomeView.html :: header}"></header>
 <body>
+<header th:replace="~{HomeView.html :: header}"></header>
 
 <div id="comment-form-container" class="comment-form-container" th:fragment="comment-form(content)">
     <h2 class="comment-form-title" th:text="${content}">Content</h2>
@@ -21,7 +21,7 @@
         <input type="submit" class="comment-form-submit" value="Save"/>
     </form>
 </div>
+<footer th:replace="~{HomeView.html :: footer}"></footer>
 
 </body>
-<footer th:replace="~{HomeView.html :: footer}"></footer>
 </html>

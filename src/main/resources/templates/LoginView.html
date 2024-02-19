@@ -3,13 +3,12 @@
 <form th:replace="~{HomeView.html :: head('Login')}"></form>
 <link href="../static/css/login.css" th:href="@{/css/login.css}" rel="stylesheet"/>
 <body>
-<form th:replace="~{HomeView.html :: header}"></form>
 
-<header>
-    <div id="box">
+
+<!--    <div id="box">-->
+        <form th:replace="~{HomeView.html :: header}"></form>
+
         <section id="loginPage">
-            <!--    <div class="body-content">-->
-<!--            <h2>Login</h2>-->
             <form action="#" th:action="@{/auth/login}" th:object="${login}" method="post">
                 <fieldset>
                     <legend>Login</legend>
@@ -31,34 +30,18 @@
                         <span>If you don't have profile click <a href="/auth/register">here</a></span>
                     </p>
 
-                    <!--        <input type="submit" value="Login"/>-->
                 </fieldset>
             </form>
-            <!--    </div>-->
         </section>
-    </div>
-</header>
+        <form th:replace="~{HomeView.html :: footer}"></form>
 
-<!--<section id="loginPage">-->
-<!--    <form>-->
-<!--        <fieldset>-->
-<!--            <legend>Login</legend>-->
+<!--    </ddiviv>-->
 
-<!--            <label for="username" class="vhide">Username</label>-->
-<!--            <input id="username" class="username" name="username" type="text" placeholder="Username">-->
 
-<!--            <label for="password" class="vhide">Password</label>-->
-<!--            <input id="password" class="password" name="password" type="password" placeholder="Password">-->
+<div th:if="${statusCode}">-->
+    <p>Status Code: <span th:text="${statusCode}"></span></p>
+    <p>Error: <span th:text="${error}"></span></p>
+</div>
 
-<!--            <button type="submit" class="login">Login</button>-->
-
-<!--            <p class="field">-->
-<!--                <span>If you don't have profile click <a href="/auth/register">here</a></span>-->
-<!--            </p>-->
-<!--        </fieldset>-->
-<!--    </form>-->
-<!--</section>-->
-
-<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

@@ -3,48 +3,10 @@
 <form th:replace="~{HomeView.html :: head('Admin Portal')}"></form>
 <link href="../static/css/admin.css" th:href="@{/css/admin.css}" rel="stylesheet"/>
 
-<form th:replace="~{HomeView.html :: header}"></form>
 <body>
-<!--<div class="body-content">-->
-<!--    <h2 th:if="${isAuthenticated && session.isAdmin}" th:text="#{admin.welcome}">Welcome (design)!</h2>-->
-<!--    <h2 th:text="${user}" th:if="${isAuthenticated}"></h2>-->
-<!--    <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>-->
-<!--    <p>Welcome my dear Admin!</p>-->
+<form th:replace="~{HomeView.html :: header}"></form>
 <form th:replace="~{UsersView.html :: usersView-form(Users)}"></form>
-
-<!--    <form action="#" th:action="@{/users/{id}/update-to-admin(id=${user.id})}" th:object="${user}" method="post">-->
-<!--        &lt;!&ndash;        <div class="form-group">&ndash;&gt;-->
-<!--        &lt;!&ndash;            <label for="username">Username:</label>&ndash;&gt;-->
-<!--        &lt;!&ndash;            <input type="text" id="username" th:field="*{username}" class="form-control" readonly>&ndash;&gt;-->
-<!--        &lt;!&ndash;            <span class="error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>&ndash;&gt;-->
-<!--        &lt;!&ndash;        </div>&ndash;&gt;-->
-<!--        <div class="form-group">-->
-<!--            <label for="email">Email:</label>-->
-<!--            <input type="email" id="email" th:field="*{email}" class="form-control">-->
-<!--            <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <button type="submit" class="btn btn-primary">Update to Admin</button>-->
-<!--        </div>-->
-<!--    </form>-->
-<!--    <div th:if="${statusCode}">-->
-<!--        <p>Status Code: <span th:text="${statusCode}"></span></p>-->
-<!--        <p>Error: <span th:text="${error}"></span></p>-->
-<!--    </div>-->
-
-<!--    <div th:each="user : ${users}">-->
-<!--        <div>-->
-<!--            &lt;!&ndash; Button to block/unblock user &ndash;&gt;-->
-<!--            <p th:text="${user.username}"></p>-->
-<!--            <form th:action="@{'/users/' + ${user.id} + '/block'}" method="post">-->
-<!--                <button type="submit" th:if="${!user.isBlocked}">Block</button>-->
-<!--            </form>-->
-<!--            <form th:action="@{'/users/' + ${user.id} + '/unblock'}" method="post">-->
-<!--                <button type="submit" th:if="${user.isBlocked}">Unblock</button>-->
-<!--            </form>-->
-<!--        </div>-->
-<!--    </div>-->
+<form th:replace="~{HomeView.html :: footer}"></form>
 
 </body>
-<form th:replace="~{HomeView.html :: footer}"></form>
 </html>

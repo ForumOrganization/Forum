@@ -6,44 +6,33 @@
     <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
 </head>
 <body>
-<!--<form th:replace="~{PostForm.html :: header}"></form>-->
-
-<!--<div class="body-content">-->
-<!--    <h2 th:text="#{home.welcome}">Welcome (design)!</h2>-->
-<!--    <h2 th:text="${session.currentUser}" th:if="${isAuthenticated}"></h2>-->
-<!--    <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="Healthy Living Hub logo"/>-->
-<!--    <p>Healthy Habits, Happy Hearts!</p>-->
-<!--</div>-->
-
-<!--<form th:replace="~{PostForm.html :: footer}"></form>-->
 
 <div id="box">
     <header id="header" th:fragment="header">
-        <nav>
-            <!--            <img src="./images/logo2.png">-->
+
+    <nav>
             <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
 
-            <img id="profile-picture" th:if="${isAuthenticated}" th:href="@{/upload-profile-picture}" class="card-img-top"
+            <img id="profile-picture" th:if="${isAuthenticated}" th:href="@{/upload-profile-picture}"
+                 class="card-img-top"
                  th:src="${(currentUser.profilePicture!=null && !currentUser.profilePicture.equals('/images/users/default.png')) ? currentUser.profilePicture : '/images/users/default.png'}"
                  alt="Profile Picture"/>
             <p id="current-user" th:text="${session.currentUser}" th:if="${isAuthenticated}"></p>
 
 
             <ul>
-                <!--All user-->
                 <li><a href="#" th:href="@{/posts}" th:text="#{navigation.all-posts}">Browse all posts</a></li>
                 <li><a href="#" th:href="@{/about}" th:text="#{navigation.about}">About</a></li>
                 <li><a href="#" th:if="${isAuthenticated && session.isAdmin}" th:href="@{/admin}">Admin Portal</a></li>
                 <li><a href="#" th:if="${isAuthenticated}" th:href="@{/user}">User Profile</a></li>
-                <!--Only guest-->
                 <li><a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login</a></li>
                 <li><a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a></li>
-                <!--Only user-->
                 <li><a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}"
                        th:text="#{navigation.create-post}   ">Create Post</a></li>
                 <li><a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a></li>
             </ul>
         </nav>
+
     </header>
     <!--Home Page-->
     <section id="welcomePage">
@@ -54,14 +43,12 @@
             <div id="statistics">
                 <h5>
                     <a th:href="@{/}">Number of active users:
-                        <!--                                    <p>Number of active users:</p>-->
                         <span th:text="${userNumber}">userNum</span>
                     </a>
                 </h5>
 
                 <h5>
                     <a th:href="@{/}">Number of posts:
-                        <!--                                    <p>Number of active users:</p>-->
                         <span th:text="${postNumber}">postNum</span>
                     </a>
                 </h5>
@@ -73,21 +60,12 @@
             <p>Healthy Habits, Happy Hearts!</p>
         </div>
     </section>
-</div>
-<!--</header>-->
 
-<!--<a href="#" th:href="@{/}" th:text="#{navigation.home} + ' | '">Home</a>-->
-<!--<a href="#" th:href="@{/posts}" th:text="#{navigation.all-posts} + ' | '">Browse all posts</a>-->
-<!--<a href="#" th:if="${isAuthenticated}" th:href="@{/posts/new}"-->
-<!--   th:text="#{navigation.create-post} + ' | '">Create Post</a>-->
-<!--<a class="left" href="#" th:href="@{/about}" th:text="#{navigation.about} + ' | '">About</a>-->
-<!--<a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/login}">Login | </a>-->
-<!--<a href="#" th:unless="${isAuthenticated}" th:href="@{/auth/register}">Register</a>-->
-<!--<a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a>-->
 
 <footer id="footer" th:fragment="footer">
     <small th:text="${'© Copyright ' + #dates.year(#dates.createNow())
     + ' Healthy Living Hub'}">Healthy Living Hub</small>
 </footer>
+</div>
 </body>
 </html>

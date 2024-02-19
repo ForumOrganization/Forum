@@ -2,8 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('All Posts')}"></form>
 <link href="../static/css/posts.css" th:href="@{/css/posts.css}" rel="stylesheet"/>
-<form th:replace="~{HomeView.html :: header}"></form>
 <body>
+<form th:replace="~{HomeView.html :: header}"></form>
+
 <div id="notAuthenticated" th:unless="${isAuthenticated}">
     <p>
         <a th:href="@{'/posts/most-recent-posts'}">Most recent posts</a>
@@ -72,6 +73,6 @@
         </div>
     </div>
 </div>
-</body>
 <form th:replace="~{HomeView.html :: footer}"></form>
+</body>
 </html>

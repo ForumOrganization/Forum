@@ -165,11 +165,12 @@
 /*    font-weight: bold;*/
 /*}*/
 
-/*nav a:hover {*/
-/*    cursor: pointer;*/
-/*    color: #45a29e;*/
-/*    font-weight: bolder;*/
-/*}*/
+nav a:hover {
+    cursor: pointer;
+    color: greenyellow;
+    /*color: #45a29e;*/
+    font-weight: bolder;
+}
 
 /*#welcomePage {*/
 /*    color: #45a29e;*/
@@ -458,6 +459,7 @@ a:hover {
     max-width: 100%;
 }
 
+
 /* Footer styles */
 #footer {
     /*position: fixed;*/
@@ -468,6 +470,7 @@ a:hover {
     color: #fff;
     padding: 20px 0;
     text-align: center;
+    margin-top: auto;
 }
 
 #footer small {

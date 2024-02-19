@@ -6,8 +6,6 @@
 <form th:replace="~{HomeView.html :: header}"></form>
 
 <section id="registerPage">
-    <!--    <div class="body-content">-->
-    <!--        <h2>Register</h2>-->
 
     <form action="#" th:action="@{/auth/register}" th:object="${register}" method="post">
         <fieldset>
@@ -54,41 +52,16 @@
                         <p class="field">
                             <span>If you already have profile click <a href="/auth/login">here</a></span>
                         </p>
-<!--            <input type="submit" value="Register"/>-->
         </fieldset>
     </form>
-    <!--    </div>-->
 </section>
 
 
-<!--&lt;!&ndash;Registration&ndash;&gt;-->
-<!--<section id="registerPage">-->
-<!--    <form>-->
-<!--        <fieldset>-->
-<!--            <legend>Register</legend>-->
-
-<!--            <label for="email" class="vhide">Email</label>-->
-<!--            <input id="email" class="email" name="email" type="text" placeholder="Email">-->
-
-<!--            <label for="password" class="vhide">Password</label>-->
-<!--            <input id="password" class="password" name="password" type="password" placeholder="Password">-->
-
-<!--            <label for="conf-pass" class="vhide">Confirm Password:</label>-->
-<!--            <input id="conf-pass" class="conf-pass" name="conf-pass" type="password" placeholder="Confirm Password">-->
-
-<!--            <button type="submit" class="register">Register</button>-->
-
-<!--            <p class="field">-->
-<!--                <span>If you already have profile click <a href="#">here</a></span>-->
-<!--            </p>-->
-<!--        </fieldset>-->
-<!--    </form>-->
-<!--</section>-->
 <div th:if="${statusCode}">-->
             <p>Status Code: <span th:text="${statusCode}"></span></p>
             <p>Error: <span th:text="${error}"></span></p>
         </div>
 
-<form th:replace="~{PostForm.html :: footer}"></form>
+<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

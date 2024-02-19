@@ -172,6 +172,6 @@ public class HomeMvcController {
             return "AccessDeniedView";
         }
 
-        return "redirect:/";
+        return "redirect:/user";
     }
 }

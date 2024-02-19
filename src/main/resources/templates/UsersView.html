@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head(' All Users')}"></form>
-<!--<link href="../static/css/admin.css" th:href="@{/css/admin.css}" rel="stylesheet"/>-->
+<link href="../static/css/admin.css" th:href="@{/css/admin.css}" rel="stylesheet"/>
 
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
@@ -54,58 +54,95 @@
         <div th:unless="${users.isEmpty()}">
             <h2 th:text="#{users.title}">All Users</h2>
 
-            <div class="table">
-                <div class="header">
-                    <div class="header-cell" th:text="#{user.label.username}">Username</div>
-                    <!--                <div class="header-cell" th:text="#{user.label.first-name}">First Name</div>-->
-                    <!--                <div class="header-cell" th:text="#{user.label.last-name}">Last Name</div>-->
-                    <div class="header-cell" th:text="#{user.label.full-name}">Full Name</div>
+<!--            <div class="table">-->
+<!--                <div class="header">-->
+<!--                    <div class="header-cell" th:text="#{user.label.username}">Username</div>-->
+<!--                    <div class="header-cell" th:text="#{user.label.full-name}">Full Name</div>-->
 
-                    <div class="header-cell" th:text="#{user.label.email}">Email</div>
-                    <div class="header-cell" th:text="#{user.label.role}">Role</div>
-                    <div class="header-cell" th:text="#{user.label.status}">Status</div>
-                </div>
-                <div class="row" th:each="user : ${users}">
-                    <div class="cell">
-                        <a href="#" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.username}">User</a>
-                    </div>
-                    <!--                <div class="cell" th:text="${user.firstName}">First Name</div>-->
-                    <!--                <div class="cell" th:text="${user.lastName}">Last Name</div>-->
-                    <div class="cell" th:text="${user.firstName + ' ' + user.lastName}">Full Name</div>
+<!--                    <div class="header-cell" th:text="#{user.label.email}">Email</div>-->
+<!--                    <div class="header-cell" th:text="#{user.label.role}">Role</div>-->
+<!--                    <div class="header-cell" th:text="#{user.label.status}">Status</div>-->
+<!--                </div>-->
+<!--                <div class="row" th:each="user : ${users}">-->
+<!--                    <div class="cell">-->
+<!--                        <a href="#" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.username}">User</a>-->
+<!--                    </div>-->
+<!--                    <div class="cell" th:text="${user.firstName + ' ' + user.lastName}">Full Name</div>-->
 
-                    <div class="cell" th:text="${user.email}">Email</div>
-                    <div class="cell" th:text="${user.role}">Role</div>
-                    <div class="cell" th:text="${user.status}">Status</div>
-                    <div class="cell">
-                        <form th:action="@{'/users/' + ${user.id} + '/block'}" method="post">
-                            <button type="submit" th:if="${!user.isBlocked}">Block</button>
+<!--                    <div class="cell" th:text="${user.email}">Email</div>-->
+<!--                    <div class="cell" th:text="${user.role}">Role</div>-->
+<!--                    <div class="cell" th:text="${user.status}">Status</div>-->
+<!--                    <div class="cell">-->
+<!--                        <form th:action="@{${'/users/' + user.getId() + '/' + (user.isBlocked() ? 'unblock' : 'block')}}" method="post">-->
+<!--                            <button type="submit" th:text="${user.isBlocked() ? 'Unblock' : 'Block'}">Toggle Block</button>-->
+<!--                        </form>-->
+<!--&lt;!&ndash;                        <form th:action="@{'/users/' + ${user.id} + '/block'}" method="post">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <button type="submit" th:if="${!user.isBlocked}">Block</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </form>&ndash;&gt;-->
+<!--&lt;!&ndash;                        <form th:action="@{'/users/' + ${user.id} + '/unblock'}" method="post">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <button type="submit" th:if="${user.isBlocked}">Unblock</button>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </form>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div class="cell">-->
+<!--                        <form th:action="@{'/users/' + ${user.id} + '/update-to-admin'}" method="post">-->
+<!--                            <button type="submit"  >Update to Admin</button>-->
+<!--                            &lt;!&ndash;                        <button type="submit" th:if="${user.getRole() != T(com.example.forum.models.enums.Role).ADMIN}" >Update to Admin</button>&ndash;&gt;-->
+<!--                        </form>-->
+<!--                        <form th:action="@{'/users/' + ${user.id} + '/update-to-user'}" method="post">-->
+<!--                            <button type="submit"  >Update to User</button>-->
+<!--                            &lt;!&ndash;                        <button type="submit" th:if="${user.getRole() == T(com.example.forum.models.enums.Role).ADMIN}" >Update to User</button>&ndash;&gt;-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                    &lt;!&ndash;                <div class="cell">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    <form th:action="@{'/users/' + ${user.id} + '/delete'}" method="post">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                        <button type="submit" >Delete</button>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    </form>&ndash;&gt;-->
+
+<!--                    &lt;!&ndash;                </div>&ndash;&gt;-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th colspan="2">Actions</th>
+<!--                    <th>Actions</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td><a href="#" th:href="@{/users/{id}(id=${user.id})}" th:text="${user.username}">User</a></td>
+                    <td th:text="${user.firstName + ' ' + user.lastName}">Full Name</td>
+                    <td th:text="${user.email}">Email</td>
+                    <td th:text="${user.role}">Role</td>
+                    <td th:text="${user.status}">Status</td>
+                    <td>
+                        <form th:action="@{${'/users/' + user.getId() + '/' + (user.isBlocked() ? 'unblock' : 'block')}}" method="post">
+                            <button type="submit" th:text="${user.isBlocked() ? 'Unblock' : 'Block'}">Toggle Block</button>
                         </form>
-                        <form th:action="@{'/users/' + ${user.id} + '/unblock'}" method="post">
-                            <button type="submit" th:if="${user.isBlocked}">Unblock</button>
-                        </form>
-                    </div>
-                    <div class="cell">
+                    </td>
+                    <td class="admin-column">
                         <form th:action="@{'/users/' + ${user.id} + '/update-to-admin'}" method="post">
                             <button type="submit"  >Update to Admin</button>
-                            <!--                        <button type="submit" th:if="${user.getRole() != T(com.example.forum.models.enums.Role).ADMIN}" >Update to Admin</button>-->
                         </form>
                         <form th:action="@{'/users/' + ${user.id} + '/update-to-user'}" method="post">
                             <button type="submit"  >Update to User</button>
-                            <!--                        <button type="submit" th:if="${user.getRole() == T(com.example.forum.models.enums.Role).ADMIN}" >Update to User</button>-->
                         </form>
-                    </div>
-                    <!--                <div class="cell">-->
-                    <!--                    <form th:action="@{'/users/' + ${user.id} + '/delete'}" method="post">-->
-                    <!--                        <button type="submit" >Delete</button>-->
-                    <!--                    </form>-->
-
-                    <!--                </div>-->
-                </div>
-            </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
-
 
 <form th:replace="~{HomeView.html :: footer}"></form>
 </body>

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:replace="~{HomeView.html :: head(${post.title})}"></div>
-<div th:replace="~{HomeView.html :: header}"></div>
 <body>
+<div th:replace="~{HomeView.html :: header}"></div>
+
 <div th:fragment="post-form(title)">
     <h2 th:text="${title}">Title</h2>
 
@@ -35,9 +36,10 @@
         <input type="submit" value="Save"/>
     </form>
 </div>
-</body>
+
 <footer th:fragment="footer">
     <small th:text="${'© Copyright ' + #dates.year(#dates.createNow())
     + ' Healthy Living Hub'}">Healthy Living Hub</small>
 </footer>
+</body>
 </html>
