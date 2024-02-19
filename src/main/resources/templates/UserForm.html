@@ -20,9 +20,14 @@
         <input type="text" th:field="*{email}"/><br/>
         <label class="error" th:errors="*{email}">Email error placeholder</label><br/><br/>
 
-        <label th:text="#{user.label.password}">Password</label><br/>
-        <input type="text" th:field="*{password}"/><br/>
+        <label for="password" class="password" th:text="#{user.label.password}">Password</label><br/>
+<!--        <br/>-->
+        <input id="password" class="password" name="password" type="password" th:field="*{password}"/><br/>
         <label class="error" th:errors="*{password}">Password error placeholder</label><br/><br/>
+
+<!--        <label th:text="#{user.label.password}">Password</label><br/>-->
+<!--        <input type="text" th:field="*{password}"/><br/>-->
+<!--        <label class="error" th:errors="*{password}">Password error placeholder</label><br/><br/>-->
 
         <div th:if="${session.isAdmin}">
 
