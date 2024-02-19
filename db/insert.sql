@@ -1,7 +1,7 @@
 INSERT INTO users (first_name, last_name, email, username, password, role, status)
 VALUES ('Yoana', 'Maksimova', 'yoana.maksimova@gmmail.com', 'yoana', 'Parola_1', 'ADMIN', 'ACTIVE'),
        ('Siyana', 'Baileva', 'siyana.baileva@gmail.com', 'siyana', 'Parola_2', 'USER', 'ACTIVE'),
-       ('Veronika', 'Kashaykova', 'veronika.kashaykova@gmail.com', 'veronika', 'Parola_3', 'USER', 'ACTIVE'),
+       ('Veronika', 'Georgieva', 'veronika.georgieva@gmail.com', 'veronika', 'Parola_3', 'USER', 'ACTIVE'),
        ('Ivana', 'Petrova', 'ivana.m@gmail.com', 'ivana', 'Parola_4', 'USER', 'ACTIVE'),
        ('Trifon', 'Ivanov', 'triffon@gmail.com', 'trifon', 'Parola_5', 'USER', 'ACTIVE'),
        ('Evgeni', 'Dimitrov', 'dimitroff@gmail.com', 'evgeni', 'Parola_6', 'USER', 'ACTIVE'),
@@ -12,9 +12,7 @@ VALUES ('Yoana', 'Maksimova', 'yoana.maksimova@gmmail.com', 'yoana', 'Parola_1',
        ('Kaloyan', 'Petrov', 'kaloyan_petrov@gmail.com', 'kaloyan', 'Parola_11', 'USER', 'ACTIVE'),
        ('Kristina', 'Kaleva', 'krissi@gmail.com', 'krissi', 'Parola_12', 'USER', 'ACTIVE');
 INSERT INTO phone_numbers (phone_number, user_id)
-VALUES ('1234567890', 1),
-       ('9876543210', 2),
-       ('5555555555', 3);
+VALUES ('1234567890', 1);
 
 INSERT INTO posts (created_by, title, content, creation_time)
 VALUES (1, 'The Power of Mindful Eating', 'Hello all. I came across the phrase “mindful eating”. What do you know about it and how it can contribute to overall health and well-being?', NOW()),
@@ -37,7 +35,6 @@ It''s important to note that the specific health benefits of probiotics can vary
 ', NOW()),
        (2, 'Food rich in Omega 3.', 'Hi friends! Today I read that Omega 3 Is so important for our health. I will be very happy if your share your knowledge on which are the products that contain Omega 3? I appreciate your time and efforts. ', NOW()),
        (7, 'Best exercises for back pain.', 'Hello all. Recently I am working to much and I spend most of the time sitting. I started to feel back pain more often. Can you please recommend me exercises for back pain relieve. Thank you a lot!', NOW()),
-       (8, 'Good sport for children.', 'Hello friends. My child is 7 years old and I was thinking that it is a high time for him to start practicing sport. I was wondering what type of sport would you recommend? I am looking for something that have many benefits for the health and the overall wellbeing. Thank you!!!', NOW()),
        (5, 'Best food products for weigth loss.', 'Hello dear friends. I want to lose some pounds. I have tried with sport and some pills. Still the results are not as I hoped for. I am asking for help. I know that food is very important for maintaining healthy weigth. Do you know which are the best food products for boosting metabolism and promoting weigth loss? I very much appreciate your input! Thank you!', NOW()),
        (6, 'Food supplements for boosting metabolism.', 'Hello people. I rely on advice on the following topic: I am looking for food supplements that boost metabolism. Can you please share your knowledge on the above? I highly appreceite your insight. Thank you!', NOW()),
        (8, 'Is coffee good for health?', 'Hi all. I am 16 years old. I have never drunk coffee. All my friends have already started drinking coffee. I am confused. I have heard different opinions on the topic. Can you please share me your knowledge on the topic? Are there any health benefits or some risks associated with drinking coffee?', NOW()),
@@ -135,27 +132,6 @@ Low-Impact Aerobic Exercises: In addition to walking and swimming, other low-imp
 
 It''s important to start slowly and gradually increase the intensity and duration of exercise to avoid exacerbating existing back pain. If you have severe or chronic back pain, consult with a healthcare professional or physical therapist before starting any new exercise program. They can provide personalized recommendations and guidance based on your specific needs and limitations.
 ', NOW()),
-       (9, 8, 'Swimming is often considered one of the best sports for children, and for several good reasons. Here''s why swimming can be an excellent choice for kids:
-
-Full-Body Workout: Swimming provides a full-body workout that engages multiple muscle groups simultaneously. It strengthens muscles in the arms, legs, back, and core, helping to develop overall strength and endurance.
-
-Low-Impact Exercise: Swimming is a low-impact sport, meaning it puts less stress on the joints compared to high-impact activities like running or jumping. This makes it an ideal choice for children, especially those who may be at risk of injury or have joint-related conditions.
-
-Cardiovascular Health: Swimming is an excellent cardiovascular exercise that helps improve heart and lung health. It increases heart rate and circulation, enhancing cardiovascular endurance and promoting overall fitness.
-
-Safety Skills: Learning to swim is not only a great form of exercise but also an important life skill. It can help children develop water safety skills, confidence in the water, and potentially save lives by reducing the risk of drowning.
-
-Suitable for All Ages and Abilities: Swimming is a sport that can be enjoyed by children of all ages and abilities. Whether a child is just learning to swim or is training competitively, there are various levels and styles of swimming that cater to different skill levels and interests.
-
-Social Interaction: Swimming offers opportunities for social interaction and teamwork, particularly in group lessons, swim clubs, or competitive swimming teams. It allows children to make new friends, learn sportsmanship, and develop teamwork skills.
-
-Year-Round Activity: Unlike some sports that are seasonal or weather-dependent, swimming can be enjoyed year-round. Whether it''s indoors or outdoors, swimming provides a consistent and accessible form of physical activity for children throughout the year.
-
-Stress Relief: Swimming can be a relaxing and enjoyable activity that helps reduce stress and promote mental well-being. The soothing sensation of being in the water and the rhythmic motion of swimming can have calming effects on the mind and body.
-
-While swimming offers numerous benefits for children, it''s important to ensure proper supervision, especially for younger or inexperienced swimmers, and to provide appropriate swim instruction and safety guidelines. Additionally, it''s essential to make sure children have access to safe swimming environments and follow proper water safety practices at all times.
-
-', NOW()),
        (10, 9, 'When it comes to weight loss, incorporating certain ingredients into your diet can help support your goals by promoting satiety, boosting metabolism, and providing essential nutrients while keeping calorie intake in check. Here are some of the best ingredients for weight loss:
 
 Vegetables: Non-starchy vegetables like leafy greens, broccoli, cauliflower, bell peppers, and cucumbers are low in calories but high in fiber, vitamins, and minerals. They help fill you up without adding excess calories, making them ideal for weight loss.
@@ -208,23 +184,12 @@ INSERT INTO reactions_posts (type_reaction, user_id, post_id)
 VALUES ('LIKES', 1, 1),
        ('LIKES', 4, 4),
        ('LIKES', 7, 5),
-       ('LOVE', 3, 2),
-       ('LOVE', 7, 6),
-       ('LOVE', 9, 2),
        ('LIKES', 10, 1),
        ('LIKES', 1, 2),
        ('LIKES', 2, 7),
-       ('LOVE', 6, 4),
-       ('LOVE', 3, 5),
-       ('LIKES', 3, 15),
        ('LIKES', 1, 3),
-       ('LOVE', 9, 8),
        ('LIKES', 1, 4),
        ('LIKES', 3, 6),
-       ('LOVE', 6, 9),
-       ('LOVE', 5, 2),
-       ('LOVE', 7, 2),
-       ('LOVE', 3, 7),
        ('LIKES', 12, 1),
        ('LIKES', 10, 1),
        ('LIKES', 11, 1),
@@ -232,87 +197,43 @@ VALUES ('LIKES', 1, 1),
        ('LIKES', 11, 1),
        ('LIKES', 10, 9),
        ('LIKES', 1, 5),
-       ('LOVE', 3, 8),
-       ('LOVE', 5, 8),
-       ('LOVE', 3, 9),
        ('LIKES', 1, 6),
-       ('DISLIKES', 2, 8),
        ('DISLIKES', 2, 9),
        ('LIKES', 9, 10),
        ('LIKES', 11, 9),
        ('LOVE', 3, 10),
-       ('LOVE', 8, 2),
-       ('LOVE', 7, 2),
        ('LIKES', 4, 1),
        ('LIKES', 6, 12),
-       ('DISLIKES', 7, 9),
-       ('LOVE', 9, 2);
+       ('DISLIKES', 7, 9);
 
-INSERT INTO reactions_comments (type_reaction, user_id,comment_id)
-VALUES
-    ('LIKES', 1, 1),
-    ('LIKES', 1, 1),
-    ('LIKES', 4, 4),
-    ('LIKES', 7, 5),
-    ('LOVE', 3, 2),
-    ('LOVE', 7, 6),
-    ('LOVE', 9, 2),
-    ('LIKES', 10, 1),
-    ('LIKES', 1, 2),
-    ('LIKES', 2, 7),
-    ('LOVE', 6, 4),
-    ('LOVE', 3, 5),
-    ('LIKES', 1, 3),
-    ('LOVE', 9, 8),
-    ('LIKES', 1, 4),
-    ('LIKES', 3, 6),
-    ('LOVE', 6, 9),
-    ('LOVE', 5, 2),
-    ('LOVE', 7, 2),
-    ('LOVE', 3, 7),
-    ('LIKES', 12, 1),
-    ('LIKES', 12, 10),
-    ('LIKES', 11, 1),
-    ('LIKES', 10, 9),
-    ('LIKES', 1, 5),
-    ('LOVE', 3, 8),
-    ('LOVE', 5, 8),
-    ('LOVE', 3, 9),
-    ('LIKES', 1, 6),
-    ('DISLIKES', 2, 8),
-    ('DISLIKES', 2, 9),
-    ('LIKES', 9, 10),
-    ('LIKES', 11, 9),
-    ('LOVE', 3, 10),
-    ('LOVE', 8, 2),
-    ('LOVE', 7, 2),
-    ('LIKES', 4, 1),
-    ('DISLIKES', 7, 9),
-    ('LOVE', 9, 2);
+# INSERT INTO reactions_comments (type_reaction, user_id,comment_id)
+# VALUES('LIKES', 6, 12);
+
+
 
 
 INSERT INTO tags (name)
-VALUES ('omega 3'),
-       ('sport'),
-       ('coffee'),
-       ('weight loss'),
-       ('back pain'),
-       ('vitalization'),
-       ('supplements'),
-       ('swimming'),
-       ('healthy living'),
-       ('antioxidants'),
-       ('water'),
-       ('aromatherapy'),
-       ('lavender'),
-       ('immune system'),
-       ('cardio exercise'),
-       ('caffeine'),
-       ('boosting metabolism'),
-       ('probiotics'),
-       ('good sleep'),
-       ('mindful eating'),
-       ('Food');
+VALUES ('#omega 3'),
+       ('#sport'),
+       ('#coffee'),
+       ('#weight loss'),
+       ('#back pain'),
+       ('#vitalization'),
+       ('#supplements'),
+       ('#swimming'),
+       ('#healthy living'),
+       ('#antioxidants'),
+       ('#water'),
+       ('#aromatherapy'),
+       ('#lavender'),
+       ('#immune system'),
+       ('#cardio exercise'),
+       ('#caffeine'),
+       ('#boosting metabolism'),
+       ('#probiotics'),
+       ('#good sleep'),
+       ('#mindful eating'),
+       ('#Food');
 
 
 INSERT INTO post_tags (post_id, tag_id)
@@ -320,13 +241,10 @@ VALUES (4, 1),
        (6, 1),
        (2, 2),
        (7, 2),
-       (8, 2),
-       (15, 2),
        (11, 3),
        (2, 4),
        (9, 4),
        (10, 4),
-       (15, 4),
        (7, 5),
        (13, 6),
        (14, 7),
@@ -334,12 +252,10 @@ VALUES (4, 1),
        (5, 7),
        (7, 7),
        (7, 8),
-       (8, 8),
        (12, 11),
        (13, 12),
        (13, 13),
        (14, 14),
-       (15, 15),
        (10, 16),
        (11, 16);
 

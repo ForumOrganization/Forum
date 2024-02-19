@@ -250,7 +250,7 @@ a:hover {
 .header-cell, .cell {
     display: table-cell;
     padding: 10px;
-    border: 1px solid #ddd;
+    /*border: 1px solid #ddd;*/
 }
 
 .header-cell {

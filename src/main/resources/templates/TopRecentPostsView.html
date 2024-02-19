@@ -19,6 +19,10 @@
             <div class="row" th:each="post : ${posts}">
                 <div class="cell">
                     <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
+                    <div class="cell">
+
+                        <p th:each="tag : ${post.tags}" th:text="${tag.name}">Tag</p>
+                    </div>
                 </div>
                 <div class="cell" th:text="${post.content}">Content</div>
                 <div class="cell" th:text="${post.createdBy.username}">Create By</div>

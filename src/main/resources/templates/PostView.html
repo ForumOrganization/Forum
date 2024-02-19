@@ -16,9 +16,9 @@
         <p class="margin12 post-created-by" th:text="#{post.label.createBy}  + ': ' + ${post.createdBy.username}">Created By</p>
         <p class="margin12 post-creation-time" th:text="#{post.label.creation}  + ': ' + ${post.creationTime}">Creation Time</p>
 
-<ul>
-        <li th:each="tag : ${post.tags}" th:text="${tag.name}">Tag</li>
-    </ul>
+
+        <p th:each="tag : ${post.tags}" th:text="${tag.name}">Tag</p>
+
 
     </div>
     <h3>
