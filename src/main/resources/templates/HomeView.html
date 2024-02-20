@@ -5,12 +5,12 @@
     <title th:text="'Healthy Living Hub | '+ ${title}">Title</title>
     <link href="../static/css/home.css" th:href="@{/css/home.css}" rel="stylesheet"/>
 </head>
-<body>
 
+<body>
 <div id="box">
     <header id="header" th:fragment="header">
 
-    <nav>
+        <nav>
             <a href="#" th:href="@{/}" th:text="#{navigation.home}">Home</a>
 
             <img id="profile-picture" th:if="${isAuthenticated}" th:href="@{/upload-profile-picture}"
@@ -32,9 +32,8 @@
                 <li><a href="#" th:if="${isAuthenticated}" th:href="@{/auth/logout}">Logout</a></li>
             </ul>
         </nav>
-
     </header>
-    <!--Home Page-->
+
     <section id="welcomePage">
         <div id="welcome-message">
             <h2 th:text="#{home.welcome}">Welcome (design)!</h2>
@@ -62,10 +61,10 @@
     </section>
 
 
-<footer id="footer" th:fragment="footer">
-    <small th:text="${'© Copyright ' + #dates.year(#dates.createNow())
+    <footer id="footer" th:fragment="footer">
+        <small th:text="${'© Copyright ' + #dates.year(#dates.createNow())
     + ' Healthy Living Hub'}">Healthy Living Hub</small>
-</footer>
+    </footer>
 </div>
 </body>
 </html>

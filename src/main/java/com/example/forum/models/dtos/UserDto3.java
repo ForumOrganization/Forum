@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public class UserDto3 {
+
     @NotNull(message = "First name can't be empty.")
     @NotBlank(message = "First name can't be blank.")
     @Size(min = 4, max = 32, message = "First name should be between 4 and 32 symbols.")
@@ -34,29 +35,13 @@ public class UserDto3 {
             message = "Password must contains at least one uppercase letter, one lowercase letter, one digit, and one special character")
     private String secondPassword;
 
-    //    @Pattern(regexp = "^\\+[0-9-()\\s]{9,}+$",
-//            message = "Invalid phone number format")
     private String phoneNumber;
 
     private Role role;
 
     public UserDto3() {
-    }
-    public String getSecondPassword() {
-        return secondPassword;
-    }
 
-    public void setSecondPassword(String secondPassword) {
-        this.secondPassword = secondPassword;
     }
-
-//    public String getUsername() {
-//        return username;
-//    }
-//
-//    public void setUsername(String username) {
-//        this.username = username;
-//    }
 
     public String getFirstName() {
         return firstName;
@@ -90,6 +75,14 @@ public class UserDto3 {
         this.password = password;
     }
 
+    public String getSecondPassword() {
+        return secondPassword;
+    }
+
+    public void setSecondPassword(String secondPassword) {
+        this.secondPassword = secondPassword;
+    }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -105,5 +98,4 @@ public class UserDto3 {
     public void setRole(Role role) {
         this.role = role;
     }
-
 }

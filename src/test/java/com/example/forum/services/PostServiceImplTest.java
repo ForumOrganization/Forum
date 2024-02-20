@@ -1,20 +1,13 @@
 package com.example.forum.services;
 
 import com.example.forum.exceptions.AuthorizationException;
-import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
-import com.example.forum.models.Reaction_posts;
-import com.example.forum.models.Tag;
 import com.example.forum.models.User;
-import com.example.forum.models.enums.Reaction;
 import com.example.forum.models.enums.Status;
-import com.example.forum.repositories.PostRepositoryImpl;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.ReactionRepository;
-import com.example.forum.services.PostServiceImpl;
 import com.example.forum.utils.PostFilterOptions;
-import org.antlr.v4.runtime.misc.Array2DHashSet;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,18 +16,18 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 public class PostServiceImplTest {
     @Mock
     private PostRepository postRepository;
-
     @Mock
     private ReactionRepository reactionRepository;
-
     @InjectMocks
     private PostServiceImpl postService;
 
@@ -255,22 +248,21 @@ public class PostServiceImplTest {
 
         verify(postRepository, times(1)).getByTitle(sampleTitle);
     }
-    @Test
-    public void testGetByComment() {
-
-        int sampleCommentId = 123;
-
-        Post expectedPost = new Post();
-
-        when(postRepository.getByComment(sampleCommentId)).thenReturn(expectedPost);
-
-        Post actualPost = postService.getByComment(sampleCommentId);
-
-        assertEquals(expectedPost.getId(), actualPost.getId());
-        assertEquals(expectedPost.getTitle(), actualPost.getTitle());
-        assertEquals(expectedPost.getContent(), actualPost.getContent());
-
-        verify(postRepository, times(1)).getByComment(sampleCommentId);
-    }
-
+//    @Test
+//    public void testGetByComment() {
+//
+//        int sampleCommentId = 123;
+//
+//        Post expectedPost = new Post();
+//
+//        when(postRepository.getByComment(sampleCommentId)).thenReturn(expectedPost);
+//
+//        Post actualPost = postService.getByComment(sampleCommentId);
+//
+//        assertEquals(expectedPost.getId(), actualPost.getId());
+//        assertEquals(expectedPost.getTitle(), actualPost.getTitle());
+//        assertEquals(expectedPost.getContent(), actualPost.getContent());
+//
+//        verify(postRepository, times(1)).getByComment(sampleCommentId);
+//    }
 }

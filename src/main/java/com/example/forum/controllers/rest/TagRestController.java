@@ -53,7 +53,6 @@ public class TagRestController {
             })
     public List<Tag> getAllTags() {
         return tagService.getAllTags();
-
     }
 
     @GetMapping("/{tagId}")
@@ -163,7 +162,7 @@ public class TagRestController {
             User user = authenticationHelper.tryGetUser(headers);
             Post existingPost = postService.getById(postId);
             Tag tag = this.tagMapper.fromDto(tagDto);
-            tagService.deleteTagInPost(tag,user, postId);
+            tagService.deleteTagInPost(tag, user, postId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

@@ -4,21 +4,14 @@
 <link href="../static/css/error.css" th:href="@{/css/error.css}" rel="stylesheet"/>
 
 <body>
-<!--<form th:replace="~{HomeView.html :: header}"></form>-->
-
 <div  id="error-page" class="body-content">
     <h2 class="label-error" th:text="${statusCode}">HTTP Status Code</h2>
     <h3 class="error" th:text="${error}">Error placeholder</h3>
-<!--    <span th:if="${session.isDelete}">If you already have profile click <a href="/auth/register">here</a></span>-->
     <script>
-        // Redirect to the logout page after 5 seconds
         setTimeout(function() {
             window.location.href = '/auth/logout';
         }, 5000);
     </script>
 </div>
-
-
-<!--<form th:replace="~{HomeView.html :: footer}"></form>-->
 </body>
 </html>

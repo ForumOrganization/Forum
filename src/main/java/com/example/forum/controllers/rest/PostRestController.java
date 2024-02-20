@@ -6,12 +6,10 @@ import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.helpers.AuthenticationHelper;
 import com.example.forum.helpers.PostMapper;
 import com.example.forum.helpers.TagMapper;
-import com.example.forum.models.Comment;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.models.dtos.PostDto;
-import com.example.forum.models.dtos.TagDto;
 import com.example.forum.models.dtos.TagListDto;
 import com.example.forum.services.contracts.PostService;
 import com.example.forum.utils.PostFilterOptions;
@@ -20,8 +18,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.models.media.MediaType;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -51,10 +47,10 @@ public class PostRestController {
     }
 
     @GetMapping
-    @Operation(tags ={"Get all posts"},
+    @Operation(tags = {"Get all posts"},
             summary = "This method retrieve information for all posts.",
             description = "This method search for all post. When a person is authorized and there are valid posts, a list with all posts will be presented.",
-            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post(s) was/were found successfully"),
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post(s) was/were found successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to access the posts."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post(s) is/were not found.")})
     public List<Post> getAll(@RequestHeader HttpHeaders headers,
@@ -85,12 +81,12 @@ public class PostRestController {
     }
 
     @GetMapping("/{id}")
-    @Operation(tags ={"Get a post"},
+    @Operation(tags = {"Get a post"},
             operationId = "id to be searched for",
             summary = "This method search for a post when id is given.",
             description = "This method search for a post. A valid id must be given as an input.",
-            parameters = {@Parameter( name = "postId", description = "path variable", example = "5")},
-            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been found successfully"),
+            parameters = {@Parameter(name = "postId", description = "path variable", example = "5")},
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been found successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to access this post."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post with this id was not found.")})
     public Post getById(@RequestHeader HttpHeaders headers, @PathVariable int id) {
@@ -105,13 +101,13 @@ public class PostRestController {
     }
 
     @GetMapping("/search")
-    @Operation(tags ={"Search for a post"},
+    @Operation(tags = {"Search for a post"},
             summary = "This method search for a post when title is given.",
             description = "This method search for a post. A valid title must be given as an input.",
 //            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts title parameters.",
 //                    content = @Content(schema = @Schema(implementation = Post.class))),
-            parameters = {@Parameter( name = "postTitle", description = "Post title", example = "new post")},
-            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been found successfully"),
+            parameters = {@Parameter(name = "postTitle", description = "Post title", example = "new post")},
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been found successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to search for this post."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post with this title was not found.")})
     public Post getByTitle(@RequestHeader HttpHeaders headers, @RequestParam String title) {
@@ -126,19 +122,19 @@ public class PostRestController {
     }
 
     @PostMapping
-    @Operation(tags ={"Create a post"},
+    @Operation(tags = {"Create a post"},
             summary = "This method create a post when input is given.",
             description = "This method create a post. A valid object must be given as an input.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request that accepts object parameters.",
                     content = @Content(schema = @Schema(implementation = Post.class))),
-            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been created successfully"),
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been created successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to create a post."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post with this id was not found.")})
     public Post create(@RequestHeader HttpHeaders headers, @Valid @RequestBody PostDto postDto, @Valid @RequestBody TagListDto tagDtos) {
         try {
             User user = this.authenticationHelper.tryGetUser(headers);
             Post post = this.postMapper.fromDto(postDto);
-            List<Tag> newTags= tagMapper.fromListDto(tagDtos);
+            List<Tag> newTags = tagMapper.fromListDto(tagDtos);
             postService.create(post, user, newTags);
             return post;
         } catch (AuthorizationException e) {
@@ -149,14 +145,14 @@ public class PostRestController {
     }
 
     @PutMapping("/{id}")
-    @Operation(tags ={"Update a post"},
+    @Operation(tags = {"Update a post"},
             operationId = "id to be updated",
             summary = "This method update post when id is given.",
             description = "This method update post. A valid object must be given as an input. An optional feature is that a tag can be attached to the post.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts PostDto and TagDto parameters.",
                     content = @Content(schema = @Schema(implementation = TagListDto.class))),
-            parameters = {@Parameter( name = "postId", description = "path variable", example = "5")},
-            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been updated successfully"),
+            parameters = {@Parameter(name = "postId", description = "path variable", example = "5")},
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been updated successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to modify this post."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "Post with this id was not found.")})
     public Post update(@RequestHeader HttpHeaders headers, @PathVariable int id, @Valid @RequestBody PostDto postDto,
@@ -164,8 +160,8 @@ public class PostRestController {
         try {
             User user = this.authenticationHelper.tryGetUser(headers);
             Post post = this.postMapper.fromDto(id, postDto);
-            List<Tag> newTags= tagMapper.fromListDto(tagDtos);
-            this.postService.update(post, user,newTags);
+            List<Tag> newTags = tagMapper.fromListDto(tagDtos);
+            this.postService.update(post, user, newTags);
             return post;
         } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -177,14 +173,14 @@ public class PostRestController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(tags ={"Delete a post"},
+    @Operation(tags = {"Delete a post"},
             operationId = "id to be deleted",
             summary = "This method delete a post when id is given.",
             description = "This method delete a post. A valid object must be given as an input.",
 //            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request that accepts post id",
 //                    content = @Content(schema = @Schema(implementation = Post.class))),
-            parameters = {@Parameter( name = "postId", description = "path variable", example = "5")},
-            responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been deleted successfully"),
+            parameters = {@Parameter(name = "postId", description = "path variable", example = "5")},
+            responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post has been deleted successfully"),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Post.class)), description = "The post with this id was not found."),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Post.class)), description = "You are not allowed to delete this post.")})
     public void delete(@RequestHeader HttpHeaders headers, @PathVariable int id) {

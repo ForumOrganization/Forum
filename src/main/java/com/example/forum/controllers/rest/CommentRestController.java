@@ -54,7 +54,7 @@ public class CommentRestController {
             responses = {@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Comment.class)), description = "Comment(s) was/were found successfully"),
                     @ApiResponse(responseCode = "403", content = @Content(schema = @Schema(implementation = Comment.class)), description = "You are not allowed to access the comment(s)."),
                     @ApiResponse(responseCode = "404", content = @Content(schema = @Schema(implementation = Comment.class)), description = "Post with this id was not found.")
-    })
+            })
     public List<Comment> getAllCommentsByPostId(@RequestHeader HttpHeaders headers, @PathVariable int postId,
                                                 @RequestParam(required = false) String content,
                                                 @RequestParam(required = false) Post post,

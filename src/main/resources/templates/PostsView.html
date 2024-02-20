@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('All Posts')}"></form>
 <link href="../static/css/posts.css" th:href="@{/css/posts.css}" rel="stylesheet"/>
+
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
 
@@ -9,12 +10,13 @@
     <p>
         <a th:href="@{'/posts/most-recent-posts'}">Most recent posts</a>
     </p>
+
     <p>
         <a th:href="@{'/posts/most-commented-posts'}">Most commented posts</a>
     </p>
 </div>
-<div class="body-content" th:if="${isAuthenticated}">
 
+<div class="body-content" th:if="${isAuthenticated}">
     <form id="filterForm" action="#" th:action="@{/posts}" method="get" th:object="${filterOptions}">
         <label for="title" th:text="#{posts.filter.label}">Filter Options</label>
         <br/><br/>
@@ -28,6 +30,7 @@
             <option value="date">Creation Time</option>
             <option value="createdBy">CreatedBy</option>
         </select>
+
         <select id="sortOrder" th:field="*{sortOrder}">
             <option value="">Sort Order</option>
             <option value="asc">Ascending</option>
@@ -36,10 +39,10 @@
 
         <input type="submit" value="Search"/>
     </form>
+
     <div id="noPosts" th:if="${posts.isEmpty()}">
         <h2 th:text="#{posts.title.empty}">No Posts</h2>
     </div>
-
 
     <div id="allPosts" th:unless="${posts.isEmpty()}">
         <h2 th:text="#{posts.title}">All Posts</h2>
@@ -51,27 +54,29 @@
                 <div class="header-cell" th:text="#{post.label.createBy}">Created By</div>
                 <div class="header-cell" th:text="#{post.label.creation}">Creation Time</div>
             </div>
+
             <div th:unless="${post.isDeleted()}" class="row" th:each="post : ${posts}">
                 <div class="cell">
                     <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
                     <div class="cell">
 
-                            <p th:each="tag : ${post.tags}" th:text="${tag.name}">Tag</p>
+                        <p th:each="tag : ${post.tags}" th:text="${tag.name}">Tag</p>
                     </div>
                 </div>
+
                 <div class="cell" th:text="${post.content}">Content</div>
                 <div class="cell" th:text="${post.createdBy.username}">Create By</div>
                 <div class="cell" th:text="${post.creationTime}">Creation Time</div>
                 <div class="cell">
                     <form th:action="@{'/posts/' + ${post.id} + '/delete'}" method="post">
-                        <button type="submit" >Delete</button>
+                        <button type="submit">Delete</button>
                     </form>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 <form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

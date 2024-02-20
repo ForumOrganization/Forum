@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="~{HomeView.html :: head(${post.title})}"></head>
+
 <body>
 <div th:replace="~{HomeView.html :: header}"></div>
 
@@ -21,20 +22,16 @@
         <label class="error" th:errors="*{email}">Email error placeholder</label><br/><br/>
 
         <label for="password" class="password" th:text="#{user.label.password}">Password</label><br/>
-<!--        <br/>-->
+        <!--        <br/>-->
         <input id="password" class="password" name="password" type="password" th:field="*{password}"/><br/>
         <label class="error" th:errors="*{password}">Password error placeholder</label><br/><br/>
 
-<!--        <label th:text="#{user.label.password}">Password</label><br/>-->
-<!--        <input type="text" th:field="*{password}"/><br/>-->
-<!--        <label class="error" th:errors="*{password}">Password error placeholder</label><br/><br/>-->
-
         <div th:if="${session.isAdmin}">
-
-                <label th:text="#{user.label.phoneNumber}">Phone Number</label><br/>
-                <input type="text" th:field="*{phoneNumber}"/><br/>
-                <label class="error" th:errors="*{phoneNumber}">Phone number error placeholder</label><br/><br/>
+            <label th:text="#{user.label.phoneNumber}">Phone Number</label><br/>
+            <input type="text" th:field="*{phoneNumber}"/><br/>
+            <label class="error" th:errors="*{phoneNumber}">Phone number error placeholder</label><br/><br/>
         </div>
+
         <input type="submit" value="Save"/>
     </form>
 </div>

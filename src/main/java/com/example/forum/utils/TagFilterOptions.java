@@ -6,6 +6,7 @@ import com.example.forum.models.enums.Status;
 import java.util.Optional;
 
 public class TagFilterOptions {
+
     private Optional<String> name;
     private Optional<Post> post;
     private Optional<String> sortBy;

@@ -12,7 +12,6 @@
     <form id="comment-form" class="comment-form" action="#" th:action="@{__${requestURI}__}" th:object="${comment}" method="post">
 
         <label class="comment-form-label" th:text="#{comment.label.content}">Content</label>
-
         <br/>
         <input id="comment-content" class="comment-form-input" type="text" th:field="*{content}"/>
         <label id="comment-content-error" class="comment-form-error" th:errors="*{content}">Content error placeholder</label>
@@ -21,7 +20,7 @@
         <input type="submit" class="comment-form-submit" value="Save"/>
     </form>
 </div>
-<footer th:replace="~{HomeView.html :: footer}"></footer>
 
+<footer th:replace="~{HomeView.html :: footer}"></footer>
 </body>
 </html>

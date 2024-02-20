@@ -24,7 +24,6 @@ public class helpers {
         mockUser.setPhoneNumber("3333333333");
         mockUser.setRole(Role.ADMIN);
 
-
         return mockUser;
     }
 
@@ -57,6 +56,7 @@ public class helpers {
                 "sort",
                 "order");
     }
+
     public static UserFilterOptions createMockUserFilterOptions() {
         return new UserFilterOptions(
                 createMockUser().getUsername(),

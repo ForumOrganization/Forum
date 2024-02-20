@@ -3,9 +3,8 @@ package com.example.forum.models.dtos;
 import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 
-import java.util.Optional;
-
 public class UserFilterDto {
+
     private String username;
     private String firstName;
     private String lastName;
@@ -16,6 +15,7 @@ public class UserFilterDto {
     private String sortOrder;
 
     public UserFilterDto() {
+
     }
 
     public String getUsername() {

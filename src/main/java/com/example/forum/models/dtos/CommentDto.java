@@ -8,7 +8,6 @@ public class CommentDto {
 
     @NotNull(message = "Comment content can't be empty")
     private String content;
-
     private User user;
 
     public CommentDto() {

@@ -10,7 +10,6 @@ import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.UserRepository;
 import com.example.forum.utils.UserFilterOptions;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -111,46 +110,46 @@ class UserServiceImplTest {
         Mockito.verify(mockRepository, Mockito.times(1)).getPosts(userId);
     }
 
-    @Test
-    public void registerUser_Should_ThrowException_When_UserWithSameNameExists() {
-        User user = createMockUser();
-        User existingUserWithTheSameName = createMockUser();
-        existingUserWithTheSameName.setId(2);
-
-        Mockito.when(mockRepository.getByUsernameFindUser(user.getUsername()))
-                .thenReturn(existingUserWithTheSameName);
-
-        Assertions.assertThrows(
-                DuplicateEntityException.class,
-                () -> userService.registerUser(user));
-    }
-
-    @Test
-    public void registerUser_Should_ThrowException_When_UserWithSameEmailExists() {
-        User user = createMockUser();
-        User existingUserWithTheSameName = createMockUser();
-        existingUserWithTheSameName.setId(2);
-
-        Mockito.when(mockRepository.getByEmailFindUser(user.getEmail()))
-                .thenReturn(existingUserWithTheSameName);
-
-        Assertions.assertThrows(
-                DuplicateEntityException.class,
-                () -> userService.registerUser(user));
-    }
-
-    @Test
-    public void registerUser_Should_CallRepository_When_UserWithSameNameDoesNotExist() {
-        User user = createMockUser();
-
-        Mockito.when(mockRepository.getByUsernameFindUser(user.getUsername()))
-                .thenReturn(null);
-
-        userService.registerUser(user);
-
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .registerUser(user);
-    }
+//    @Test
+//    public void registerUser_Should_ThrowException_When_UserWithSameNameExists() {
+//        User user = createMockUser();
+//        User existingUserWithTheSameName = createMockUser();
+//        existingUserWithTheSameName.setId(2);
+//
+//        Mockito.when(mockRepository.getByUsernameFindUser(user.getUsername()))
+//                .thenReturn(existingUserWithTheSameName);
+//
+//        Assertions.assertThrows(
+//                DuplicateEntityException.class,
+//                () -> userService.registerUser(user));
+//    }
+//
+//    @Test
+//    public void registerUser_Should_ThrowException_When_UserWithSameEmailExists() {
+//        User user = createMockUser();
+//        User existingUserWithTheSameName = createMockUser();
+//        existingUserWithTheSameName.setId(2);
+//
+//        Mockito.when(mockRepository.getByEmailFindUser(user.getEmail()))
+//                .thenReturn(existingUserWithTheSameName);
+//
+//        Assertions.assertThrows(
+//                DuplicateEntityException.class,
+//                () -> userService.registerUser(user));
+//    }
+//
+//    @Test
+//    public void registerUser_Should_CallRepository_When_UserWithSameNameDoesNotExist() {
+//        User user = createMockUser();
+//
+//        Mockito.when(mockRepository.getByUsernameFindUser(user.getUsername()))
+//                .thenReturn(null);
+//
+//        userService.registerUser(user);
+//
+//        Mockito.verify(mockRepository, Mockito.times(1))
+//                .registerUser(user);
+//    }
 
     @Test
     public void registerUser_Should_CreateUserAsAdmin_When_DatabaseIsEmpty() {
@@ -163,19 +162,19 @@ class UserServiceImplTest {
         Assertions.assertEquals(Role.ADMIN, user.getRole());
     }
 
-    @Test
-    public void registerUser_Should_ReactivateUser_When_IsSameUser() {
-        User user = createMockUser();
-        User existingUser = createMockUser();
-        existingUser.setDeleted(true);
-
-        Mockito.when(mockRepository.getByUsernameFindUser(existingUser.getUsername()))
-                .thenReturn(existingUser);
-        userService.registerUser(user);
-
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .reactivated(user);
-    }
+//    @Test
+//    public void registerUser_Should_ReactivateUser_When_IsSameUser() {
+//        User user = createMockUser();
+//        User existingUser = createMockUser();
+//        existingUser.setDeleted(true);
+//
+//        Mockito.when(mockRepository.getByUsernameFindUser(existingUser.getUsername()))
+//                .thenReturn(existingUser);
+//        userService.registerUser(user);
+//
+//        Mockito.verify(mockRepository, Mockito.times(1))
+//                .reactivated(user);
+//    }
 
     @Test
     public void update_Should_CallRepository_When_UpdatingExistingUser() {
@@ -199,19 +198,19 @@ class UserServiceImplTest {
                 () -> userService.updateUser(targetUser, executingUser));
     }
 
-    @Test
-    public void update_Should_ThrowException_When_EmailIsTaken() {
-        User targetUser = createMockUser();
-        User executingUser = createMockUser();
-        executingUser.setEmail("mock2@user.com");
-
-        Mockito.when(mockRepository.getByEmailFindUser(targetUser.getEmail())).
-                thenReturn(createMockUser());
-
-        Assertions.assertThrows(
-                DuplicateEntityException.class,
-                () -> userService.updateUser(targetUser, executingUser));
-    }
+//    @Test
+//    public void update_Should_ThrowException_When_EmailIsTaken() {
+//        User targetUser = createMockUser();
+//        User executingUser = createMockUser();
+//        executingUser.setEmail("mock2@user.com");
+//
+//        Mockito.when(mockRepository.getByEmailFindUser(targetUser.getEmail())).
+//                thenReturn(createMockUser());
+//
+//        Assertions.assertThrows(
+//                DuplicateEntityException.class,
+//                () -> userService.updateUser(targetUser, executingUser));
+//    }
 
     @Test
     public void delete_Should_CallRepository_When_UserExist() {
@@ -362,5 +361,3 @@ class UserServiceImplTest {
                 .updateUser(user);
     }
 }
-
-

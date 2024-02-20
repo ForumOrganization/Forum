@@ -10,6 +10,7 @@ public interface PostRepository {
     List<Post> getAll(PostFilterOptions postFilterOptions);
 
     List<Post> getTopCommentedPosts();
+
     long getAllNumber();
 
     List<Post> getMostRecentPosts();

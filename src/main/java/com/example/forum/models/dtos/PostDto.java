@@ -1,6 +1,5 @@
 package com.example.forum.models.dtos;
 
-import com.example.forum.models.Tag;
 import jakarta.validation.constraints.Size;
 
 import javax.validation.constraints.NotNull;

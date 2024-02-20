@@ -45,8 +45,10 @@ public class PostMvcController {
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
-    public PostMvcController(PostService postService, CommentService commentService, ReactionService reactionService, TagService tagService, PostMapper postMapper, TagMapper tagMapper, CommentMapper commentMapper,
-                             AuthenticationHelper authenticationHelper) {
+    public PostMvcController(PostService postService, CommentService commentService,
+                             ReactionService reactionService, TagService tagService,
+                             PostMapper postMapper, TagMapper tagMapper,
+                             CommentMapper commentMapper, AuthenticationHelper authenticationHelper) {
         this.postService = postService;
         this.commentService = commentService;
         this.reactionService = reactionService;
@@ -72,21 +74,26 @@ public class PostMvcController {
                                Model model, HttpSession session) {
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
+
             if (user != null) {
                 model.addAttribute("currentUser", user);
             }
+
             PostFilterOptions filterOptions = new PostFilterOptions(
                     filterDto.getTitle(),
                     filterDto.getCreatedBy(),
                     filterDto.getCreationTime(),
                     filterDto.getSortBy(),
                     filterDto.getSortOrder());
+
             List<Post> posts = postService.getAll(filterOptions);
             List<List<Tag>> tagsList = new ArrayList<>();
+
             for (Post post : posts) {
                 List<Tag> tags = tagService.getAllTagsByPostId(post.getId());
                 tagsList.add(tags);
             }
+
             model.addAttribute("filterOptions", filterDto);
             model.addAttribute("posts", posts);
             model.addAttribute("tagsList", tagsList);
@@ -95,7 +102,6 @@ public class PostMvcController {
             return "PostsView";
         }
     }
-
 
     @GetMapping("/{id}")
     public String showSinglePost(@PathVariable int id, Model model, HttpSession session) {
@@ -139,13 +145,10 @@ public class PostMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-//        List<String> dummy= Arrays.asList("Tag 1", "Tag2");
-//        TagListDto newTags=new TagListDto();
-//        newTags.setNames(dummy);
+
         List<Tag> allTags = tagService.getAllTags();
         TagListDto newTags = new TagListDto();
         newTags.setNames(new ArrayList<>());
-
 
         model.addAttribute("post", new PostDto());
         model.addAttribute("allTags", allTags);
@@ -178,7 +181,6 @@ public class PostMvcController {
             List<Tag> newTags = tagMapper.fromListDto(tagDtos);
             postService.create(post, user, newTags);
             model.addAttribute("newTags", newTags);
-
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -205,13 +207,14 @@ public class PostMvcController {
             return "redirect:/auth/login";
         }
 
-
         try {
             Post post = postService.getById(id);
             PostDto postDto = postMapper.toDto(post);
+
             List<Tag> allTags = tagService.getAllTags();
             TagListDto newTags = new TagListDto();
             List<Tag> postTags = tagService.getAllTagsByPostId(post.getId());
+
             for (Tag tag : postTags) {
                 newTags.getNames().add(tag.getName());
             }
@@ -251,7 +254,6 @@ public class PostMvcController {
         try {
             Post post = postMapper.fromDto(id, postDto);
             List<Tag> newTags = tagMapper.fromListDto(tagDtos);
-
             postService.update(post, user, newTags);
             return "redirect:/posts";
         } catch (EntityNotFoundException e) {
@@ -395,7 +397,6 @@ public class PostMvcController {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
-
     }
 
     @PostMapping("/{postId}/newComment")
@@ -432,7 +433,6 @@ public class PostMvcController {
             model.addAttribute("error", e.getMessage());
             return "ErrorView";
         }
-
     }
 
     @GetMapping("/{postId}/comments/{commentId}/update")
@@ -445,7 +445,6 @@ public class PostMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-
 
         try {
             Post existingPost = postService.getById(postId);
@@ -507,6 +506,7 @@ public class PostMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
+
         try {
             Post post = postService.getById(postId);
             commentService.deleteComment(commentId, user);

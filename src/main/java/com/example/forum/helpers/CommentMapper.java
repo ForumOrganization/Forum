@@ -43,6 +43,4 @@ public class CommentMapper {
         commentDto.setContent(comment.getContent());
         return commentDto;
     }
-
-
 }

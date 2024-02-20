@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Block User</title>
 </head>
+
 <body>
 <h1>Block User</h1>
+
 <form action="/users/{userId}/block" method="post">
     <input type="hidden" name="_csrf" th:value="${_csrf.token}" />
     <label for="userId">User ID:</label>

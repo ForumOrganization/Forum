@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 public class UserDto2 {
+
     @NotNull(message = "First name can't be empty.")
     @NotBlank(message = "First name can't be blank.")
     @Size(min = 4, max = 32, message = "First name should be between 4 and 32 symbols.")
@@ -28,8 +29,8 @@ public class UserDto2 {
 
 
     public UserDto2() {
-    }
 
+    }
 
     public String getFirstName() {
         return firstName;

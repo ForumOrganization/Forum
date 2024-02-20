@@ -110,7 +110,6 @@ public class TagRepositoryImpl implements TagRepository {
 
     @Override
     public void createTagInPost(Tag tag, int postId, User user) {
-
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, postId);
             Query<Tag> query = session.createQuery(
@@ -138,7 +137,6 @@ public class TagRepositoryImpl implements TagRepository {
                 session.getTransaction().commit();
             }
         }
-
     }
 
     @Override
@@ -150,10 +148,8 @@ public class TagRepositoryImpl implements TagRepository {
         }
     }
 
-
     @Override
     public void deleteTagInPost(int postId, int tagId) {
-
         try (Session session = sessionFactory.openSession()) {
             Post post = session.get(Post.class, postId);
 
@@ -169,5 +165,4 @@ public class TagRepositoryImpl implements TagRepository {
             }
         }
     }
-
 }

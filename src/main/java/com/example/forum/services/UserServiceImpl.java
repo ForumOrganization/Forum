@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll(User user,UserFilterOptions userFilterOptions) {
+    public List<User> getAll(User user, UserFilterOptions userFilterOptions) {
         checkAccessPermissionsAdmin(user, SEARCH_ADMIN_MESSAGE_ERROR);
         return this.userRepository.getAll(userFilterOptions);
     }
@@ -74,8 +74,8 @@ public class UserServiceImpl implements UserService {
     public void registerUser(User user) {
         setAdminRoleIfDataBaseEmpty(user);
         User existingUser = userRepository.getByUsername(user.getUsername());
-        if (existingUser != null && isSameUser(existingUser, user)
-                && existingUser.isDeleted()) {
+
+        if (existingUser != null && isSameUser(existingUser, user) && existingUser.isDeleted()) {
             userRepository.reactivated(existingUser);
         } else {
             checkDuplicateEntity(user);
@@ -103,11 +103,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(int deleteUser, User executingUser) {
         checkAccessPermissions(deleteUser, executingUser, DELETE_USER_MESSAGE_ERROR);
+
         User userToDelete = getById(deleteUser);
 
         if (userToDelete.isDeleted()) {
             throw new EntityAlreadyDeleteException("User", "id", String.valueOf(deleteUser));
-        }if (userToDelete.getId() == 1) {
+        }
+
+        if (userToDelete.getId() == 1) {
             throw new DeletionRestrictedException(MASTER_ADMIN_MESSAGE_ERROR);
         }
 
@@ -117,24 +120,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveProfilePictureUrl(String username, String profilePictureUrl) {
         User user = userRepository.getByUsername(username);
+
         if (user == null) {
             throw new EntityNotFoundException("User", "username", username);
         }
+
         user.setProfilePicture(profilePictureUrl);
         userRepository.updateUser(user);
-
     }
 
     @Override
     public String getProfilePictureUrl(String username) {
-
         User user = userRepository.getByUsername(username);
+
         if (user == null) {
             throw new EntityNotFoundException("User", "username", username);
         }
+
         return user.getProfilePicture();
-
-
     }
 
     @Override
@@ -157,9 +160,11 @@ public class UserServiceImpl implements UserService {
         }
 
         checkAccessPermissionsAdmin(executingUser, UPDATE_TO_USER_ERROR_MESSAGE);
+
         if (targetUser.getId() == 1) {
             throw new DeletionRestrictedException(MASTER_ADMIN_MESSAGE_ERROR);
         }
+
         targetUser.setRole(Role.USER);
         userRepository.updateUser(targetUser);
     }
@@ -167,13 +172,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public void blockUser(User admin, User blockUser) {
         checkAccessPermissionsAdmin(admin, MODIFY_ADMIN_MESSAGE_ERROR);
+
         if (blockUser.getStatus() == Status.BLOCKED) {
             throw new DuplicateEntityException(
                     "User", "id", String.valueOf(blockUser.getId()), "has already been blocked");
         }
+
         if (blockUser.getId() == 1) {
             throw new DeletionRestrictedException(MASTER_ADMIN_MESSAGE_ERROR_BLOCK);
         }
+
         blockUser.setStatus(Status.BLOCKED);
         userRepository.updateUser(blockUser);
     }

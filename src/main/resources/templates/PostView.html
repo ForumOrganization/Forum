@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div id="head" th:replace="~{HomeView.html :: head(${post.title})}"></div>
 <script src="https://kit.fontawesome.com/30f218fe1f.js" crossorigin="anonymous"></script>
-<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
 <link href="../static/css/post.css" th:href="@{/css/post.css}" rel="stylesheet"/>
 
 <body>
@@ -13,14 +12,13 @@
     <div class="post-details" th:style="text-align">
         <p class="margin12 post-title" th:text="#{post.label.title}  + ': ' +       ${post.title}">Title</p>
         <p class="margin12 post-content" th:text="#{post.label.content} + ': ' +      ${post.content}">Content</p>
-        <p class="margin12 post-created-by" th:text="#{post.label.createBy}  + ': ' + ${post.createdBy.username}">Created By</p>
-        <p class="margin12 post-creation-time" th:text="#{post.label.creation}  + ': ' + ${post.creationTime}">Creation Time</p>
-
-
+        <p class="margin12 post-created-by" th:text="#{post.label.createBy}  + ': ' + ${post.createdBy.username}">
+            Created By</p>
+        <p class="margin12 post-creation-time" th:text="#{post.label.creation}  + ': ' + ${post.creationTime}">Creation
+            Time</p>
         <p th:each="tag : ${post.tags}" th:text="${tag.name}">Tag</p>
-
-
     </div>
+
     <h3>
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/update}">Update</a>
         <a th:if="${isAuthenticated}" href="#" th:href="@{__${requestURI}__/delete}">Delete</a>
@@ -28,7 +26,6 @@
         <a th:if="${isAuthenticated}" th:href="@{__${requestURI}__/like}">
             <i class="fa-regular fa-thumbs-up"></i>
             <span class="like-count" th:text="${likeCount}">likes</span>
-
         </a>
         <a class="dislike-link" th:if="${isAuthenticated}" th:href="@{__${requestURI}__/dislike}">
             <i class="fa-regular fa-thumbs-down"></i>
@@ -36,6 +33,7 @@
         </a>
     </h3>
 </div>
+
 <h3 class="comments-title">Comments:</h3>
 <div class="comments" th:if="${comments}">
     <ul>
@@ -57,7 +55,6 @@
 <div class="no-comments" th:if="${post.comments.isEmpty()}">
     <h2 class="no-comments-title" th:text="#{comments.title.empty}">No comments yet.</h2>
 </div>
-
 
 <form id="footer" th:replace="~{HomeView.html :: footer}"></form>
 </body>

@@ -1,23 +1,18 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <form th:replace="~{HomeView.html :: head('User Deletion Successful')}"></form>
 <link href="../static/css/delete.css" th:href="@{/css/delete.css}" rel="stylesheet"/>
-
 
 <body>
 <div class="body-content">
     <h1>User Deletion Successful</h1>
     <p class="success-message">The user has been successfully deleted.</p>
-
 </div>
 
 <script th:inline="javascript">
-
     setTimeout(function() {
         window.location.href = '/auth/logout';
     }, 3000);
-
 </script>
 </body>
 </html>

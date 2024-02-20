@@ -29,7 +29,6 @@ public class TagServiceImpl implements TagService {
         this.postRepository = postRepository;
     }
 
-
     @Override
     public List<Tag> getAllTags() {
         return tagRepository.getAllTags();
@@ -42,7 +41,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag getTagByName(String name) {
-      return tagRepository.getTagByName(name);
+        return tagRepository.getTagByName(name);
     }
 
     @Override
@@ -64,11 +63,13 @@ public class TagServiceImpl implements TagService {
     public void createTagInPost(Tag tag, int postId, User user) {
         User author = postRepository.getById(postId).getCreatedBy();
         checkAccessPermissionsUser(author.getId(), user, CREATE_TAG_MESSAGE_ERROR);
+
         boolean duplicateExists = true;
+
         try {
             Tag existingTag = tagRepository.getTagById(tag.getId());
 
-            if (existingTag.getName().equals( tag.getName()) ){
+            if (existingTag.getName().equals(tag.getName())) {
                 duplicateExists = false;
             }
         } catch (EntityNotFoundException e) {
@@ -78,6 +79,7 @@ public class TagServiceImpl implements TagService {
         if (duplicateExists) {
             throw new DuplicateEntityException("Tag", "name", tag.getName());
         }
+
         this.tagRepository.createTagInPost(tag, postId, user);
     }
 
@@ -87,6 +89,7 @@ public class TagServiceImpl implements TagService {
         checkAccessPermissions(author.getId(), user, MODIFY_TAG_ERROR_MESSAGE);
 
         boolean duplicateExists = true;
+
         try {
             Tag existingTag = tagRepository.getTagById(tag.getId());
 
@@ -105,7 +108,7 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public void deleteTagInPost(Tag tag,User user, int postId) {
+    public void deleteTagInPost(Tag tag, User user, int postId) {
         User author = postRepository.getById(postId).getCreatedBy();
         Tag tagToDelete = tagRepository.getTagById(tag.getId());
         checkAccessPermissions(author.getId(), user, DELETE_TAG_MESSAGE_ERROR);

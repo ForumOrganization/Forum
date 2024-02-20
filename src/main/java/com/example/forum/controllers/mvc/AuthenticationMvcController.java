@@ -60,7 +60,6 @@ public class AuthenticationMvcController {
             return "LoginView";
         }
 
-
         try {
             User user = authenticationHelper.verifyAuthentication(login.getUsername(), login.getPassword());
             session.setAttribute("currentUser", login.getUsername());
@@ -89,7 +88,7 @@ public class AuthenticationMvcController {
     }
 
     @GetMapping("/register")
-    public String showRegisterPage(Model model, HttpSession session) {
+    public String showRegisterPage(Model model) {
         model.addAttribute("register", new RegisterDto());
         return "RegisterView";
     }

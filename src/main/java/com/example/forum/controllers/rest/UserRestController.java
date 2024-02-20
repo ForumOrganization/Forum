@@ -211,7 +211,6 @@ public class UserRestController {
     @Operation(tags ={"Register user"},
             summary = "Using this method, a new user can be registered.",
             description = "This method do registering of a new user. When valid parameters are given as an input, a new user is being created.",
-//
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "This is a request body that accepts user dto object as a parameter.",
                     content = @Content(schema = @Schema(implementation = User.class))),
             responses ={@ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = User.class)), description = "The user has been created successfully"),

@@ -45,31 +45,6 @@ public class ReactionServiceImpl implements ReactionService {
         reactionRepository.deleteReactionPost(reactionId, user);
     }
 
-    //    @Override
-//    public void likeComment(Comment comment, User user) {
-//        Reaction_comments reaction = reactionRepository.f(comment.getId(), user.getId());
-//        if (reaction == null) {
-//            reaction = new Reaction_comments();
-//            reaction.setComment(comment);
-//            reaction.setUser(user);
-//        }
-//        reaction.setReaction(Reaction.LIKES);
-//        updateReactionComment(reaction,comment.getId());
-//        comment.getReactions().add(reaction);
-//
-//    }
-//
-//    @Override
-//    public void dislikeComment(Comment comment, User user) {
-//        Reaction_comments reaction = findReactionByCommentIdAndUserId(comment.getId(), user.getId());
-//        if (reaction == null) {
-//            reaction = new Reaction_comments();
-//            reaction.setComment(comment);
-//            reaction.setUser(user);
-//        }
-//        reaction.setReaction(Reaction.DISLIKES);
-//        updateReactionComment(reaction,comment.getId());
-//    }
     public Reaction_comments findReactionByCommentIdAndUserId(int commentId, int userId) {
         return reactionRepository.findReactionByCommentIdAndUserId(commentId, userId);
     }

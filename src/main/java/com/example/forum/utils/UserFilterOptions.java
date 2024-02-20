@@ -1,14 +1,12 @@
 package com.example.forum.utils;
 
-import com.example.forum.models.Post;
-import com.example.forum.models.Tag;
 import com.example.forum.models.enums.Role;
 import com.example.forum.models.enums.Status;
 
 import java.util.Optional;
-import java.util.Spliterator;
 
 public class UserFilterOptions {
+
     private Optional<String> username;
     private Optional<String> firstName;
     private Optional<String> lastName;
@@ -17,10 +15,6 @@ public class UserFilterOptions {
     private Optional<Status> status;
     private Optional<String> sortBy;
     private Optional<String> sortOrder;
-
-    public UserFilterOptions() {
-        this(null, null, null, null, null, null, null, null);
-    }
 
     public UserFilterOptions(
             String username,

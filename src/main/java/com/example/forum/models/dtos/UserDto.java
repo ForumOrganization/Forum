@@ -32,8 +32,8 @@ public class UserDto {
 
     private Role role;
 
-
     public UserDto() {
+
     }
 
     public String getFirstName() {

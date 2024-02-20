@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('Register')}"></form>
 <link href="../static/css/login.css" th:href="@{/css/login.css}" rel="stylesheet"/>
+
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
 
 <section id="registerPage">
-
     <form action="#" th:action="@{/auth/register}" th:object="${register}" method="post">
         <fieldset>
             <legend>Register</legend>
@@ -49,18 +49,17 @@
 
             <button type="submit" class="register">Register</button>
 
-                        <p class="field">
-                            <span>If you already have profile click <a href="/auth/login">here</a></span>
-                        </p>
+            <p class="field">
+                <span>If you already have profile click <a href="/auth/login">here</a></span>
+            </p>
         </fieldset>
     </form>
 </section>
 
-
 <div th:if="${statusCode}">-->
-            <p>Status Code: <span th:text="${statusCode}"></span></p>
-            <p>Error: <span th:text="${error}"></span></p>
-        </div>
+    <p>Status Code: <span th:text="${statusCode}"></span></p>
+    <p>Error: <span th:text="${error}"></span></p>
+</div>
 
 <form th:replace="~{HomeView.html :: footer}"></form>
 </body>

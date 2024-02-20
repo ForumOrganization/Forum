@@ -94,7 +94,8 @@ public class UserRepositoryImpl implements UserRepository {
             query.setParameter("status", Status.ACTIVE);
             return query.list().size();
 
-        }}
+        }
+    }
 
 
     @Override
@@ -212,9 +213,11 @@ public class UserRepositoryImpl implements UserRepository {
                     session.merge(comment);
 
                 }
+
                 post.setDeleted(false);
                 session.merge(post);
             }
+
             for (Comment comment : targetUser.getComments()) {
                 comment.setDeleted(false);
                 session.merge(comment);
@@ -237,11 +240,12 @@ public class UserRepositoryImpl implements UserRepository {
                 for (Comment comment : post.getComments()) {
                     comment.setDeleted(true);
                     session.merge(comment);
-
                 }
+
                 post.setDeleted(true);
                 session.merge(post);
             }
+
             for (Comment comment : userToDelete.getComments()) {
                 comment.setDeleted(true);
                 session.merge(comment);
@@ -249,11 +253,28 @@ public class UserRepositoryImpl implements UserRepository {
 
             }
 
-
             userToDelete.setDeleted(true);
             session.merge(userToDelete);
-//            session.remove(userToDelete);
             session.getTransaction().commit();
+        }
+    }
+
+    public boolean isDataBaseEmpty() {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Long> query = session.createQuery("SELECT COUNT(u) FROM User u", Long.class);
+            Long userCount = query.uniqueResult();
+
+            return userCount == 0;
+        }
+    }
+
+    public boolean existsByPhoneNumber(User userPhoneNumberToBeUpdate) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Long> query = session.createQuery("SELECT COUNT(u) FROM User  u WHERE u.phoneNumber = :phoneNumber", Long.class);
+            query.setParameter("phoneNumber", userPhoneNumberToBeUpdate.getPhoneNumber());
+            Long userCount = query.uniqueResult();
+
+            return userCount != null && userCount > 0;
         }
     }
 
@@ -293,24 +314,5 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         return orderBy;
-    }
-
-    public boolean isDataBaseEmpty() {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Long> query = session.createQuery("SELECT COUNT(u) FROM User u", Long.class);
-            Long userCount = query.uniqueResult();
-
-            return userCount == 0;
-        }
-    }
-
-    public boolean existsByPhoneNumber(User userPhoneNumberToBeUpdate) {
-        try (Session session = sessionFactory.openSession()) {
-            Query<Long> query = session.createQuery("SELECT COUNT(u) FROM User  u WHERE u.phoneNumber = :phoneNumber", Long.class);
-            query.setParameter("phoneNumber", userPhoneNumberToBeUpdate.getPhoneNumber());
-            Long userCount = query.uniqueResult();
-
-            return userCount != null && userCount > 0;
-        }
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UserMapper {
+
     private final UserService userService;
 
     @Autowired
@@ -19,7 +20,6 @@ public class UserMapper {
 
     public User fromDtoRegister(UserDto dto) {
         User user = new User();
-//        user.setUsername(dto.getUsername());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
         user.setEmail(dto.getEmail());
@@ -30,7 +30,6 @@ public class UserMapper {
     public User fromDtoUpdate(int id, UserDto dto) {
         User updatedUser = userService.getById(id);
         updatedUser.setId(id);
-//        updatedUser.setUsername(dto.getUsername());
         updatedUser.setUsername(userService.getById(id).getUsername());
         updatedUser.setFirstName(dto.getFirstName());
         updatedUser.setLastName(dto.getLastName());
@@ -42,7 +41,6 @@ public class UserMapper {
     public User fromDtoUpdate3(int id, UserDto3 dto) {
         User updatedUser = userService.getById(id);
         updatedUser.setId(id);
-//        updatedUser.setUsername(dto.getUsername());
         updatedUser.setUsername(userService.getById(id).getUsername());
         updatedUser.setFirstName(dto.getFirstName());
         updatedUser.setLastName(dto.getLastName());
@@ -71,6 +69,7 @@ public class UserMapper {
         userDto.setEmail(user.getEmail());
         return userDto;
     }
+
     public UserDto3 userToDto3(User user) {
         UserDto3 userDto = new UserDto3();
         userDto.setFirstName(user.getFirstName());
@@ -78,7 +77,6 @@ public class UserMapper {
         userDto.setEmail(user.getEmail());
         return userDto;
     }
-
 
     public UserResponseDto toDtoRegisterAndUpdateUser(User user) {
         User userToUpdate = userService.getByUsername(user.getUsername());

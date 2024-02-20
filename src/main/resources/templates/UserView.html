@@ -2,24 +2,23 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('User')}"></form>
 <link href="../static/css/user.css" th:href="@{/css/user.css}" rel="stylesheet"/>
+
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
 
 <div class="body-content">
-
-
-<!--        <h2 th:text="${user.getUsername()}">Username</h2>-->
-        <div th:style="text-align">
-            <p class="margin12" th:text="#{user.label.first-name}  + ': ' +       ${user.firstName}">First Name</p>
-            <p class="margin12" th:text="#{user.label.last-name}  + ': ' +       ${user.lastName}">Last Name</p>
-            <p class="margin12" th:text="#{user.label.email}  + ': ' +       ${user.email}">Email</p>
-            <p class="margin12" th:text="#{user.label.role}  + ': ' +       ${user.role}">Role</p>
-            <p class="margin12" th:text="#{user.label.status}  + ': ' +       ${user.status}">Status</p>
-            <p class="margin12" th:text="#{user.label.isDelete}  + ': ' +       ${user.isDeleted()}">IsDeleted</p>
-            <p  th:if="${user.getRole() == T(com.example.forum.models.enums.Role).ADMIN}" class="margin12" th:text="#{user.label.phoneNumber}  + ': ' +       ${user.phoneNumber}">Phone number</p>
-        </div>
+    <div th:style="text-align">
+        <p class="margin12" th:text="#{user.label.first-name}  + ': ' +       ${user.firstName}">First Name</p>
+        <p class="margin12" th:text="#{user.label.last-name}  + ': ' +       ${user.lastName}">Last Name</p>
+        <p class="margin12" th:text="#{user.label.email}  + ': ' +       ${user.email}">Email</p>
+        <p class="margin12" th:text="#{user.label.role}  + ': ' +       ${user.role}">Role</p>
+        <p class="margin12" th:text="#{user.label.status}  + ': ' +       ${user.status}">Status</p>
+        <p class="margin12" th:text="#{user.label.isDelete}  + ': ' +       ${user.isDeleted()}">IsDeleted</p>
+        <p th:if="${user.getRole() == T(com.example.forum.models.enums.Role).ADMIN}" class="margin12"
+           th:text="#{user.label.phoneNumber}  + ': ' +       ${user.phoneNumber}">Phone number</p>
+    </div>
 </div>
-<form th:replace="~{HomeView.html :: footer}"></form>
 
+<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

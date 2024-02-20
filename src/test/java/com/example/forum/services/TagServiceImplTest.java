@@ -1,11 +1,14 @@
 package com.example.forum.services;
+
 import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
+
 import static org.mockito.Mockito.*;
+
 import com.example.forum.repositories.TagRepositoryImpl;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
@@ -59,6 +62,7 @@ public class TagServiceImplTest {
             assertEquals(expectedTags.get(i), actualTags.get(i));
         }
     }
+
     @Test
     void getTagById_test() {
         int tagId = 1;
@@ -144,23 +148,23 @@ public class TagServiceImplTest {
 
         assertDoesNotThrow(() -> tagService.createTagInPost(tag, postId, user));
     }
+
     @Test
     void testUpdateTagInPost() {
-
-
         User user = new User();
         Post post = new Post();
         post.setCreatedBy(user);
         int postId = post.getId();
+
         Tag tag = new Tag();
         int tagId = tag.getId();
         int authorId = tagId;
+
         when(postRepository.getById(postId)).thenReturn(post);
         when(tagRepository.getTagById(tagId)).thenReturn(tag);
         doNothing().when(tagRepository).updateTagInPost(tag);
         assertDoesNotThrow(() -> tagService.updateTagInPost(tag, user, postId, tagId));
     }
-
 
 
     @Test
@@ -169,7 +173,6 @@ public class TagServiceImplTest {
         int tagId = 1;
         User user = new User();
         when(postRepository.getById(postId)).thenThrow(new EntityNotFoundException("Post", postId));
-
     }
 
     @Test
@@ -183,25 +186,20 @@ public class TagServiceImplTest {
         Tag tag = new Tag();
         when(postRepository.getById(postId)).thenReturn(post);
         when(tagRepository.getTagById(tagId)).thenReturn(tag);
-
     }
 
     @Test
     public void testGetAllPostsByTagName() {
-        // Define sample data
         String tagName = "exampleTag";
         List<Post> expectedPosts = Arrays.asList(
                 new Post(),
                 new Post()
         );
 
-        // Mock the behavior of tagRepository.getAllPostsByTagName() method
         when(tagRepository.getAllPostsByTagName(tagName)).thenReturn(expectedPosts);
 
-        // Call the method under test
         List<Post> actualPosts = tagService.getAllPostsByTagName(tagName);
 
-        // Verify that the method behaves as expected
         assertEquals(expectedPosts.size(), actualPosts.size());
         assertEquals(expectedPosts.get(0).getTitle(), actualPosts.get(0).getTitle());
         assertEquals(expectedPosts.get(1).getContent(), actualPosts.get(1).getContent());
@@ -209,20 +207,16 @@ public class TagServiceImplTest {
 
     @Test
     public void testGetAllTagsByPostId() {
-        // Define sample data
         int postId = 123;
         List<Tag> expectedTags = Arrays.asList(
                 new Tag(),
                 new Tag()
         );
 
-        // Mock the behavior of tagRepository.getAllTagsByPostId() method
         when(tagRepository.getAllTagsByPostId(postId)).thenReturn(expectedTags);
 
-        // Call the method under test
         List<Tag> actualTags = tagService.getAllTagsByPostId(postId);
 
-        // Verify that the method behaves as expected
         assertEquals(expectedTags.size(), actualTags.size());
         assertEquals(expectedTags.get(0).getName(), actualTags.get(0).getName());
         assertEquals(expectedTags.get(1).getName(), actualTags.get(1).getName());

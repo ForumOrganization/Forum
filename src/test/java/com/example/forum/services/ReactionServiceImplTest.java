@@ -3,7 +3,6 @@ package com.example.forum.services;
 import com.example.forum.models.Reaction_comments;
 import com.example.forum.models.Reaction_posts;
 import com.example.forum.models.User;
-import com.example.forum.models.enums.Reaction;
 import com.example.forum.repositories.contracts.ReactionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +12,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;

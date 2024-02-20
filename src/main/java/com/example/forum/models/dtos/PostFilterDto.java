@@ -1,10 +1,9 @@
 package com.example.forum.models.dtos;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Optional;
 
 public class PostFilterDto {
+
     private String title;
     private String createdBy;
     private LocalDate creationTime;

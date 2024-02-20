@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <div th:replace="~{HomeView.html :: head(${post.title})}"></div>
+
 <body>
 <div th:replace="~{HomeView.html :: header}"></div>
 
@@ -23,14 +24,8 @@
         <label th:text="#{post.label.tag}">Tags</label>
         <br/>
         <input type="text" id="tagInput" th:field="*{newTags.names}"/>
-        <div id="tagSuggestions">
-            <ul>
-                <!-- Suggestions will be populated here -->
-            </ul>
-        </div>
+
         <span class="error" th:if="${#fields.hasErrors('newTags.names')}" th:errors="*{newTags.names}"></span>
-
-
         <br/><br/>
 
         <input type="submit" value="Save"/>

@@ -2,23 +2,19 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('Error Page')}"></form>
 <script src="https://kit.fontawesome.com/30f218fe1f.js" crossorigin="anonymous"></script>
-
 <link href="../static/css/error.css" th:href="@{/css/error.css}" rel="stylesheet"/>
+
 <body>
-
-
 <section  id="error-page" class="body-content">
     <h1 class="title">Oops!It seems the following operation was not properly done!</h1>
     <p>You can go back to our home page.</p>
-    <div class="options-container">
 
+    <div class="options-container">
         <a class="btn"
            th:href="@{/}">
             <i class="fa-solid fa-magnifying-glass"></i> Home page
         </a>
-
     </div>
 </section>
-
 </body>
 </html>

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.example.forum.utils.CheckPermission.checkAccessPermissions;
 import static com.example.forum.utils.CheckPermission.checkAccessPermissionsUser;
@@ -47,7 +46,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getTopCommentedPosts() {
         return this.postRepository.getTopCommentedPosts();
-
     }
 
     @Override
@@ -74,7 +72,6 @@ public class PostServiceImpl implements PostService {
     public void create(Post post, User user, List<Tag> tags) {
         checkBlockOrDeleteUser(user);
 
-
         boolean duplicateExists = true;
 
         try {
@@ -93,19 +90,16 @@ public class PostServiceImpl implements PostService {
         }
 
         post.setCreatedBy(user);
+
         if (tags.isEmpty()) {
             this.postRepository.create(post);
         } else {
-//            List<Tag> existingTags = tagRepository.getAllTags();
             this.postRepository.create(post);
+
             for (Tag tag : tags) {
-//                if (!existingTags.contains(tag)) {
                 tagRepository.createTagInPost(tag, post.getId(), user);
-
-
             }
         }
-
     }
 
     @Override
@@ -126,11 +120,12 @@ public class PostServiceImpl implements PostService {
             duplicateExists = false;
         }
 
-
         if (duplicateExists) {
             throw new DuplicateEntityException("Post", "id", String.valueOf(post.getId()));
         }
+
         List<Tag> existingTagsInPost = tagRepository.getAllTagsByPostId(post.getId());
+
         if (newTags.isEmpty()) {
             postRepository.update(post);
         } else {
@@ -139,19 +134,19 @@ public class PostServiceImpl implements PostService {
                             .stream()
                             .noneMatch(newTagInPost -> newTagInPost.getName().equals(existingTagInPost.getName())))
                     .toList();
+
             if (!tagsToBeRemove.isEmpty()) {
                 for (Tag tag : tagsToBeRemove) {
                     tagRepository.deleteTagInPost(post.getId(), tag.getId());
-
                 }
             }
+
             postRepository.update(post);
+
             for (Tag newTag : newTags) {
                 tagRepository.createTagInPost(newTag, post.getId(), user);
 
             }
-
-
         }
     }
 
@@ -167,6 +162,7 @@ public class PostServiceImpl implements PostService {
         Post currentPost = getById(postId);
         User user = reactionPostToAdd.getUser();
         Optional<Reaction_posts> reaction = currentPost.getReactions().stream().filter(reactionPosts -> reactionPosts.getUser().equals(user)).findFirst();
+
         if (reaction.isPresent()) {
             reaction.get().setReaction(reactionPostToAdd.getReaction());
             reactionRepository.updateReactionPost(reactionPostToAdd, currentPost.getId());
@@ -175,24 +171,20 @@ public class PostServiceImpl implements PostService {
             reactionPostToAdd.setPost(currentPost);
             reactionRepository.updateReactionPost(reactionPostToAdd, currentPost.getId());
         }
-        return postRepository.reactToPost(currentPost);
 
+        return postRepository.reactToPost(currentPost);
     }
 
     public long countReactionLikes(Post post) {
         return post.getReactions().stream()
                 .filter(r -> r.getReaction().equals(Reaction.LIKES))
                 .count();
-
-
     }
 
     public long countReactionDislikes(Post post) {
         return post.getReactions().stream()
                 .filter(r -> r.getReaction().equals(Reaction.DISLIKES))
                 .count();
-
-
     }
 
     private static void checkBlockOrDeleteUser(User user) {
@@ -200,6 +192,4 @@ public class PostServiceImpl implements PostService {
             throw new AuthorizationException(USER_HAS_BEEN_BLOCKED_OR_DELETED);
         }
     }
-
-
 }

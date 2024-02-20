@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 public class CommentFilterOptions {
+
     // private Optional<User> user;
     private Optional<Post> post;
     private Optional<String> content;
@@ -18,7 +19,6 @@ public class CommentFilterOptions {
             Post post,
             String content,
             LocalDate creationTime,
-
             String sortBy,
             String sortOrder) {
         this.post = Optional.ofNullable(post);

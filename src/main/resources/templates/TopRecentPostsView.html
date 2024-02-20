@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('Most recent posts')}"></form>
 <link href="../static/css/posts.css" th:href="@{/css/posts.css}" rel="stylesheet"/>
+
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
 
@@ -16,6 +17,7 @@
                 <div class="header-cell" th:text="#{post.label.createBy}">Created By</div>
                 <div class="header-cell" th:text="#{post.label.creation}">Creation Time</div>
             </div>
+
             <div class="row" th:each="post : ${posts}">
                 <div class="cell">
                     <a href="#" th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post</a>
@@ -24,6 +26,7 @@
                         <p th:each="tag : ${post.tags}" th:text="${tag.name}">Tag</p>
                     </div>
                 </div>
+
                 <div class="cell" th:text="${post.content}">Content</div>
                 <div class="cell" th:text="${post.createdBy.username}">Create By</div>
                 <div class="cell" th:text="${post.creationTime}">Creation Time</div>

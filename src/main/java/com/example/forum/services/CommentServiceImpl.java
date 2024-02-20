@@ -43,11 +43,10 @@ CommentServiceImpl implements CommentService {
     @Override
     public void createComment(Comment comment, int postId, User user) {
         checkBlockOrDeleteUser(user);
-        Post post = postRepository.getById(postId);
 
+        Post post = postRepository.getById(postId);
         comment.setUser(user);
         comment.setPost(post);
-
         this.commentRepository.createComment(comment);
     }
 

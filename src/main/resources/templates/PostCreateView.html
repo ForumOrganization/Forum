@@ -2,6 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <form th:replace="~{HomeView.html :: head('New Post')}"></form>
 <link href="../static/css/create.css" th:href="@{/css/create.css}" rel="stylesheet"/>
+
 <body>
 <form th:replace="~{HomeView.html :: header}"></form>
 
@@ -10,7 +11,7 @@
         <form th:replace="~{PostForm.html :: post-form('New Post')}"></form>
     </div>
 </div>
-<form th:replace="~{HomeView.html :: footer}"></form>
 
+<form th:replace="~{HomeView.html :: footer}"></form>
 </body>
 </html>

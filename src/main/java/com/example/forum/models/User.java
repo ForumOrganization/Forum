@@ -47,21 +47,13 @@ public class User {
     @Column(name = "is_deleted")
     private Boolean isDeleted = Boolean.FALSE;
 
-    @Column(name = "phone_number", table = "phone_numbers")
-    private String phoneNumber;
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
     @JsonIgnore
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private Status status = Status.ACTIVE;
+
+    @Column(name = "phone_number", table = "phone_numbers")
+    private String phoneNumber;
 
     @JsonIgnore
     @OneToMany(mappedBy = "createdBy", fetch = FetchType.EAGER)
@@ -123,6 +115,14 @@ public class User {
         this.password = password;
     }
 
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -152,6 +152,14 @@ public class User {
         return status == Status.BLOCKED;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     public Set<Post> getPosts() {
         return posts;
     }
@@ -179,13 +187,5 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public String getProfilePicture() {
-        return profilePicture;
-    }
-
-    public void setProfilePicture(String profilePicture) {
-        this.profilePicture = profilePicture;
     }
 }

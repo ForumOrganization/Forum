@@ -65,6 +65,7 @@ public class UserMvcController {
         } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
+
         try {
             List<User> users = userService.getAll(user, userFilterOptions);
             model.addAttribute("filterOptions", filterDto);
@@ -80,10 +81,8 @@ public class UserMvcController {
 
     }
 
-
     @GetMapping("/{id}")
     public String showSingleUser(@PathVariable int id, Model model, HttpSession session) {
-
         try {
             authenticationHelper.tryGetCurrentUser(session);
         } catch (AuthorizationException e) {
@@ -102,7 +101,6 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
-
 
     @GetMapping("/{id}/update")
     public String showEditUserPage(@PathVariable int id, Model model, HttpSession session) {
@@ -210,6 +208,7 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
+
     @GetMapping("/{id}/update-to-admin")
     public String updateToAdminForm(@PathVariable int id, Model model,
                                     HttpSession session) {
@@ -431,5 +430,4 @@ public class UserMvcController {
             return "ErrorView";
         }
     }
-
 }

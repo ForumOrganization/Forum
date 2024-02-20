@@ -73,7 +73,8 @@ public class PostRepositoryImpl implements PostRepository {
             Query<Post> query = session.createQuery("FROM Post", Post.class);
             return query.list().size();
 
-        }}
+        }
+    }
 
 
     @Override
@@ -200,15 +201,12 @@ public class PostRepositoryImpl implements PostRepository {
 
     public Post reactToPost(Post currentPost) {
         try (Session session = sessionFactory.openSession()) {
-//            Reaction_posts existingReaction = reactionRepository
-//                    .findReactionByPostIdAndUserId(currentPost.getId(), reaction.getUser().getId());
-
             session.beginTransaction();
             session.merge(currentPost);
             session.getTransaction().commit();
         }
-        return currentPost;
 
+        return currentPost;
     }
 
     private String generateOrderBy(PostFilterOptions postFilterOptions) {

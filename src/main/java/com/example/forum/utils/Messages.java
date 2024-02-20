@@ -3,7 +3,6 @@ package com.example.forum.utils;
 public class Messages {
 
     public static final String UNAUTHORIZED_USER_ERROR_MESSAGE = "You are not authorized to browse user information.";
-
     public static final String SEARCH_ADMIN_MESSAGE_ERROR = "Only admins are able to review all users.";
     public static final String MASTER_ADMIN_MESSAGE_ERROR = "Master admin user can not be downgrade to user.";
     public static final String MASTER_ADMIN_MESSAGE_ERROR_BLOCK = "Master admin user can not be blocked.";

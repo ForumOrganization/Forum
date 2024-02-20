@@ -29,11 +29,14 @@ import static com.example.forum.utils.Messages.UNAUTHORIZED_USER_ERROR_MESSAGE;
 @Controller
 @RequestMapping("/")
 public class HomeMvcController {
+
     private final AuthenticationHelper authenticationHelper;
     private final UserService userService;
     private final PostService postService;
 
-    public HomeMvcController(AuthenticationHelper authenticationHelper, UserService userService, PostService postService) {
+    public HomeMvcController(AuthenticationHelper authenticationHelper,
+                             UserService userService,
+                             PostService postService) {
         this.authenticationHelper = authenticationHelper;
         this.userService = userService;
         this.postService = postService;
@@ -46,14 +49,15 @@ public class HomeMvcController {
 
     @GetMapping
     public String showHomePage(Model model, HttpSession session) {
-
         long userNum = userService.getAllNumber();
         long postNum = postService.getAllNumber();
+
         model.addAttribute("userNumber", userNum);
         model.addAttribute("postNumber", postNum);
 
         try {
             User user = authenticationHelper.tryGetCurrentUser(session);
+
             if (user != null) {
                 model.addAttribute("currentUser", user);
             }
@@ -138,6 +142,7 @@ public class HomeMvcController {
             return "ErrorView";
         }
     }
+
     @GetMapping("/upload-profile-picture")
     public String getProfilePicture(Model model, HttpSession session) {
         User user = authenticationHelper.tryGetCurrentUser(session);
@@ -149,23 +154,21 @@ public class HomeMvcController {
     }
 
     @PostMapping("/upload-profile-picture")
-    public String uploadProfilePicture( @RequestParam("file") MultipartFile file,
-                                       HttpSession session){
+    public String uploadProfilePicture(@RequestParam("file") MultipartFile file,
+                                       HttpSession session) {
         try {
             String fileName = file.getOriginalFilename();
             String uploadDir = "static/images/";
-            System.out.println(uploadDir);
-            System.out.println(fileName);
-
             String relativeUrl = "/images/" + fileName;
+
             userService.saveProfilePictureUrl(
                     authenticationHelper.tryGetCurrentUser(session).getUsername(), relativeUrl);
+
             Path uploadPath = Paths.get(uploadDir);
             Files.createDirectories(uploadPath);
 
             try (InputStream inputStream = file.getInputStream()) {
                 Path filePath = uploadPath.resolve(fileName);
-                System.out.println(filePath);
                 Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
