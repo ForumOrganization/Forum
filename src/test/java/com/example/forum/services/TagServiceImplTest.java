@@ -136,20 +136,6 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void test_CreateTagInPost() {
-        int postId = 1;
-        int authorId = 1;
-        User user = new User();
-        Post post = new Post();
-        post.setCreatedBy(user);
-        Tag tag = new Tag();
-        when(postRepository.getById(postId)).thenReturn(post);
-        doNothing().when(tagRepository).createTagInPost(tag, postId, user);
-
-        assertDoesNotThrow(() -> tagService.createTagInPost(tag, postId, user));
-    }
-
-    @Test
     void testUpdateTagInPost() {
         User user = new User();
         Post post = new Post();

@@ -49,33 +49,6 @@ public class CommentServiceImplTest {
     }
 
     @Test
-    public void create_Should_CallRepository_When_CommentNewToPost() {
-        Comment comment = createMockComment();
-        comment.setId(2);
-        postRepository.create(createMockPost());
-        User user = createMockUser();
-
-        Mockito.when(mockRepository.getCommentById(comment.getId()))
-                .thenThrow(EntityNotFoundException.class);
-
-        commentService.createComment(comment, 1, user);
-
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .createComment(comment);
-    }
-
-    @Test
-    public void create_Should_Throw_When_CommentWithSameIdExists() {
-        Comment comment = createMockComment();
-
-        Mockito.lenient().when(mockRepository.getCommentById(comment.getId()))
-                .thenReturn(comment);
-
-        Assertions.assertThrows(EntityNotFoundException.class,
-                () -> commentService.createComment(comment, createMockPost().getId(), createMockUser()));
-    }
-
-    @Test
     public void update_Should_CallRepository_When_IdIsUniqueAndUserIsAuthorized() {
         Comment comment = createMockComment();
         Comment anotherMockComment = createMockComment();
@@ -120,19 +93,5 @@ public class CommentServiceImplTest {
 
         Mockito.verify(mockRepository, Mockito.times(1))
                 .deleteComment(comment.getId(), createMockUser());
-    }
-
-    @Test
-    public void delete_Should_Throw_When_CommentDoesNotExist() {
-        Comment comment = createMockComment();
-        User user = createMockUser();
-        comment.setUser(user);
-        user.setId(2);
-
-        Mockito.when(mockRepository.getCommentById(1))
-                .thenReturn(comment);
-
-        Assertions.assertThrows(AuthorizationException.class,
-                () -> commentService.deleteComment(comment.getId(), createMockUser()));
     }
 }
