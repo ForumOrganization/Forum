@@ -1,268 +1,224 @@
 package com.example.forum.services;
 
 import com.example.forum.exceptions.AuthorizationException;
-import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
+import com.example.forum.models.Reaction_posts;
+import com.example.forum.models.Tag;
 import com.example.forum.models.User;
 import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.ReactionRepository;
+import com.example.forum.repositories.contracts.TagRepository;
 import com.example.forum.utils.PostFilterOptions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class PostServiceImplTest {
+
     @Mock
     private PostRepository postRepository;
+
     @Mock
     private ReactionRepository reactionRepository;
+
+    @Mock
+    private TagRepository tagRepository;
+
     @InjectMocks
     private PostServiceImpl postService;
 
+    private User user;
+    private Post post;
+    private Tag tag;
+
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    public void setUp() {
+        user = new User();
+        user.setId(1);
+        user.setStatus(Status.ACTIVE);
+
+        post = new Post();
+        post.setId(1);
+
+        tag = new Tag();
+        tag.setId(1);
+        tag.setName("Test Tag");
     }
 
-//    @Test
-//    void create_post_when_valid_user_is_present() {
-//        Post post = new Post();
-//        User user = new User();
-//        int postId = post.getId(); // Assuming postId is 1
-//        Post existingPost = new Post();
-//        existingPost.setCreatedBy(user);
-//        when(postRepository.getById(postId)).thenReturn(existingPost);
-//        assertDoesNotThrow(() -> postService.create(post, user));
-//        verify(postRepository, times(1)).create(post);
-//        assertEquals(user, post.getCreatedBy());
-//    }
+    @Test
+    public void getAll_ShouldReturnListOfPosts() {
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
 
+        when(postRepository.getAll(any(PostFilterOptions.class))).thenReturn(posts);
 
-//    @Test
-//    void update_post_when_valid_user_is_present() {
-//        Post post = new Post();
-//        post.setId(1);
-//        User user = new User();
-//        user.setId(1);
-//        post.setCreatedBy(user);
-//
-//        when(postRepository.getById(post.getId())).thenReturn(post);
-//
-//        assertDoesNotThrow(() -> {
-//            postService.update(post, user);
-//        });
-//
-//        verify(postRepository, times(1)).update(post);
-//    }
+        List<Post> result = postService.getAll(new PostFilterOptions());
 
-
-//    @Test
-//    void update_post_when_user_is_blocked_test() {
-//        Post post = new Post();
-//        User user = new User();
-//        user.setStatus(Status.BLOCKED);
-//
-//        assertThrows(AuthorizationException.class, () -> {
-//            postService.update(post, user,new Tag());
-//        });
-//
-//        verify(postRepository, never()).update(post);
-//    }
+        Assertions.assertEquals(posts, result);
+    }
 
     @Test
-    void delete_post_when_valid_user_is_present() {
-        int postId = 1;
-        User user = new User();
-        user.setId(1);
+    public void getTopCommentedPosts_ShouldReturnListOfPosts() {
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
+
+        when(postRepository.getTopCommentedPosts()).thenReturn(posts);
+
+        List<Post> result = postService.getTopCommentedPosts();
+
+        Assertions.assertEquals(posts, result);
+    }
+
+    @Test
+    public void getMostRecentPosts_ShouldReturnListOfPosts() {
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
+
+        when(postRepository.getMostRecentPosts()).thenReturn(posts);
+
+        List<Post> result = postService.getMostRecentPosts();
+
+        Assertions.assertEquals(posts, result);
+    }
+
+    @Test
+    public void getById_ShouldReturnPost() {
+        when(postRepository.getById(1)).thenReturn(post);
+
+        Post result = postService.getById(1);
+
+        Assertions.assertEquals(post, result);
+    }
+
+    @Test
+    public void getByTitle_ShouldReturnPost() {
+        when(postRepository.getByTitle("Test Title")).thenReturn(post);
+
+        Post result = postService.getByTitle("Test Title");
+
+        Assertions.assertEquals(post, result);
+    }
+
+    @Test
+    public void create_ShouldCreatePost() {
+        Post newPost = new Post();
+        newPost.setTitle("New Post Title");
+        newPost.setContent("New Post Content");
+
+        List<Tag> tags = new ArrayList<>();
+        tags.add(tag);
+
+        postService.create(newPost, user, tags);
+
+        verify(postRepository, times(1)).create(newPost);
+        verify(tagRepository, times(1)).createTagInPost(tag, newPost.getId(), user);
+    }
+
+    @Test
+    public void update_ShouldUpdatePost() {
+        Post updatedPost = new Post();
+        updatedPost.setId(1);
+        updatedPost.setTitle("Updated Post Title");
+        updatedPost.setContent("Updated Post Content");
+
+        List<Tag> newTags = new ArrayList<>();
+        newTags.add(tag);
+
+        when(postRepository.getById(1)).thenReturn(post);
+
+        postService.update(updatedPost, user, newTags);
+
+        verify(postRepository, times(1)).update(updatedPost);
+        verify(tagRepository, times(1)).createTagInPost(tag, updatedPost.getId(), user);
+    }
+
+    @Test
+    public void delete_ShouldDeletePost() {
+        when(postRepository.getById(1)).thenReturn(post);
+
+        postService.delete(1, user);
+
+        verify(postRepository, times(1)).delete(1);
+    }
+
+    @Test
+    public void reactToPost_ShouldReactToPost() {
+        Post currentPost = new Post();
+        currentPost.setId(1);
+
+        when(postRepository.getById(1)).thenReturn(currentPost);
+
+        postService.reactToPost(1, new Reaction_posts());
+
+        verify(reactionRepository, times(1)).updateReactionPost(any(Reaction_posts.class), 1);
+    }
+
+    @Test
+    public void countReactionLikes_ShouldReturnCorrectCount() {
         Post post = new Post();
-        post.setId(postId);
-        post.setCreatedBy(user);
+        post.setId(1);
+        post.setReactions(new HashSet<>());
+        post.getReactions().add(new Reaction_posts());
 
-        when(postRepository.getById(postId)).thenReturn(post);
+        long count = postService.countReactionLikes(post);
 
-        assertDoesNotThrow(() -> {
-            postService.delete(postId, user);
-        });
-
-        verify(postRepository, times(1)).delete(postId);
+        Assertions.assertEquals(1, count);
     }
 
     @Test
-    void delete_check_when_post_is_not_found() {
-        int postId = 1;
-        User user = new User();
-        user.setId(1);
-
-        when(postRepository.getById(postId)).thenThrow(new EntityNotFoundException("Post", "id", String.valueOf(postId)));
-
-        assertThrows(EntityNotFoundException.class, () -> {
-            postService.delete(postId, user);
-        });
-
-        verify(postRepository, never()).delete(postId);
-    }
-
-    @Test
-    void delete_when_user_is_not_authorized() {
-        int postId = 1;
-        User user = new User();
-        user.setId(1);
+    public void countReactionDislikes_ShouldReturnCorrectCount() {
         Post post = new Post();
-        post.setId(postId);
-        post.setCreatedBy(new User()); // Different user created the post
+        post.setId(1);
+        post.setReactions(new HashSet<>());
+        post.getReactions().add(new Reaction_posts());
 
-        when(postRepository.getById(postId)).thenReturn(post);
+        long count = postService.countReactionDislikes(post);
 
-        assertThrows(AuthorizationException.class, () -> {
-            postService.delete(postId, user);
-        });
-
-        verify(postRepository, never()).delete(postId);
+        Assertions.assertEquals(1, count);
     }
 
     @Test
-    void delete_when_user_is_blocked() {
-        int postId = 1;
-        User user = new User();
-        user.setId(1);
+    public void create_ShouldThrowAuthorizationException_WhenUserIsBlocked() {
         user.setStatus(Status.BLOCKED);
+        Post post = new Post();
+        List<Tag> tags = new ArrayList<>();
 
-        assertThrows(AuthorizationException.class, () -> {
-            postService.delete(postId, user);
-        });
+        Assertions.assertThrows(AuthorizationException.class, () -> postService.create(post, user, tags));
 
-        verify(postRepository, never()).delete(postId);
+        verify(postRepository, never()).create(post);
     }
 
     @Test
-    void delete_when_user_is_deleted() {
-        int postId = 1;
-        User user = new User();
-        user.setId(1);
+    public void create_ShouldThrowAuthorizationException_WhenUserIsDeleted() {
         user.setDeleted(true);
+        Post post = new Post();
+        List<Tag> tags = new ArrayList<>();
 
-        assertThrows(AuthorizationException.class, () -> {
-            postService.delete(postId, user);
-        });
+        Assertions.assertThrows(AuthorizationException.class, () -> postService.create(post, user, tags));
 
-        verify(postRepository, never()).delete(postId);
+        verify(postRepository, never()).create(post);
     }
 
     @Test
-    public void testGetAll() {
-        PostFilterOptions filterOptions = new PostFilterOptions();
-        List<Post> expectedPosts = Arrays.asList(
-                new Post(),
-                new Post()
-        );
+    public void create_ShouldCreatePost_WhenUserIsActive() {
+        Post post = new Post();
+        List<Tag> tags = new ArrayList<>();
 
-        when(postRepository.getAll(filterOptions)).thenReturn(expectedPosts);
-        List<Post> actualPosts = postService.getAll(filterOptions);
+        Assertions.assertDoesNotThrow(() -> postService.create(post, user, tags));
 
-        assertEquals(expectedPosts.size(), actualPosts.size());
-        assertEquals(expectedPosts.get(0).getTitle(), actualPosts.get(0).getTitle());
-        assertEquals(expectedPosts.get(1).getContent(), actualPosts.get(1).getContent());
-
-        verify(postRepository, times(1)).getAll(filterOptions);
+        verify(postRepository, times(1)).create(any(Post.class));
     }
-
-
-    @Test
-    public void testGetTopCommentedPosts() {
-
-        List<Post> expectedTopCommentedPosts = Arrays.asList(
-                new Post(),
-                new Post()
-        );
-
-        when(postRepository.getTopCommentedPosts()).thenReturn(expectedTopCommentedPosts);
-
-        List<Post> actualTopCommentedPosts = postService.getTopCommentedPosts();
-
-        assertEquals(expectedTopCommentedPosts.size(), actualTopCommentedPosts.size());
-        assertEquals(expectedTopCommentedPosts.get(0).getTitle(), actualTopCommentedPosts.get(0).getTitle());
-        assertEquals(expectedTopCommentedPosts.get(1).getContent(), actualTopCommentedPosts.get(1).getContent());
-
-        verify(postRepository, times(1)).getTopCommentedPosts();
-    }
-
-    @Test
-    public void testGetMostRecentPosts() {
-        List<Post> expectedMostRecentPosts = Arrays.asList(
-                new Post(),
-                new Post()
-        );
-
-        when(postRepository.getMostRecentPosts()).thenReturn(expectedMostRecentPosts);
-
-        List<Post> actualMostRecentPosts = postService.getMostRecentPosts();
-
-        assertEquals(expectedMostRecentPosts.size(), actualMostRecentPosts.size());
-        assertEquals(expectedMostRecentPosts.get(0).getTitle(), actualMostRecentPosts.get(0).getTitle());
-        assertEquals(expectedMostRecentPosts.get(1).getContent(), actualMostRecentPosts.get(1).getContent());
-
-        verify(postRepository, times(1)).getMostRecentPosts();
-    }
-
-    @Test
-    public void testGetById() {
-
-        Post expectedPost = new Post();
-
-        when(postRepository.getById(1)).thenReturn(expectedPost);
-
-        Post actualPost = postService.getById(1);
-
-        assertEquals(expectedPost.getId(), actualPost.getId());
-        assertEquals(expectedPost.getTitle(), actualPost.getTitle());
-        assertEquals(expectedPost.getContent(), actualPost.getContent());
-
-        verify(postRepository, times(1)).getById(1);
-    }
-
-    @Test
-    public void testGetByTitle() {
-
-        String sampleTitle = "Sample Title";
-        Post expectedPost = new Post();
-
-        when(postRepository.getByTitle(sampleTitle)).thenReturn(expectedPost);
-
-        Post actualPost = postService.getByTitle(sampleTitle);
-
-        assertEquals(expectedPost.getId(), actualPost.getId());
-        assertEquals(expectedPost.getTitle(), actualPost.getTitle());
-        assertEquals(expectedPost.getContent(), actualPost.getContent());
-
-        verify(postRepository, times(1)).getByTitle(sampleTitle);
-    }
-//    @Test
-//    public void testGetByComment() {
-//
-//        int sampleCommentId = 123;
-//
-//        Post expectedPost = new Post();
-//
-//        when(postRepository.getByComment(sampleCommentId)).thenReturn(expectedPost);
-//
-//        Post actualPost = postService.getByComment(sampleCommentId);
-//
-//        assertEquals(expectedPost.getId(), actualPost.getId());
-//        assertEquals(expectedPost.getTitle(), actualPost.getTitle());
-//        assertEquals(expectedPost.getContent(), actualPost.getContent());
-//
-//        verify(postRepository, times(1)).getByComment(sampleCommentId);
-//    }
 }

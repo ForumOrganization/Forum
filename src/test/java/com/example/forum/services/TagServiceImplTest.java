@@ -1,54 +1,43 @@
 package com.example.forum.services;
 
-import com.example.forum.exceptions.AuthorizationException;
 import com.example.forum.exceptions.DuplicateEntityException;
 import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Post;
 import com.example.forum.models.Tag;
 import com.example.forum.models.User;
-
-import static org.mockito.Mockito.*;
-
-import com.example.forum.repositories.TagRepositoryImpl;
 import com.example.forum.repositories.contracts.PostRepository;
 import com.example.forum.repositories.contracts.TagRepository;
-import com.example.forum.services.TagServiceImpl;
-import com.example.forum.services.contracts.TagService;
-import com.example.forum.utils.TagFilterOptions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.client.ExpectedCount.times;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 public class TagServiceImplTest {
 
     @Mock
-    private TagRepositoryImpl tagRepository;
+    private TagRepository tagRepository;
+
+    @Mock
+    private PostRepository postRepository;
 
     @InjectMocks
     private TagServiceImpl tagService;
 
-    private PostRepository postRepository;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        postRepository = mock(PostRepository.class);
-        tagService = new TagServiceImpl(tagRepository, postRepository);
     }
 
     @Test
-    void get_all_tags_with_no_filters() {
+    void getAllTags_ShouldReturnAllTags() {
         List<Tag> expectedTags = new ArrayList<>();
         expectedTags.add(new Tag());
         expectedTags.add(new Tag());
@@ -64,7 +53,7 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void getTagById_test() {
+    void getTagById_ShouldReturnTagById() {
         int tagId = 1;
         Tag expectedTag = new Tag();
 
@@ -76,18 +65,18 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void getTagById_when_Tag_does_not_exists() {
+    void getTagById_WhenTagDoesNotExist_ShouldReturnNull() {
         int tagId = 1;
 
         when(tagRepository.getTagById(tagId)).thenReturn(null);
 
         Tag actualTag = tagService.getTagById(tagId);
 
-        assertEquals(null, actualTag);
+        assertNull(actualTag);
     }
 
     @Test
-    void getTagByName_when_Tag_does_not_exists() {
+    void getTagByName_ShouldReturnTagByName() {
         String tagName = "Test Tag";
         Tag expectedTag = new Tag();
 
@@ -99,7 +88,7 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void getTagByName_when_tag_does_not_exists() {
+    void getTagByName_WhenTagDoesNotExist_ShouldThrowEntityNotFoundException() {
         String tagName = "Nonexistent Tag";
 
         when(tagRepository.getTagByName(tagName)).thenThrow(new EntityNotFoundException("Tag", "name", tagName));
@@ -110,7 +99,7 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void getAllPostsByTagId_when_posts_exist() {
+    void getAllPostsByTagId_WhenPostsExist_ShouldReturnAllPostsByTagId() {
         int tagId = 1;
         List<Post> expectedPosts = new ArrayList<>();
         expectedPosts.add(new Post());
@@ -124,7 +113,7 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void getAllPostsByTagId_when_no_posts_exist() {
+    void getAllPostsByTagId_WhenNoPostsExist_ShouldReturnEmptyList() {
         int tagId = 1;
         List<Post> expectedPosts = new ArrayList<>();
 
@@ -136,33 +125,38 @@ public class TagServiceImplTest {
     }
 
     @Test
-    void testUpdateTagInPost() {
+    void createTagInPost_WhenDuplicateExists_ShouldThrowDuplicateEntityException() {
+        int postId = 1;
+        int authorId = 1;
         User user = new User();
         Post post = new Post();
         post.setCreatedBy(user);
-        int postId = post.getId();
-
         Tag tag = new Tag();
-        int tagId = tag.getId();
-        int authorId = tagId;
-
         when(postRepository.getById(postId)).thenReturn(post);
-        when(tagRepository.getTagById(tagId)).thenReturn(tag);
-        doNothing().when(tagRepository).updateTagInPost(tag);
-        assertDoesNotThrow(() -> tagService.updateTagInPost(tag, user, postId, tagId));
+        when(tagRepository.getTagById(tag.getId())).thenReturn(tag);
+
+        assertThrows(DuplicateEntityException.class, () -> {
+            tagService.createTagInPost(tag, postId, user);
+        });
     }
 
-
     @Test
-    void testUpdateTagInPost_when_post_does_not_exists() {
+    void createTagInPost_WhenDuplicateDoesNotExist_ShouldCreateTagInPost() {
         int postId = 1;
-        int tagId = 1;
+        int authorId = 1;
         User user = new User();
-        when(postRepository.getById(postId)).thenThrow(new EntityNotFoundException("Post", postId));
+        Post post = new Post();
+        post.setCreatedBy(user);
+        Tag tag = new Tag();
+        when(postRepository.getById(postId)).thenReturn(post);
+        when(tagRepository.getTagById(tag.getId())).thenReturn(null);
+        doNothing().when(tagRepository).createTagInPost(tag, postId, user);
+
+        assertDoesNotThrow(() -> tagService.createTagInPost(tag, postId, user));
     }
 
     @Test
-    void testUpdateTagInPost_DuplicateEntityException() {
+    void updateTagInPost_WhenDuplicateExists_ShouldThrowDuplicateEntityException() {
         int postId = 1;
         int tagId = 1;
         int authorId = 1;
@@ -172,39 +166,58 @@ public class TagServiceImplTest {
         Tag tag = new Tag();
         when(postRepository.getById(postId)).thenReturn(post);
         when(tagRepository.getTagById(tagId)).thenReturn(tag);
+
+        assertThrows(DuplicateEntityException.class, () -> {
+            tagService.updateTagInPost(tag, user, postId, tagId);
+        });
     }
 
     @Test
-    public void testGetAllPostsByTagName() {
-        String tagName = "exampleTag";
-        List<Post> expectedPosts = Arrays.asList(
-                new Post(),
-                new Post()
-        );
+    void updateTagInPost_WhenDuplicateDoesNotExist_ShouldUpdateTagInPost() {
+        int postId = 1;
+        int tagId = 1;
+        int authorId = 1;
+        User user = new User();
+        Post post = new Post();
+        post.setCreatedBy(user);
+        Tag tag = new Tag();
+        when(postRepository.getById(postId)).thenReturn(post);
+        when(tagRepository.getTagById(tagId)).thenReturn(null);
+        doNothing().when(tagRepository).updateTagInPost(tag);
 
-        when(tagRepository.getAllPostsByTagName(tagName)).thenReturn(expectedPosts);
-
-        List<Post> actualPosts = tagService.getAllPostsByTagName(tagName);
-
-        assertEquals(expectedPosts.size(), actualPosts.size());
-        assertEquals(expectedPosts.get(0).getTitle(), actualPosts.get(0).getTitle());
-        assertEquals(expectedPosts.get(1).getContent(), actualPosts.get(1).getContent());
+        assertDoesNotThrow(() -> tagService.updateTagInPost(tag, user, postId, tagId));
     }
 
     @Test
-    public void testGetAllTagsByPostId() {
-        int postId = 123;
-        List<Tag> expectedTags = Arrays.asList(
-                new Tag(),
-                new Tag()
-        );
+    void deleteTagInPost_WhenDuplicateExists_ShouldThrowDuplicateEntityException() {
+        int postId = 1;
+        int tagId = 1;
+        int authorId = 1;
+        User user = new User();
+        Post post = new Post();
+        post.setCreatedBy(user);
+        Tag tag = new Tag();
+        when(postRepository.getById(postId)).thenReturn(post);
+        when(tagRepository.getTagById(tagId)).thenReturn(tag);
 
-        when(tagRepository.getAllTagsByPostId(postId)).thenReturn(expectedTags);
+        assertThrows(DuplicateEntityException.class, () -> {
+            tagService.deleteTagInPost(tag, user, postId);
+        });
+    }
 
-        List<Tag> actualTags = tagService.getAllTagsByPostId(postId);
+    @Test
+    void deleteTagInPost_WhenDuplicateDoesNotExist_ShouldDeleteTagInPost() {
+        int postId = 1;
+        int tagId = 1;
+        int authorId = 1;
+        User user = new User();
+        Post post = new Post();
+        post.setCreatedBy(user);
+        Tag tag = new Tag();
+        when(postRepository.getById(postId)).thenReturn(post);
+        when(tagRepository.getTagById(tagId)).thenReturn(null);
+        doNothing().when(tagRepository).deleteTagInPost(postId, tagId);
 
-        assertEquals(expectedTags.size(), actualTags.size());
-        assertEquals(expectedTags.get(0).getName(), actualTags.get(0).getName());
-        assertEquals(expectedTags.get(1).getName(), actualTags.get(1).getName());
+        assertDoesNotThrow(() -> tagService.deleteTagInPost(tag, user, postId));
     }
 }

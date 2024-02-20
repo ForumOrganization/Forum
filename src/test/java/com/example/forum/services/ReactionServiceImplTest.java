@@ -49,30 +49,6 @@ public class ReactionServiceImplTest {
         assertEquals(expectedReactions, actualReactions);
     }
 
-//    @Test
-//    void countReactionsPost_ShouldReturnReactionCountMap() {
-//        int postId = 1;
-//        Map<Reaction_posts, Integer> expectedReactionCountMap = Map.of(new Reaction_posts(), 2);
-//
-//        when(reactionRepository.countReactionsPost(postId)).thenReturn(expectedReactionCountMap);
-//
-//        Map<Reaction_posts, Integer> actualReactionCountMap = reactionService.countReactionsPost(postId);
-//
-//        assertEquals(expectedReactionCountMap, actualReactionCountMap);
-//    }
-//
-//    @Test
-//    void countReactionsComment_ShouldReturnReactionCountMap() {
-//        int commentId = 1;
-//        Map<Reaction, Integer> expectedReactionCountMap = Map.of(new Reaction(), 3);
-//
-//        when(reactionRepository.countReactionsComment(commentId)).thenReturn(expectedReactionCountMap);
-//
-//        Map<Reaction_comments, Integer> actualReactionCountMap = reactionService.countReactionsComment(commentId);
-//
-//        assertEquals(expectedReactionCountMap, actualReactionCountMap);
-//    }
-
     @Test
     void updateReactionPost_ShouldCallRepository() {
         Reaction_posts reaction = new Reaction_posts();

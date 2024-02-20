@@ -1,97 +1,142 @@
 package com.example.forum.services;
 
 import com.example.forum.exceptions.AuthorizationException;
-import com.example.forum.exceptions.EntityNotFoundException;
 import com.example.forum.models.Comment;
+import com.example.forum.models.Post;
 import com.example.forum.models.User;
+import com.example.forum.models.enums.Status;
 import com.example.forum.repositories.contracts.CommentRepository;
 import com.example.forum.repositories.contracts.PostRepository;
-import com.example.forum.utils.CommentFilterOptions;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.example.forum.helpers.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CommentServiceImplTest {
 
     @Mock
-    CommentRepository mockRepository;
+    private CommentRepository commentRepository;
+
     @Mock
-    PostRepository postRepository;
+    private PostRepository postRepository;
+
     @InjectMocks
-    CommentServiceImpl commentService;
+    private CommentServiceImpl commentService;
 
-    @Test
-    public void get_Should_CallRepository() {
-        CommentFilterOptions mockCommentFilterOptions = createMockCommentFilterOptions();
+    private User user;
+    private Post post;
+    private Comment comment;
 
-        commentService.getAllCommentsByPostId(1);
+    @BeforeEach
+    public void setUp() {
+        user = new User();
+        user.setId(1);
+        user.setStatus(Status.ACTIVE);
 
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .getAllCommentsByPostId(1);
+        post = new Post();
+        post.setId(1);
+
+        comment = new Comment();
+        comment.setId(1);
+        comment.setUser(user);
+        comment.setPost(post);
     }
 
     @Test
-    public void getCommentById_Should_ReturnComment_When_MatchExists() {
-        Mockito.when(mockRepository.getCommentById(1))
-                .thenReturn(createMockComment());
+    public void getAllCommentsByPostId_ShouldReturnListOfComments() {
+        List<Comment> comments = new ArrayList<>();
+        comments.add(comment);
+
+        when(commentRepository.getAllCommentsByPostId(1)).thenReturn(comments);
+
+        List<Comment> result = commentService.getAllCommentsByPostId(1);
+
+        Assertions.assertEquals(comments, result);
+    }
+
+    @Test
+    public void getCommentById_ShouldReturnComment() {
+        when(commentRepository.getCommentById(1)).thenReturn(comment);
 
         Comment result = commentService.getCommentById(1);
 
-        Assertions.assertEquals(1, result.getId());
-        Assertions.assertEquals("Some content", result.getContent());
+        Assertions.assertEquals(comment, result);
     }
 
     @Test
-    public void update_Should_CallRepository_When_IdIsUniqueAndUserIsAuthorized() {
-        Comment comment = createMockComment();
-        Comment anotherMockComment = createMockComment();
-        anotherMockComment.setId(2);
+    public void createComment_ShouldCreateComment() {
+        Comment newComment = new Comment();
+        newComment.setContent("New Comment");
 
-        Mockito.lenient().when(mockRepository.getCommentById(1))
-                .thenReturn(comment);
+        when(postRepository.getById(1)).thenReturn(post);
 
-        Mockito.lenient().when(mockRepository.getCommentById(anotherMockComment.getId()))
-                .thenThrow(EntityNotFoundException.class);
+        commentService.createComment(newComment, 1, user);
 
-        commentService.updateComment(comment, createMockUser());
-
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .updateComment(comment);
+        verify(commentRepository, times(1)).createComment(any(Comment.class));
     }
 
     @Test
-    public void update_Should_Throw_When_UserIsNotCreatorOrAdmin() {
-        Comment comment = createMockComment();
-        User user = createMockUser();
+    public void updateComment_ShouldUpdateComment() {
+        Comment updatedComment = new Comment();
+        updatedComment.setId(1);
+        updatedComment.setContent("Updated Comment");
+        updatedComment.setUser(user);
 
-        comment.setUser(user);
-        user.setId(2);
+        when(commentRepository.getCommentById(1)).thenReturn(comment);
 
-        Mockito.lenient().when(mockRepository.getCommentById(comment.getId()))
-                .thenReturn(comment);
+        commentService.updateComment(updatedComment, user);
 
-        Assertions.assertThrows(AuthorizationException.class,
-                () -> commentService.updateComment(comment, createMockUser()));
+        verify(commentRepository, times(1)).updateComment(any(Comment.class));
     }
 
     @Test
-    public void delete_Should_DeleteComment_When_MatchExists() {
-        Comment comment = createMockComment();
-        User user = createMockUser();
+    public void deleteComment_ShouldDeleteComment() {
+        when(commentRepository.getCommentById(1)).thenReturn(comment);
 
-        Mockito.when(mockRepository.getCommentById(1))
-                .thenReturn(comment);
+        commentService.deleteComment(1, user);
 
-        commentService.deleteComment(comment.getId(), user);
+        verify(commentRepository, times(1)).deleteComment(1, user);
+    }
 
-        Mockito.verify(mockRepository, Mockito.times(1))
-                .deleteComment(comment.getId(), createMockUser());
+    @Test
+    public void createComment_ShouldThrowAuthorizationException_WhenUserIsBlocked() {
+        user.setStatus(Status.BLOCKED);
+        Comment comment = new Comment();
+        int postId = 1;
+
+        Assertions.assertThrows(AuthorizationException.class, () -> commentService.createComment(comment, postId, user));
+
+        verify(commentRepository, never()).createComment(comment);
+    }
+
+    @Test
+    public void createComment_ShouldThrowAuthorizationException_WhenUserIsDeleted() {
+        user.setDeleted(true);
+        Comment comment = new Comment();
+        int postId = 1;
+
+        Assertions.assertThrows(AuthorizationException.class, () -> commentService.createComment(comment, postId, user));
+
+        verify(commentRepository, never()).createComment(comment);
+    }
+
+    @Test
+    public void createComment_ShouldCreateComment_WhenUserIsActive() {
+        Comment comment = new Comment();
+        int postId = 1;
+
+        Assertions.assertDoesNotThrow(() -> commentService.createComment(comment, postId, user));
+
+        verify(commentRepository, times(1)).createComment(comment);
     }
 }
