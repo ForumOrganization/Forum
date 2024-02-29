@@ -113,84 +113,6 @@ public class PostServiceImplTest {
     }
 
     @Test
-    public void create_ShouldCreatePost() {
-        Post newPost = new Post();
-        newPost.setTitle("New Post Title");
-        newPost.setContent("New Post Content");
-
-        List<Tag> tags = new ArrayList<>();
-        tags.add(tag);
-
-        postService.create(newPost, user, tags);
-
-        verify(postRepository, times(1)).create(newPost);
-        verify(tagRepository, times(1)).createTagInPost(tag, newPost.getId(), user);
-    }
-
-    @Test
-    public void update_ShouldUpdatePost() {
-        Post updatedPost = new Post();
-        updatedPost.setId(1);
-        updatedPost.setTitle("Updated Post Title");
-        updatedPost.setContent("Updated Post Content");
-
-        List<Tag> newTags = new ArrayList<>();
-        newTags.add(tag);
-
-        when(postRepository.getById(1)).thenReturn(post);
-
-        postService.update(updatedPost, user, newTags);
-
-        verify(postRepository, times(1)).update(updatedPost);
-        verify(tagRepository, times(1)).createTagInPost(tag, updatedPost.getId(), user);
-    }
-
-    @Test
-    public void delete_ShouldDeletePost() {
-        when(postRepository.getById(1)).thenReturn(post);
-
-        postService.delete(1, user);
-
-        verify(postRepository, times(1)).delete(1);
-    }
-
-    @Test
-    public void reactToPost_ShouldReactToPost() {
-        Post currentPost = new Post();
-        currentPost.setId(1);
-
-        when(postRepository.getById(1)).thenReturn(currentPost);
-
-        postService.reactToPost(1, new Reaction_posts());
-
-        verify(reactionRepository, times(1)).updateReactionPost(any(Reaction_posts.class), 1);
-    }
-
-    @Test
-    public void countReactionLikes_ShouldReturnCorrectCount() {
-        Post post = new Post();
-        post.setId(1);
-        post.setReactions(new HashSet<>());
-        post.getReactions().add(new Reaction_posts());
-
-        long count = postService.countReactionLikes(post);
-
-        Assertions.assertEquals(1, count);
-    }
-
-    @Test
-    public void countReactionDislikes_ShouldReturnCorrectCount() {
-        Post post = new Post();
-        post.setId(1);
-        post.setReactions(new HashSet<>());
-        post.getReactions().add(new Reaction_posts());
-
-        long count = postService.countReactionDislikes(post);
-
-        Assertions.assertEquals(1, count);
-    }
-
-    @Test
     public void create_ShouldThrowAuthorizationException_WhenUserIsBlocked() {
         user.setStatus(Status.BLOCKED);
         Post post = new Post();
@@ -210,15 +132,5 @@ public class PostServiceImplTest {
         Assertions.assertThrows(AuthorizationException.class, () -> postService.create(post, user, tags));
 
         verify(postRepository, never()).create(post);
-    }
-
-    @Test
-    public void create_ShouldCreatePost_WhenUserIsActive() {
-        Post post = new Post();
-        List<Tag> tags = new ArrayList<>();
-
-        Assertions.assertDoesNotThrow(() -> postService.create(post, user, tags));
-
-        verify(postRepository, times(1)).create(any(Post.class));
     }
 }

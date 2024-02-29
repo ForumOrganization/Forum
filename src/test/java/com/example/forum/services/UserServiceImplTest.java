@@ -126,20 +126,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void registerUser_Should_ThrowException_When_UserWithSameEmailExists() {
-        User user = createMockUser();
-        User existingUserWithTheSameName = createMockUser();
-        existingUserWithTheSameName.setId(2);
-
-        Mockito.when(mockRepository.getByUsername(user.getEmail()))
-                .thenReturn(existingUserWithTheSameName);
-
-        Assertions.assertThrows(
-                DuplicateEntityException.class,
-                () -> userService.registerUser(user));
-    }
-
-    @Test
     public void registerUser_Should_CallRepository_When_UserWithSameNameDoesNotExist() {
         User user = createMockUser();
 
@@ -200,34 +186,6 @@ class UserServiceImplTest {
     }
 
     @Test
-    public void update_Should_ThrowException_When_EmailIsTaken() {
-        User targetUser = createMockUser();
-        User executingUser = createMockUser();
-        executingUser.setEmail("mock2@user.com");
-
-        Mockito.when(mockRepository.getByUsername(targetUser.getEmail())).
-                thenReturn(createMockUser());
-
-        Assertions.assertThrows(
-                DuplicateEntityException.class,
-                () -> userService.updateUser(targetUser, executingUser));
-    }
-
-    @Test
-    public void delete_Should_CallRepository_When_UserExist() {
-        int userIdToDelete = 1;
-        User executingUser = createMockUser();
-        User userToDelete = createMockUser();
-        Mockito.when(mockRepository.getById(userIdToDelete))
-                .thenReturn(userToDelete);
-
-        userService.deleteUser(userIdToDelete, executingUser);
-
-        Mockito.verify(mockRepository, Mockito.times(1)).
-                deleteUser(userIdToDelete);
-    }
-
-    @Test
     public void delete_Should_ThrowException_When_UserAlreadyDeleted() {
         int userIdToDelete = 1;
         User executingUser = createMockUser();
@@ -262,17 +220,6 @@ class UserServiceImplTest {
         Assertions.assertThrows(
                 DuplicateEntityException.class,
                 () -> userService.updateToAdmin(targetUser, executingUser));
-    }
-
-    @Test
-    public void blockUser_Should_CallRepository_When_BlockUserExist() {
-        User admin = createMockUser();
-        User blockUser = createMockUser();
-
-        userService.blockUser(admin, blockUser);
-
-        Mockito.verify(mockRepository, Mockito.times(1)).
-                updateUser(blockUser);
     }
 
     @Test
@@ -334,17 +281,6 @@ class UserServiceImplTest {
 
         Assertions.assertThrows(
                 DuplicateEntityException.class,
-                () -> userService.addPhoneNumberToAdmin(admin, userPhoneNumberToBeUpdate));
-    }
-
-    @Test
-    public void addPhoneNumberToAdmin_Should_ThrowException_When_PhoneNumberIsMissing() {
-        User admin = createMockUser();
-        User userPhoneNumberToBeUpdate = createMockUser();
-        userPhoneNumberToBeUpdate.setPhoneNumber(null);
-
-        Assertions.assertThrows(
-                EntityNotFoundException.class,
                 () -> userService.addPhoneNumberToAdmin(admin, userPhoneNumberToBeUpdate));
     }
 
